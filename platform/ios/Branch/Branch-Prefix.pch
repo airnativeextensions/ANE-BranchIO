@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'Branch' target in the 'Branch' project
+//
+
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#import "BranchTag.h"
+#endif
