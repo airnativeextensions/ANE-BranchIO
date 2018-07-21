@@ -1,0 +1,30 @@
+<extension xmlns="http://ns.adobe.com/air/extension/4.0">
+	<id>io.branch.nativeExtensions.Branch</id>
+	<versionNumber>1.1.2</versionNumber>
+	<platforms>
+		<platform name="iPhone-ARM">
+			<applicationDeployment>
+				<nativeLibrary>libBranchIosExtension.a</nativeLibrary>
+				<initializer>BranchExtensionInitializer</initializer>
+				<finalizer>BranchExtensionFinalizer</finalizer>
+			</applicationDeployment>
+		</platform>
+		<platform name="Android-ARM">
+			<applicationDeployment>
+				<nativeLibrary>BranchAndroidExtension.jar</nativeLibrary>
+				<initializer>io.branch.nativeExtensions.branch.BranchExtension</initializer>
+				<finalizer>io.branch.nativeExtensions.branch.BranchExtension</finalizer>
+			</applicationDeployment>
+		</platform>
+		<platform name="Android-x86">
+			<applicationDeployment>
+				<nativeLibrary>BranchAndroidExtension.jar</nativeLibrary>
+				<initializer>io.branch.nativeExtensions.branch.BranchExtension</initializer>
+				<finalizer>io.branch.nativeExtensions.branch.BranchExtension</finalizer>
+			</applicationDeployment>
+		</platform>
+		<platform name="default">
+			<applicationDeployment/>
+		</platform>
+	</platforms>
+</extension>
