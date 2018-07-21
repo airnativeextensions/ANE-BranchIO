@@ -19,7 +19,7 @@
 
 #import "FlashRuntimeExtensions.h"
 #import "BranchController.h"
-#import "BranchEventDispatcher.h"
+#import "BranchExtensionContext.h"
 
 #import <CoreNativeExtension/CoreNativeExtension.h>
 
@@ -27,10 +27,9 @@
 NSString * const Branch_VERSION = @"1.0";
 NSString * const Branch_IMPLEMENTATION = @"iOS";
 
-FREContext distriqt_branch_ctx = nil;
-Boolean distriqt_branch_v = false;
-BranchEventDispatcher* distriqt_branch_eventDispatcher = nil;
-BranchController* distriqt_branch_controller = nil;
+FREContext branch_ctx = nil;
+BranchExtensionContext* branch_extensionContext = nil;
+BranchController* branch_controller = nil;
 
 
 ////////////////////////////////////////////////////////
@@ -70,18 +69,6 @@ FREObject BranchIsSupported(FREContext ctx, void* funcData, uint32_t argc, FREOb
 }
 
 
-FREObject BranchVV2( FREContext ctx, void* funcData, uint32_t argc, FREObject argv[] )
-{
-    FREObject result = NULL;
-    @autoreleasepool
-    {
-        NSString* developerKey = [DTFREUtils getFREObjectAsString: argv[0]];
-        int extensionIdNumber  = [DTFREUtils getFREObjectAsInt: argv[1]];
-        distriqt_branch_v = [DTExtensionBase v: developerKey identifier: extensionIdNumber];
-        result = [DTFREUtils newFREObjectFromBoolean: distriqt_branch_v];
-    }
-    return result;
-}
 
 //
 //
@@ -89,18 +76,195 @@ FREObject BranchVV2( FREContext ctx, void* funcData, uint32_t argc, FREObject ar
 //
 //
 
-FREObject BranchFunction(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+FREObject Branch_init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     FREObject result = NULL;
     @autoreleasepool
     {
-        if (distriqt_branch_v) // key check
-        {
-            // Functionality
-        }
+        Boolean useTestKey = [DTFREUtils getFREObjectAsBoolean: argv[0]];
+        
+        [branch_controller initBranch: useTestKey];
     }
     return result;
 }
+
+FREObject Branch_setIdentity(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* userId = [DTFREUtils getFREObjectAsString: argv[0]];
+        
+        [branch_controller setIdentity: userId];
+    }
+    return result;
+}
+
+FREObject Branch_logout(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        [branch_controller logout];
+    }
+    return result;
+}
+
+FREObject Branch_userCompletedAction(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* action = [DTFREUtils getFREObjectAsString: argv[0]];
+        NSString* appState = [DTFREUtils getFREObjectAsString: argv[1]];
+        
+        [branch_controller userCompletedAction: action withState: appState];
+    }
+    return result;
+}
+
+FREObject Branch_getLatestReferringParams(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* params = [branch_controller getLatestReferringParams];
+        result = [DTFREUtils newFREObjectFromString: params];
+    }
+    return result;
+}
+
+FREObject Branch_getFirstReferringParams(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* params = [branch_controller getFirstReferringParams];
+        result = [DTFREUtils newFREObjectFromString: params];
+    }
+    return result;
+}
+
+FREObject Branch_getCredits(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* bucket = [DTFREUtils getFREObjectAsString: argv[0]];
+        
+        [branch_controller getCredits: bucket];
+    }
+    return result;
+}
+
+FREObject Branch_redeemRewards(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        int credits = [DTFREUtils getFREObjectAsInt: argv[0]];
+        NSString* bucket = [DTFREUtils getFREObjectAsString: argv[1]];
+        
+        [branch_controller redeemRewards: credits
+                               andBucket: bucket];
+    }
+    return result;
+}
+
+FREObject Branch_getCreditsHistory(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* bucket = [DTFREUtils getFREObjectAsString: argv[0]];
+        
+        [branch_controller getCreditsHistory: bucket];
+    }
+    return result;
+}
+
+
+FREObject Branch_getShortUrl(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSArray* tags = [DTFREUtils getFREObjectAsArrayOfStrings: argv[0]];
+        NSString* channel = [DTFREUtils getFREObjectAsString: argv[1]];
+        NSString* feature = [DTFREUtils getFREObjectAsString: argv[2]];
+        NSString* stage = [DTFREUtils getFREObjectAsString: argv[3]];
+        NSString* json = [DTFREUtils getFREObjectAsString: argv[4]];
+        NSString* alias = [DTFREUtils getFREObjectAsString: argv[5]];
+        int type = [DTFREUtils getFREObjectAsInt: argv[6]];
+        
+        [branch_controller getShortURL: json
+                               andTags: tags
+                            andChannel: channel
+                            andFeature: feature
+                              andStage: stage
+                              andAlias: alias
+                               andType: type ];
+    }
+    return result;
+}
+
+
+FREObject Branch_getReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        [branch_controller getReferralCode];
+    }
+    return result;
+}
+
+FREObject Branch_createReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* prefix = [DTFREUtils getFREObjectAsString: argv[0]];
+        int amount = [DTFREUtils getFREObjectAsInt: argv[1]];
+        int expiration = [DTFREUtils getFREObjectAsInt: argv[1]];
+        NSString* bucket = [DTFREUtils getFREObjectAsString: argv[0]];
+        int type = [DTFREUtils getFREObjectAsInt: argv[1]];
+        int rewardLocation = [DTFREUtils getFREObjectAsInt: argv[1]];
+        
+        [branch_controller createReferralCode: prefix
+                                       amount: amount
+                                   expiration: expiration
+                                       bucket: bucket
+                                    usageType: type
+                               rewardLocation: rewardLocation ];
+    }
+    return result;
+}
+
+FREObject Branch_validateReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* code = [DTFREUtils getFREObjectAsString: argv[0]];
+        
+        [branch_controller validateReferralCode: code];
+    }
+    return result;
+}
+
+FREObject Branch_applyReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* code = [DTFREUtils getFREObjectAsString: argv[0]];
+        
+        [branch_controller applyReferralCode: code];
+    }
+    return result;
+}
+
 
 
 
@@ -116,10 +280,27 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
 	
 	static FRENamedFunction distriqt_branchFunctionMap[] =
     {
-        MAP_FUNCTION( BranchVersion,          "version",          NULL ),
-        MAP_FUNCTION( BranchImplementation,   "implementation",   NULL ),
-        MAP_FUNCTION( BranchIsSupported,      "isSupported",      NULL ),
-        MAP_FUNCTION( BranchVV2,              "vV2",              NULL )
+        MAP_FUNCTION( BranchVersion,                    "version",                  NULL ),
+        MAP_FUNCTION( BranchImplementation,             "implementation",           NULL ),
+        MAP_FUNCTION( BranchIsSupported,                "isSupported",              NULL ),
+        
+        MAP_FUNCTION( Branch_init,                      "init",                     NULL ),
+        MAP_FUNCTION( Branch_setIdentity,               "setIdentity",              NULL ),
+        MAP_FUNCTION( Branch_logout,                    "logout",                   NULL ),
+        MAP_FUNCTION( Branch_userCompletedAction,       "userCompletedAction",      NULL ),
+        MAP_FUNCTION( Branch_getLatestReferringParams,  "getLatestReferringParams", NULL ),
+        MAP_FUNCTION( Branch_getFirstReferringParams,   "getFirstReferringParams",  NULL ),
+        MAP_FUNCTION( Branch_getCredits,                "getCredits",               NULL ),
+        MAP_FUNCTION( Branch_redeemRewards,             "redeemRewards",            NULL ),
+        MAP_FUNCTION( Branch_getCreditsHistory,         "getCreditsHistory",        NULL ),
+        
+        MAP_FUNCTION( Branch_getShortUrl,               "getShortUrl",              NULL ),
+        
+        MAP_FUNCTION( Branch_getReferralCode,           "getReferralCode",          NULL ),
+        MAP_FUNCTION( Branch_createReferralCode,        "createReferralCode",       NULL ),
+        MAP_FUNCTION( Branch_validateReferralCode,      "validateReferralCode",     NULL ),
+        MAP_FUNCTION( Branch_applyReferralCode,         "applyReferralCode",        NULL )
+        
     };
     
     *numFunctionsToTest = sizeof( distriqt_branchFunctionMap ) / sizeof( FRENamedFunction );
@@ -129,14 +310,13 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
 	//
 	//	Store the global states
 	
-    distriqt_branch_ctx = ctx;
-    distriqt_branch_v = false;
+    branch_ctx = ctx;
     
-    distriqt_branch_eventDispatcher = [[BranchEventDispatcher alloc] init];
-    distriqt_branch_eventDispatcher.context = distriqt_branch_ctx;
+    branch_extensionContext = [[BranchExtensionContext alloc] init];
+    branch_extensionContext.context = branch_ctx;
     
-    distriqt_branch_controller = [[BranchController alloc] init];
-    distriqt_branch_controller.delegate = distriqt_branch_eventDispatcher;
+    branch_controller = [[BranchController alloc] init];
+    branch_controller.context = branch_extensionContext;
 
 }
 
@@ -147,19 +327,17 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
  */
 void BranchContextFinalizer(FREContext ctx) 
 {
-    if (distriqt_branch_controller != nil)
+    if (branch_controller != nil)
     {
-        distriqt_branch_controller.delegate = nil;
-        distriqt_branch_controller = nil;
+        branch_controller.context = nil;
+        branch_controller = nil;
     }
-    
-    if (distriqt_branch_eventDispatcher != nil)
+    if (branch_extensionContext != nil)
     {
-        distriqt_branch_eventDispatcher.context = nil;
-        distriqt_branch_eventDispatcher = nil;
+        branch_extensionContext.context = nil;
+        branch_extensionContext = nil;
     }
-
-	distriqt_branch_ctx = nil;
+	branch_ctx = nil;
 }
 
 

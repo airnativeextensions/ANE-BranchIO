@@ -1,19 +1,3 @@
-/**
- *        __       __               __ 
- *   ____/ /_ ____/ /______ _ ___  / /_
- *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
- * http://distriqt.com
- *
- * @brief  		Implementation function implementation for the Compass ANE
- * @author 		Michael Archbold (ma@distriqt.com)
- * @created		Apr 10, 2012
- * @copyright	http://distriqt.com/copyright/license.txt
- *
- */
 package io.branch.nativeExtensions.branch.functions;
 
 import com.adobe.fre.FREContext;

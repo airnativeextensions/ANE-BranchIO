@@ -1,21 +1,32 @@
 package io.branch.nativeExtensions.branch.functions;
 
 import com.adobe.fre.FREContext;
+import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 
-import io.branch.nativeExtensions.branch.BranchExtension;
+import io.branch.nativeExtensions.branch.BranchContext;
+import io.branch.nativeExtensions.branch.utils.Errors;
 
-public class InitFunction extends BaseFunction {
-	
+public class InitFunction implements FREFunction
+{
+
 	@Override
-	public FREObject call(FREContext context, FREObject[] args) {
-		super.call(context, args);
-		
-		Boolean useTestKey = getBooleanFromFREObject(args[0]);
-		
-		BranchExtension.context.initActivity(useTestKey);
-		
-		return null;
+	public FREObject call( FREContext context, FREObject[] args )
+	{
+		FREObject result = null;
+		try
+		{
+			boolean useTestKey = args[0].getAsBool();
+
+			BranchContext ctx = (BranchContext)context;
+
+			ctx.controller().init( useTestKey );
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( context, e );
+		}
+		return result;
 	}
 
 }

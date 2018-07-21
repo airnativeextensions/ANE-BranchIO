@@ -1,4 +1,4 @@
-package com.distriqt.extension.@PACKAGE@
+package @PACKAGE@
 {
 	internal final class Version
 	{

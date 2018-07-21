@@ -11,9 +11,6 @@
 
 @interface TypeConversion : NSObject
 
-- (FREResult) FREGetObject:(FREObject)object asString:(NSString**)value;
-- (FREResult) FREGetString:(NSString*)string asObject:(FREObject*)asString;
-- (FREResult) FREGetObject:(FREObject)object asSetOfStrings:(NSMutableSet**)value;
 
 + (NSString *) ConvertNSDictionaryToJSONString:(NSDictionary *) dictionary;
 

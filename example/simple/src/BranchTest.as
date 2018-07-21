@@ -11,43 +11,41 @@ package {
 	 */
 	public class BranchTest extends Sprite {
 		
-		private var _branch:Branch;
+		private var Branch.instance:Branch;
 
 		public function BranchTest() {
 			
-			_branch = new Branch();
+			Branch.instance.addEventListener(BranchEvent.INIT_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.INIT_SUCCESSED, _initSuccessed);
 
-			_branch.addEventListener(BranchEvent.INIT_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.INIT_SUCCESSED, _initSuccessed);
+			Branch.instance.addEventListener(BranchEvent.SET_IDENTITY_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.SET_IDENTITY_SUCCESSED, _branchEventCallback);
 
-			_branch.addEventListener(BranchEvent.SET_IDENTITY_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.SET_IDENTITY_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_SHORT_URL_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_SHORT_URL_SUCCESSED, _branchEventCallback);
 
-			_branch.addEventListener(BranchEvent.GET_SHORT_URL_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.GET_SHORT_URL_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_SUCCESSED, _branchEventCallback);
 
-			_branch.addEventListener(BranchEvent.GET_CREDITS_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.GET_CREDITS_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.REDEEM_REWARDS_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.REDEEM_REWARDS_SUCCESSED, _branchEventCallback);
 
-			_branch.addEventListener(BranchEvent.REDEEM_REWARDS_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.REDEEM_REWARDS_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_SUCCESSED, _branchEventCallback);
 
-			_branch.addEventListener(BranchEvent.GET_CREDITS_HISTORY_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.GET_CREDITS_HISTORY_SUCCESSED, _branchEventCallback);
-
-			_branch.addEventListener(BranchEvent.GET_REFERRAL_CODE_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.GET_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_REFERRAL_CODE_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
 			
-			_branch.addEventListener(BranchEvent.CREATE_REFERRAL_CODE_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.CREATE_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.CREATE_REFERRAL_CODE_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.CREATE_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
 			
-			_branch.addEventListener(BranchEvent.VALIDATE_REFERRAL_CODE_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.VALIDATE_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.VALIDATE_REFERRAL_CODE_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.VALIDATE_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
 			
-			_branch.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_FAILED, _branchEventCallback);
-			_branch.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_FAILED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
 
-			_branch.init();
+			Branch.instance.init();
 		}
 
 		private function _initSuccessed(bEvt:BranchEvent):void {
@@ -59,7 +57,7 @@ package {
 			var referringParams:Object = JSON.parse(bEvt.informations);
 			//trace(referringParams.user);
 			
-			_branch.setIdentity("Bob");
+			Branch.instance.setIdentity("Bob");
 			
 			var dataToInclude:Object = {
 				user:"Joe",
@@ -74,22 +72,22 @@ package {
 			
 			var tags:Array = ["version1", "trial6"];
 			
-			_branch.getShortUrl(tags, "text_message", BranchConst.FEATURE_TAG_SHARE, "level_3", JSON.stringify(dataToInclude));
+			Branch.instance.getShortUrl(tags, "text_message", BranchConst.FEATURE_TAG_SHARE, "level_3", JSON.stringify(dataToInclude));
 			
-			_branch.getCredits();
+			Branch.instance.getCredits();
 			
-			_branch.getCreditsHistory();
+			Branch.instance.getCreditsHistory();
 			
-			_branch.getReferralCode();
+			Branch.instance.getReferralCode();
 			
-			//_branch.createReferralCode(prefix, amount, expiration, bucket, calculationType, location)
-			//_branch.validateReferralCode(code);
-			//_branch.applyReferralCode(code);
+			//Branch.instance.createReferralCode(prefix, amount, expiration, bucket, calculationType, location)
+			//Branch.instance.validateReferralCode(code);
+			//Branch.instance.applyReferralCode(code);
 			
-			var sessionParams:String = _branch.getLatestReferringParams();
+			var sessionParams:String = Branch.instance.getLatestReferringParams();
 			trace("sessionParams: " + sessionParams);
 			
-			var installParams:String = _branch.getFirstReferringParams();
+			var installParams:String = Branch.instance.getFirstReferringParams();
 			trace("installParams: " + installParams);
 		}
 		
@@ -98,7 +96,7 @@ package {
 			trace(bEvt.type, bEvt.informations);
 			
 			if (bEvt.type == BranchEvent.GET_CREDITS_SUCCESSED)
-				_branch.redeemRewards(5);
+				Branch.instance.redeemRewards(5);
 		}
 	}
 }

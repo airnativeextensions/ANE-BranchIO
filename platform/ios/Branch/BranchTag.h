@@ -9,6 +9,6 @@
 #ifndef BranchTag_h
 #define BranchTag_h
 
-#define Branch_TAG @"com.distriqt.Branch"
+#define Branch_TAG @"io.branch.nativeExtensions.Branch"
 
 #endif /* BranchTag_h */

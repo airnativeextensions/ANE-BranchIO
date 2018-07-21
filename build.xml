@@ -28,6 +28,15 @@
 		]]>
 	</scriptdef>
 	
+	<scriptdef language="javascript" name="packagetopath">
+		<attribute name="name" />
+		<attribute name="value" /> 
+		<![CDATA[
+		project.setProperty( attributes.get( "name" ),
+							 attributes.get( "value" ).replace( /\./g, "/" ) );
+		]]>
+	</scriptdef>
+
 	<scriptdef language="javascript" name="wrapxmltag">
 		<attribute name="name" /> 
 		<attribute name="input" />
@@ -58,7 +67,10 @@
 	<property name="default.name" value="${project.packagename}.default.swc" />
 	<cleanchars name="ios.name" value="${project.name}" />
 	<property name="android.name" value="${project.packagename}.jar" />
-		
+
+	<packagetopath name="project.packagepath" value="${project.packagename}" />
+	<packagetopath name="android.packagepath" value="${android.package}" />
+	
 	<property name="AIR_SDK_HOME" value="${air.sdk}" />
 	<taskdef resource="flexTasks.tasks" classpath="${air.sdk}/ant/lib/flexTasks.jar" />
 	
@@ -94,7 +106,7 @@
 				</tokenfilter>
 			</filterchain>
 		</copy>
-		<copy file="${codetmpl}/Version.as" tofile="${actionscript.dir}/src/com/distriqt/extension/${project.packagename}/Version.as" overwrite="true" >
+		<copy file="${codetmpl}/Version.as" tofile="${actionscript.dir}/src/${project.packagepath}/Version.as" overwrite="true" >
 			<filterchain>
 				<tokenfilter>
 					<replacestring from="@VERSION@" to="${version}"/>
@@ -102,7 +114,7 @@
 				</tokenfilter>
 			</filterchain>
 		</copy>
-		<copy file="${codetmpl}/Version.as" tofile="${default.dir}/src/com/distriqt/extension/${project.packagename}/Version.as" overwrite="true" >
+		<copy file="${codetmpl}/Version.as" tofile="${default.dir}/src/${project.packagepath}/Version.as" overwrite="true" >
 			<filterchain>
 				<tokenfilter>
 					<replacestring from="@VERSION@" to="${version}"/>

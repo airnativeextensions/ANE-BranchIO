@@ -1,30 +1,32 @@
 package io.branch.nativeExtensions.branch.functions;
 
-import io.branch.nativeExtensions.branch.BranchActivity;
-
-import org.json.JSONObject;
-
 import com.adobe.fre.FREContext;
+import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
-import com.adobe.fre.FREWrongThreadException;
 
-public class GetFirstReferringParamsFunction extends BaseFunction {
-	
+import io.branch.nativeExtensions.branch.BranchContext;
+import io.branch.nativeExtensions.branch.utils.Errors;
+
+public class GetFirstReferringParamsFunction implements FREFunction
+{
+
 	@Override
-	public FREObject call(FREContext context, FREObject[] args) {
-		super.call(context, args);
-		
-		JSONObject installParams = BranchActivity.branch.getFirstReferringParams();
-		
-		try {
-			
-			String result = installParams.toString().replace("\\", "");
-			
-			return FREObject.newObject(result);
-			
-		} catch (FREWrongThreadException e) {
-			e.printStackTrace();
-        	return null;
+	public FREObject call( FREContext context, FREObject[] args )
+	{
+		FREObject result = null;
+		try
+		{
+			BranchContext ctx = (BranchContext) context;
+
+			String params = ctx.controller().getFirstReferringParams();
+
+			result = FREObject.newObject( params );
 		}
+		catch (Exception e)
+		{
+			Errors.handleException( context, e );
+		}
+		return result;
 	}
+
 }

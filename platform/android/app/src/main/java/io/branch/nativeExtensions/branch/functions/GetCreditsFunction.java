@@ -1,37 +1,32 @@
 package io.branch.nativeExtensions.branch.functions;
 
-import io.branch.nativeExtensions.branch.BranchActivity;
-import io.branch.nativeExtensions.branch.BranchExtension;
-import io.branch.referral.Branch.BranchReferralStateChangedListener;
-import io.branch.referral.BranchError;
-
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 
-public class GetCreditsFunction extends BaseFunction implements FREFunction {
-	
-	String _bucket;
-	
+import io.branch.nativeExtensions.branch.BranchContext;
+import io.branch.nativeExtensions.branch.utils.Errors;
+
+public class GetCreditsFunction implements FREFunction
+{
+
 	@Override
-	public FREObject call(FREContext context, FREObject[] args) {
-		super.call(context, args);
-		
-		_bucket = getStringFromFREObject(args[0]);
-		
-		BranchActivity.branch.loadRewards(new BranchReferralStateChangedListener() {
-			
-			@Override
-			public void onStateChanged(boolean changed, BranchError error) {
-				
-				if (error == null)
-					BranchExtension.context.dispatchStatusEventAsync("GET_CREDITS_SUCCESSED", String.valueOf(BranchActivity.branch.getCreditsForBucket(_bucket)));
-					
-				else
-					BranchExtension.context.dispatchStatusEventAsync("GET_CREDITS_FAILED", error.getMessage());
-			}
-		});
-		
-		return null;
+	public FREObject call( FREContext context, FREObject[] args )
+	{
+		FREObject result = null;
+		try
+		{
+			BranchContext ctx = (BranchContext) context;
+
+			String bucket = args[0].getAsString();
+
+			ctx.controller().getCredits( bucket );
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( context, e );
+		}
+		return result;
 	}
+
 }

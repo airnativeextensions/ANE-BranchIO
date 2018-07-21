@@ -1,19 +1,3 @@
-/**
- *        __       __               __ 
- *   ____/ /_ ____/ /______ _ ___  / /_
- *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
- * http://distriqt.com
- *
- * @brief  		Is Supported function implementation for this ANE
- * @author 		Michael Archbold
- * @created		Jan 19, 2012
- * @copyright	http://distriqt.com/copyright/license.txt
- *
- */
 package io.branch.nativeExtensions.branch.functions;
 
 import android.os.Build;
@@ -34,7 +18,7 @@ public class IsSupportedFunction implements FREFunction
 		try
 		{
 			boolean isSupported = false;
-			if (Build.VERSION.SDK_INT >= 14)
+			if (Build.VERSION.SDK_INT >= 15)
 			{
 				isSupported = true;
 			}

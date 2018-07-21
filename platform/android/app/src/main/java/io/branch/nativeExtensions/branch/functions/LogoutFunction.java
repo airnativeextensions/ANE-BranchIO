@@ -1,18 +1,30 @@
 package io.branch.nativeExtensions.branch.functions;
 
-import io.branch.nativeExtensions.branch.BranchActivity;
-
 import com.adobe.fre.FREContext;
+import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 
-public class LogoutFunction extends BaseFunction {
-	
+import io.branch.nativeExtensions.branch.BranchContext;
+import io.branch.nativeExtensions.branch.utils.Errors;
+
+public class LogoutFunction implements FREFunction
+{
+
 	@Override
-	public FREObject call(FREContext context, FREObject[] args) {
-		super.call(context, args);
-		
-		BranchActivity.branch.logout();
-		
-		return null;
+	public FREObject call( FREContext context, FREObject[] args )
+	{
+		FREObject result = null;
+		try
+		{
+			BranchContext ctx = (BranchContext) context;
+
+			ctx.controller().logout();
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( context, e );
+		}
+		return result;
 	}
+
 }
