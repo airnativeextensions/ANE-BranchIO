@@ -14,7 +14,7 @@
 
 @implementation BranchController
 {
-    Branch *branch;
+//    Branch *branch;
 }
 
 @synthesize context;
@@ -32,33 +32,34 @@
 
 - (void) initBranch:(BOOL) useTestKey
 {
+    [context log: Branch_TAG message: @"BranchController::initBranch: %@", useTestKey ? @"true" : @"false"];
     Branch.useTestBranchKey = useTestKey;
+//    branch = [Branch getInstance];
     
-    branch = [Branch getInstance];
-    
-    [branch initSessionWithLaunchOptions: @{}
-              andRegisterDeepLinkHandler: ^(NSDictionary *params, NSError *error)
-    {
-        if (!error)
-        {
-            NSString *JSONString = [TypeConversion ConvertNSDictionaryToJSONString:params];
-            
-            [self.context dispatch:@"INIT_SUCCESSED" data:JSONString];
-            
-        }
-        else
-        {
-            [self.context dispatch: @"INIT_FAILED" data: error.description];
-        }
-    }];
+//    [branch initSessionWithLaunchOptions: @{}
+//              andRegisterDeepLinkHandler: ^(NSDictionary *params, NSError *error)
+//    {
+//        if (!error)
+//        {
+//            NSString *JSONString = [TypeConversion ConvertNSDictionaryToJSONString:params];
+//
+//            [self.context dispatch:@"INIT_SUCCESSED" data:JSONString];
+//
+//        }
+//        else
+//        {
+//            [self.context dispatch: @"INIT_FAILED" data: error.description];
+//        }
+//    }];
 }
 
 
 - (void) setIdentity:(NSString *) userId
 {
+    [context log: Branch_TAG message: @"BranchController::setIdentity: %@", userId];
     __weak typeof(self) weakSelf = self;
-    [branch setIdentity: userId
-           withCallback: ^(NSDictionary *params, NSError *error)
+    [[Branch getInstance] setIdentity: userId
+                         withCallback: ^(NSDictionary *params, NSError *error)
     {
         if (!error)
         {
@@ -80,6 +81,7 @@
             andAlias:(NSString *) alias
              andType:(int) type
 {
+    [context log: Branch_TAG message: @"BranchController::getShortURL"];
     NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
     NSError *jsonError;
     NSDictionary* params = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
@@ -104,15 +106,32 @@
         
         if (alias.length != 0)
         {
-            [branch getShortURLWithParams:params andTags:tags andChannel:channel andFeature:feature andStage:stage andAlias:alias andCallback:callback];
+            [[Branch getInstance] getShortURLWithParams:params
+                                                andTags:tags
+                                             andChannel:channel
+                                             andFeature:feature
+                                               andStage:stage
+                                               andAlias:alias
+                                            andCallback:callback];
         }
         else if (type != -1)
         {
-            [branch getShortURLWithParams:params andTags:tags andChannel:channel andFeature:feature andStage:stage andType:type andCallback:callback];
+            [[Branch getInstance] getShortURLWithParams:params
+                                                andTags:tags
+                                             andChannel:channel
+                                             andFeature:feature
+                                               andStage:stage
+                                                andType:type
+                                            andCallback:callback];
         }
         else
         {
-            [branch getShortURLWithParams:params andTags:tags andChannel:channel andFeature:feature andStage:stage andCallback:callback];
+            [[Branch getInstance] getShortURLWithParams:params
+                                                andTags:tags
+                                             andChannel:channel
+                                             andFeature:feature
+                                               andStage:stage
+                                            andCallback:callback];
         }
     }
 }
@@ -120,12 +139,14 @@
 
 - (void) logout
 {
-    [branch logout];
+    [context log: Branch_TAG message: @"BranchController::logout"];
+    [[Branch getInstance] logout];
 }
 
 
 - (void) userCompletedAction:(NSString *) action withState:(NSString *) appState
 {
+    [context log: Branch_TAG message: @"BranchController::userCompletedAction: %@ withState: %@", action, appState];
     NSData *data = [appState dataUsingEncoding:NSUTF8StringEncoding];
     NSError *jsonError;
     
@@ -133,32 +154,35 @@
     
     if (!jsonError)
     {
-        [branch userCompletedAction:action withState:params];
+        [[Branch getInstance] userCompletedAction:action withState:params];
     }
 }
 
 - (NSString *) getLatestReferringParams
 {
-    NSDictionary* paramsDict = [branch getLatestReferringParams];
+    [context log: Branch_TAG message: @"BranchController::getLatestReferringParams"];
+    NSDictionary* paramsDict = [[Branch getInstance] getLatestReferringParams];
     return [TypeConversion ConvertNSDictionaryToJSONString: paramsDict];
 }
 
 
 - (NSString *) getFirstReferringParams
 {
-    NSDictionary* paramsDict = [branch getFirstReferringParams];
+    [context log: Branch_TAG message: @"BranchController::getFirstReferringParams"];
+    NSDictionary* paramsDict = [[Branch getInstance] getFirstReferringParams];
     return [TypeConversion ConvertNSDictionaryToJSONString: paramsDict];
 }
 
 
 - (void) getCredits:(NSString *) bucket
 {
-    [branch loadRewardsWithCallback:^(BOOL changed, NSError *error)
+    [context log: Branch_TAG message: @"BranchController::getCredits: %@", bucket];
+    [[Branch getInstance] loadRewardsWithCallback:^(BOOL changed, NSError *error)
     {
         if (!error)
         {
             [self.context dispatch: @"GET_CREDITS_SUCCESSED"
-                              data: [NSString stringWithFormat: @"%ld", (long) [self->branch getCreditsForBucket:bucket]]];
+                              data: [NSString stringWithFormat: @"%ld", (long) [[Branch getInstance] getCreditsForBucket:bucket]]];
         }
         else
         {
@@ -171,7 +195,8 @@
 
 - (void) redeemRewards:(NSInteger) credits andBucket:(NSString *) bucket
 {
-    [branch redeemRewards:credits forBucket:bucket callback:^(BOOL changed, NSError *error)
+    [context log: Branch_TAG message: @"BranchController::redeemRewards: %d andBucket: %@", credits, bucket];
+    [[Branch getInstance] redeemRewards:credits forBucket:bucket callback:^(BOOL changed, NSError *error)
     {
         if (!error)
         {
@@ -187,7 +212,8 @@
 
 - (void) getCreditsHistory:(NSString *) bucket
 {
-    [branch getCreditHistoryForBucket:bucket andCallback:^(NSArray *list, NSError *error)
+    [context log: Branch_TAG message: @"BranchController::getCreditsHistory: %@", bucket];
+    [[Branch getInstance] getCreditHistoryForBucket:bucket andCallback:^(NSArray *list, NSError *error)
     {
         if (!error)
         {
@@ -202,7 +228,7 @@
 
 - (void) getReferralCode
 {
-//    [branch getPromoCodeWithCallback:^(NSDictionary *params, NSError *error) {
+//    [[Branch getInstance] getPromoCodeWithCallback:^(NSDictionary *params, NSError *error) {
 //
 //        if (!error)
 //            [self.context dispatch:@"GET_REFERRAL_CODE_SUCCESSED" data:[params objectForKey:@"promo_code"]];
@@ -214,7 +240,7 @@
 
 - (void) createReferralCode:(NSString *)prefix amount:(NSInteger)amount expiration:(NSInteger)expiration bucket:(NSString *)bucket usageType:(NSInteger)usageType rewardLocation:(NSInteger)rewardLocation
 {
-//    [branch getPromoCodeWithPrefix:prefix amount:amount expiration:[NSDate dateWithTimeIntervalSince1970:expiration / 1000] bucket:bucket usageType:usageType rewardLocation:rewardLocation callback:^(NSDictionary *params, NSError *error) {
+//    [[Branch getInstance] getPromoCodeWithPrefix:prefix amount:amount expiration:[NSDate dateWithTimeIntervalSince1970:expiration / 1000] bucket:bucket usageType:usageType rewardLocation:rewardLocation callback:^(NSDictionary *params, NSError *error) {
 //
 //        if (!error)
 //            [self.context dispatch:@"CREATE_REFERRAL_CODE_SUCCESSED" data:[params objectForKey:@"promo_code"]];
@@ -226,7 +252,7 @@
 
 - (void) validateReferralCode:(NSString *) code
 {
-//    [branch validatePromoCode:code callback:^(NSDictionary *params, NSError *error) {
+//    [[Branch getInstance] validatePromoCode:code callback:^(NSDictionary *params, NSError *error) {
 //
 //        if (!error) {
 //
@@ -243,7 +269,7 @@
 
 - (void) applyReferralCode:(NSString *) code
 {
-//    [branch applyPromoCode:code callback:^(NSDictionary *params, NSError *error) {
+//    [[Branch getInstance] applyPromoCode:code callback:^(NSDictionary *params, NSError *error) {
 //
 //        if (!error) {
 //
@@ -259,54 +285,49 @@
 
 
 
-#pragma mark
-
-//SEL selectorToOverride1 = @selector(application:openURL:sourceApplication:annotation:);
-//SEL selectorToOverride2 = @selector(application:didFinishLaunchingWithOptions:);
-//SEL selectorToOverride3 = @selector(application:continueUserActivity:restorationHandler:);
-//
-//
-//bool applicationDidFinishLaunchingWithOptions(id self, SEL _cmd, UIApplication* application, NSDictionary* launchOptions) {
-//    //NSLog(@"applicationDidFinishLaunchingWithOptions");
-//
-//    Branch *branch = [Branch getInstance];
-//    [branch initSessionWithLaunchOptions:launchOptions andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
-//
-//        if (!error) {
-//
-//            NSString *JSONString = [TypeConversion ConvertNSDictionaryToJSONString:params];
-//
-//            [branchHelpers dispatchEvent:@"INIT_SUCCESSED" withParams:JSONString];
-//
-//        } else {
-//
-//            [branchHelpers dispatchEvent:@"INIT_FAILED" withParams:error.description];
-//        }
-//    }];
-//
-//    return YES;
-//}
-//
-//bool applicationOpenURLSourceApplication(id self, SEL _cmd, UIApplication* application, NSURL* url, NSString* sourceApplication, id annotation) {
-//    //NSLog(@"applicationOpenURLSourceApplication");
-//
-//    // if handleDeepLink returns YES, and you registered a callback in initSessionAndRegisterDeepLinkHandler, the callback will be called with the data associated with the deep link
-//    if (![[Branch getInstance] handleDeepLink:url]) {
-//        // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
-//    }
-//
-//    return YES;
-//}
-//
-//bool applicationContinueUserActivity(id self, SEL _cmd, UIApplication* application, NSUserActivity* userActivity, id restorationHandler) {
-//    //NSLog(@"applicationContinueUserActivity");
-//
-//    BOOL handledByBranch = [[Branch getInstance] continueUserActivity:userActivity];
-//
-//    return handledByBranch;
-//}
+#pragma mark DTNotifications
 
 
+-(void) didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [context log: Branch_TAG message: @"BranchController::didFinishLaunchingWithOptions: %@", launchOptions];
+    [[Branch getInstance] initSessionWithLaunchOptions:launchOptions andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error)
+    {
+        if (!error)
+        {
+            NSString *JSONString = [TypeConversion ConvertNSDictionaryToJSONString:params];
+            [self.context dispatch:@"INIT_SUCCESSED" data:JSONString];
+        }
+        else
+        {
+            [self.context dispatch:@"INIT_FAILED" data:error.description];
+        }
+    }];
+}
+
+-(void) openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    [context log: Branch_TAG message: @"BranchController::openURL: %@ sourceApplication: %@", url, sourceApplication];
+    
+    // if handleDeepLink returns YES, and you registered a callback in initSessionAndRegisterDeepLinkHandler,
+    // the callback will be called with the data associated with the deep link
+
+    [[Branch getInstance] handleDeepLink:url];
+
+}
+
+-(void) openURL:(NSURL *)url options: (NSDictionary*)options
+{
+    [context log: Branch_TAG message: @"BranchController::openURL: %@", url];
+    [[Branch getInstance] handleDeepLink:url];
+}
+
+-(void) continueUserActivity: (NSUserActivity*)userActivity
+{
+    [context log: Branch_TAG message: @"BranchController::continueUserActivity:" ];
+//    BOOL handledByBranch =
+    [[Branch getInstance] continueUserActivity:userActivity];
+}
 
 
 

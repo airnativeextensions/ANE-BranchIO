@@ -2,10 +2,10 @@
 	<packagedDependencies>
 @JARS@
 	</packagedDependencies>
-<!-- 
 	<packagedResources>
 	     <packagedResource>
+		 	<packageName>io.branch.nativeExtensions.branch</packageName>
+	        <folderName>io.branch.nativeExtensions.branch-res</folderName>
 		</packagedResource>
 	</packagedResources>
--->
 </platform>

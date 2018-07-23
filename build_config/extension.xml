@@ -4,14 +4,14 @@
 	<platforms>
 		<platform name="Android-ARM">
 			<applicationDeployment>
-				<nativeLibrary>io.branch.nativeExtensions.Branch.jar</nativeLibrary>
+				<nativeLibrary>io.branch.nativeExtensions.branch.jar</nativeLibrary>
 				<initializer>io.branch.nativeExtensions.branch.BranchExtension</initializer>
 				<finalizer>io.branch.nativeExtensions.branch.BranchExtension</finalizer>
 			</applicationDeployment>
 		</platform>
 		<platform name="Android-x86">
 			<applicationDeployment>
-				<nativeLibrary>io.branch.nativeExtensions.Branch.jar</nativeLibrary>
+				<nativeLibrary>io.branch.nativeExtensions.branch.jar</nativeLibrary>
 				<initializer>io.branch.nativeExtensions.branch.BranchExtension</initializer>
 				<finalizer>io.branch.nativeExtensions.branch.BranchExtension</finalizer>
 			</applicationDeployment>

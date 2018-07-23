@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreNativeExtension/CoreNativeExtension.h>
+
 #import "BranchContext.h"
 
 
-@interface BranchController : NSObject
+@interface BranchController : NSObject<DTNotificationsDelegate>
 
 @property id<BranchContext> context;
 

@@ -30,7 +30,7 @@ NSString * const Branch_IMPLEMENTATION = @"iOS";
 FREContext branch_ctx = nil;
 BranchExtensionContext* branch_extensionContext = nil;
 BranchController* branch_controller = nil;
-
+DTNotifications* branch_notifications = nil;
 
 ////////////////////////////////////////////////////////
 //	ACTIONSCRIPT INTERFACE METHODS 
@@ -84,6 +84,8 @@ FREObject Branch_init(FREContext ctx, void* funcData, uint32_t argc, FREObject a
         Boolean useTestKey = [DTFREUtils getFREObjectAsBoolean: argv[0]];
         
         [branch_controller initBranch: useTestKey];
+        
+        [branch_notifications checkLaunchOptions];
     }
     return result;
 }
@@ -317,7 +319,9 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
     
     branch_controller = [[BranchController alloc] init];
     branch_controller.context = branch_extensionContext;
-
+    
+    branch_notifications = [[DTNotifications alloc] init];
+    branch_notifications.delegate = branch_controller;
 }
 
 
@@ -327,6 +331,12 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
  */
 void BranchContextFinalizer(FREContext ctx) 
 {
+    if (branch_notifications != nil)
+    {
+        [branch_notifications removeObservers];
+        branch_notifications.delegate = nil;
+        branch_notifications = nil;
+    }
     if (branch_controller != nil)
     {
         branch_controller.context = nil;

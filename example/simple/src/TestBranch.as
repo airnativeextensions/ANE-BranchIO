@@ -1,38 +1,37 @@
 package {
-
+	
 	import io.branch.nativeExtensions.branch.Branch;
 	import io.branch.nativeExtensions.branch.BranchConst;
 	import io.branch.nativeExtensions.branch.BranchEvent;
-
+	
 	import flash.display.Sprite;
-
+	
 	/**
 	 * @author Aymeric
 	 */
-	public class BranchTest extends Sprite {
+	public class TestBranch extends Sprite {
 		
-		private var Branch.instance:Branch;
-
-		public function BranchTest() {
+		
+		public function TestBranch() {
 			
 			Branch.instance.addEventListener(BranchEvent.INIT_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.INIT_SUCCESSED, _initSuccessed);
-
+			
 			Branch.instance.addEventListener(BranchEvent.SET_IDENTITY_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.SET_IDENTITY_SUCCESSED, _branchEventCallback);
-
+			
 			Branch.instance.addEventListener(BranchEvent.GET_SHORT_URL_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.GET_SHORT_URL_SUCCESSED, _branchEventCallback);
-
+			
 			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_SUCCESSED, _branchEventCallback);
-
+			
 			Branch.instance.addEventListener(BranchEvent.REDEEM_REWARDS_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.REDEEM_REWARDS_SUCCESSED, _branchEventCallback);
-
+			
 			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_SUCCESSED, _branchEventCallback);
-
+			
 			Branch.instance.addEventListener(BranchEvent.GET_REFERRAL_CODE_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.GET_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
 			
@@ -44,10 +43,10 @@ package {
 			
 			Branch.instance.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
-
+			
 			Branch.instance.init();
 		}
-
+		
 		private function _initSuccessed(bEvt:BranchEvent):void {
 			trace("BranchEvent.INIT_SUCCESSED", bEvt.informations);
 			
