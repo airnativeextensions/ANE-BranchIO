@@ -76,14 +76,14 @@ FREObject BranchIsSupported(FREContext ctx, void* funcData, uint32_t argc, FREOb
 //
 //
 
-FREObject Branch_init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+FREObject Branch_initSession(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     FREObject result = NULL;
     @autoreleasepool
     {
         Boolean useTestKey = [DTFREUtils getFREObjectAsBoolean: argv[0]];
         
-        [branch_controller initBranch: useTestKey];
+        [branch_controller initSession: useTestKey];
         
         [branch_notifications checkLaunchOptions];
     }
@@ -112,6 +112,32 @@ FREObject Branch_logout(FREContext ctx, void* funcData, uint32_t argc, FREObject
     return result;
 }
 
+FREObject Branch_getLatestReferringParams(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* params = [branch_controller getLatestReferringParams];
+        result = [DTFREUtils newFREObjectFromString: params];
+    }
+    return result;
+}
+
+FREObject Branch_handleDeepLink(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* link = [DTFREUtils getFREObjectAsString: argv[0]];
+        Boolean forceNewSession = [DTFREUtils getFREObjectAsBoolean: argv[0]];
+        
+        [branch_controller handleDeepLink: link
+                          forceNewSession: forceNewSession];
+    }
+    return result;
+}
+
+
 FREObject Branch_userCompletedAction(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     FREObject result = NULL;
@@ -125,16 +151,21 @@ FREObject Branch_userCompletedAction(FREContext ctx, void* funcData, uint32_t ar
     return result;
 }
 
-FREObject Branch_getLatestReferringParams(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+FREObject Branch_logEvent(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     FREObject result = NULL;
     @autoreleasepool
     {
-        NSString* params = [branch_controller getLatestReferringParams];
-        result = [DTFREUtils newFREObjectFromString: params];
+        NSString* eventJSONString = [DTFREUtils getFREObjectAsString: argv[0]];
+        
+        Boolean success = [branch_controller logEvent: eventJSONString];
+    
+        result = [DTFREUtils newFREObjectFromBoolean: success];
     }
     return result;
 }
+
+
 
 FREObject Branch_getFirstReferringParams(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
@@ -211,62 +242,6 @@ FREObject Branch_getShortUrl(FREContext ctx, void* funcData, uint32_t argc, FREO
 }
 
 
-FREObject Branch_getReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
-{
-    FREObject result = NULL;
-    @autoreleasepool
-    {
-        [branch_controller getReferralCode];
-    }
-    return result;
-}
-
-FREObject Branch_createReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
-{
-    FREObject result = NULL;
-    @autoreleasepool
-    {
-        NSString* prefix = [DTFREUtils getFREObjectAsString: argv[0]];
-        int amount = [DTFREUtils getFREObjectAsInt: argv[1]];
-        int expiration = [DTFREUtils getFREObjectAsInt: argv[1]];
-        NSString* bucket = [DTFREUtils getFREObjectAsString: argv[0]];
-        int type = [DTFREUtils getFREObjectAsInt: argv[1]];
-        int rewardLocation = [DTFREUtils getFREObjectAsInt: argv[1]];
-        
-        [branch_controller createReferralCode: prefix
-                                       amount: amount
-                                   expiration: expiration
-                                       bucket: bucket
-                                    usageType: type
-                               rewardLocation: rewardLocation ];
-    }
-    return result;
-}
-
-FREObject Branch_validateReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
-{
-    FREObject result = NULL;
-    @autoreleasepool
-    {
-        NSString* code = [DTFREUtils getFREObjectAsString: argv[0]];
-        
-        [branch_controller validateReferralCode: code];
-    }
-    return result;
-}
-
-FREObject Branch_applyReferralCode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
-{
-    FREObject result = NULL;
-    @autoreleasepool
-    {
-        NSString* code = [DTFREUtils getFREObjectAsString: argv[0]];
-        
-        [branch_controller applyReferralCode: code];
-    }
-    return result;
-}
-
 
 
 
@@ -286,22 +261,23 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
         MAP_FUNCTION( BranchImplementation,             "implementation",           NULL ),
         MAP_FUNCTION( BranchIsSupported,                "isSupported",              NULL ),
         
-        MAP_FUNCTION( Branch_init,                      "init",                     NULL ),
+        MAP_FUNCTION( Branch_initSession,               "initSession",              NULL ),
         MAP_FUNCTION( Branch_setIdentity,               "setIdentity",              NULL ),
         MAP_FUNCTION( Branch_logout,                    "logout",                   NULL ),
-        MAP_FUNCTION( Branch_userCompletedAction,       "userCompletedAction",      NULL ),
+        
         MAP_FUNCTION( Branch_getLatestReferringParams,  "getLatestReferringParams", NULL ),
         MAP_FUNCTION( Branch_getFirstReferringParams,   "getFirstReferringParams",  NULL ),
+        MAP_FUNCTION( Branch_handleDeepLink,            "handleDeepLink",           NULL ),
+
+        MAP_FUNCTION( Branch_userCompletedAction,       "userCompletedAction",      NULL ),
+        MAP_FUNCTION( Branch_logEvent,                  "logEvent",                 NULL ),
+
         MAP_FUNCTION( Branch_getCredits,                "getCredits",               NULL ),
         MAP_FUNCTION( Branch_redeemRewards,             "redeemRewards",            NULL ),
         MAP_FUNCTION( Branch_getCreditsHistory,         "getCreditsHistory",        NULL ),
         
         MAP_FUNCTION( Branch_getShortUrl,               "getShortUrl",              NULL ),
         
-        MAP_FUNCTION( Branch_getReferralCode,           "getReferralCode",          NULL ),
-        MAP_FUNCTION( Branch_createReferralCode,        "createReferralCode",       NULL ),
-        MAP_FUNCTION( Branch_validateReferralCode,      "validateReferralCode",     NULL ),
-        MAP_FUNCTION( Branch_applyReferralCode,         "applyReferralCode",        NULL )
         
     };
     

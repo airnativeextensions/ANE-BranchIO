@@ -15,12 +15,15 @@
  */
 package io.branch.nativeExtensions.branch.controller;
 
+import android.content.Intent;
+
 import com.distriqt.core.ActivityStateListener;
 import com.distriqt.core.utils.IExtensionContext;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import io.branch.nativeExtensions.branch.BranchActivity;
 import io.branch.nativeExtensions.branch.utils.Errors;
 import io.branch.nativeExtensions.branch.utils.Logger;
 import io.branch.referral.Branch;
@@ -42,7 +45,6 @@ public class BranchController extends ActivityStateListener
 
 	private IExtensionContext _extContext;
 
-	private Branch _branch;
 
 
 	////////////////////////////////////////////////////////////
@@ -57,49 +59,70 @@ public class BranchController extends ActivityStateListener
 
 	public void dispose()
 	{
-		_branch = null;
 		_extContext = null;
 	}
 
 
 	public void onNewIntent()
 	{
-		if (_branch != null)
+		Logger.d( TAG, "onNewIntent()" );
+		// TODO
+		if (Branch.getInstance() != null)
 		{
-			// TODO
+			//_extContext.getActivity().setIntent(  );
 		}
 	}
 
 
-	public void init( boolean useTestKey )
+	public void initSession( boolean useTestKey )
 	{
-		Logger.d( TAG, "init( %b )", useTestKey );
+		Logger.d( TAG, "initSession( %b )", useTestKey );
 		try
 		{
-			if (useTestKey)
-			{
-				_branch = Branch.getTestInstance( _extContext.getActivity().getApplicationContext() );
-			}
-			else
-			{
-				_branch = Branch.getInstance( _extContext.getActivity().getApplicationContext() );
-			}
+			Intent i = new Intent( _extContext.getActivity().getApplicationContext(), BranchActivity.class );
+			i.putExtra( BranchActivity.extraPrefix + ".useTestKey", useTestKey );
+			_extContext.getActivity().startActivity(i);
 
-			_branch.initSession( new Branch.BranchReferralInitListener()
-			{
-				@Override
-				public void onInitFinished( JSONObject referringParams, BranchError error )
-				{
-					if (error == null)
-					{
-						_extContext.dispatchEvent( "INIT_SUCCESSED", referringParams.toString().replace( "\\", "" ) );
-					}
-					else
-					{
-						_extContext.dispatchEvent( "INIT_FAILED", error.getMessage() );
-					}
-				}
-			}, _extContext.getActivity().getIntent().getData(), _extContext.getActivity() );
+			//
+			//	THIS DOESN'T WORK HERE
+			// Branch must need some activity callback that we can't manually trigger
+
+			//if (useTestKey)
+			//{
+			//	Branch.getTestInstance( _extContext.getActivity().getApplication() );
+			//}
+			//else
+			//{
+			//	Branch.getInstance( _extContext.getActivity().getApplication() );
+			//}
+			//
+			//Branch.getInstance().resetUserSession();
+			//Branch.getInstance().initSession(
+			//		new Branch.BranchReferralInitListener()
+			//		{
+			//			@Override
+			//			public void onInitFinished( JSONObject referringParams, BranchError error )
+			//			{
+			//				Logger.d( TAG, "onInitFinished( %s, %s )",
+			//						referringParams == null ? "null" : referringParams.toString(),
+			//						error == null ? "null" : error.getMessage() );
+			//
+			//				if (error == null)
+			//				{
+			//					_extContext.dispatchEvent( "INIT_SUCCESSED", referringParams.toString().replace( "\\", "" ) );
+			//				}
+			//				else
+			//				{
+			//					_extContext.dispatchEvent( "INIT_FAILED", error.getMessage() );
+			//				}
+			//			}
+			//		},
+			//		_extContext.getActivity().getIntent().getData(),
+			//		_extContext.getActivity()
+			//);
+			//
+			//IntegrationValidator.validate( _extContext.getActivity() );
+
 		}
 		catch (Exception e)
 		{
@@ -111,9 +134,9 @@ public class BranchController extends ActivityStateListener
 	public void setIdentity( String userId )
 	{
 		Logger.d( TAG, "setIdentity( %s )", userId );
-		if (_branch != null)
+		if (Branch.getInstance() != null)
 		{
-			_branch.setIdentity( userId, new Branch.BranchReferralInitListener()
+			Branch.getInstance().setIdentity( userId, new Branch.BranchReferralInitListener()
 			{
 				@Override
 				public void onInitFinished( JSONObject referringParams, BranchError error )
@@ -135,9 +158,9 @@ public class BranchController extends ActivityStateListener
 	public void logout()
 	{
 		Logger.d( TAG, "logout()" );
-		if (_branch != null)
+		if (Branch.getInstance() != null)
 		{
-			_branch.logout();
+			Branch.getInstance().logout();
 		}
 	}
 
@@ -145,11 +168,11 @@ public class BranchController extends ActivityStateListener
 	public String getLatestReferringParams()
 	{
 		Logger.d( TAG, "getLatestReferringParams()" );
-		if (_branch != null)
+		if (Branch.getInstance() != null)
 		{
 			try
 			{
-				JSONObject sessionsParams = _branch.getLatestReferringParams();
+				JSONObject sessionsParams = Branch.getInstance().getLatestReferringParams();
 				return sessionsParams.toString().replace( "\\", "" );
 			}
 			catch (Exception e)
@@ -164,11 +187,11 @@ public class BranchController extends ActivityStateListener
 	public String getFirstReferringParams()
 	{
 		Logger.d( TAG, "getFirstReferringParams()" );
-		if (_branch != null)
+		if (Branch.getInstance() != null)
 		{
 			try
 			{
-				JSONObject sessionsParams = _branch.getFirstReferringParams();
+				JSONObject sessionsParams = Branch.getInstance().getFirstReferringParams();
 				return sessionsParams.toString().replace( "\\", "" );
 			}
 			catch (Exception e)
@@ -180,16 +203,49 @@ public class BranchController extends ActivityStateListener
 	}
 
 
+	public void handleDeepLink( String link, boolean forceNewSession )
+	{
+		Logger.d( TAG, "handleDeepLink()" );
+		try
+		{
+			Intent intent = new Intent( _extContext.getActivity(), _extContext.getActivity().getClass() );
+			intent.putExtra( "branch", link );
+			intent.putExtra( "branch_force_new_session", forceNewSession );
+			_extContext.getActivity().startActivity( intent );
+		}
+		catch (Exception e)
+		{
+		}
+	}
+
+
+	public boolean logEvent( String eventJSONString )
+	{
+		Logger.d( TAG, "logEvent( %s )", eventJSONString );
+		try
+		{
+			JSONObject eventJSON = new JSONObject( eventJSONString );
+			return BranchEventUtils.eventFromJSONObject( eventJSON )
+					.logEvent( _extContext.getActivity() );
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( e );
+		}
+		return false;
+	}
+
+
 	public void userCompletedAction( String action, String json )
 	{
 		Logger.d( TAG, "userCompletedAction( %s, %s )", action, json  );
 		try
 		{
-			if (_branch != null)
+			if (Branch.getInstance() != null)
 			{
 				JSONObject obj = new JSONObject( json );
 
-				_branch.userCompletedAction( action, obj );
+				Branch.getInstance().userCompletedAction( action, obj );
 			}
 		}
 		catch (Exception e)
@@ -202,9 +258,9 @@ public class BranchController extends ActivityStateListener
 	public void getCredits( final String bucket )
 	{
 		Logger.d( TAG, "getCredits( %s )", bucket  );
-		if (_branch != null)
+		if (Branch.getInstance() != null)
 		{
-			_branch.loadRewards( new Branch.BranchReferralStateChangedListener()
+			Branch.getInstance().loadRewards( new Branch.BranchReferralStateChangedListener()
 			{
 				@Override
 				public void onStateChanged( boolean changed, BranchError error )
@@ -213,7 +269,7 @@ public class BranchController extends ActivityStateListener
 					{
 						_extContext.dispatchEvent(
 								"GET_CREDITS_SUCCESSED",
-								String.valueOf( _branch.getCreditsForBucket( bucket ) )
+								String.valueOf( Branch.getInstance().getCreditsForBucket( bucket ) )
 						);
 					}
 					else
@@ -234,9 +290,9 @@ public class BranchController extends ActivityStateListener
 		Logger.d( TAG, "redeemRewards( %d, %s )", credits, bucket );
 		try
 		{
-			if (_branch != null)
+			if (Branch.getInstance() != null)
 			{
-				_branch.redeemRewards( bucket, credits, new Branch.BranchReferralStateChangedListener()
+				Branch.getInstance().redeemRewards( bucket, credits, new Branch.BranchReferralStateChangedListener()
 				{
 					@Override
 					public void onStateChanged( boolean changed, BranchError error )
@@ -265,9 +321,9 @@ public class BranchController extends ActivityStateListener
 		Logger.d( TAG, "getCreditHistory( %s )", bucket );
 		try
 		{
-			if (_branch != null)
+			if (Branch.getInstance() != null)
 			{
-				_branch.getCreditHistory(bucket, new Branch.BranchListResponseListener() {
+				Branch.getInstance().getCreditHistory(bucket, new Branch.BranchListResponseListener() {
 
 					@Override
 					public void onReceivingResponse( JSONArray list, BranchError error)
@@ -289,6 +345,16 @@ public class BranchController extends ActivityStateListener
 			Errors.handleException( e );
 		}
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -32,7 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.branch.nativeExtensions.branch.controller.BranchController;
+import io.branch.nativeExtensions.branch.functions.HandleDeepLinkFunction;
 import io.branch.nativeExtensions.branch.functions.InvokeFunction;
+import io.branch.nativeExtensions.branch.functions.LogEventFunction;
 import io.branch.nativeExtensions.branch.functions.deprecated.ApplyReferralCodeFunction;
 import io.branch.nativeExtensions.branch.functions.deprecated.CreateReferralCodeFunction;
 import io.branch.nativeExtensions.branch.functions.GetCreditsFunction;
@@ -42,7 +44,7 @@ import io.branch.nativeExtensions.branch.functions.GetLatestReferringParamsFunct
 import io.branch.nativeExtensions.branch.functions.deprecated.GetReferralCodeFunction;
 import io.branch.nativeExtensions.branch.functions.deprecated.GetShortUrlFunction;
 import io.branch.nativeExtensions.branch.functions.ImplementationFunction;
-import io.branch.nativeExtensions.branch.functions.InitFunction;
+import io.branch.nativeExtensions.branch.functions.InitSessionFunction;
 import io.branch.nativeExtensions.branch.functions.IsSupportedFunction;
 import io.branch.nativeExtensions.branch.functions.LogoutFunction;
 import io.branch.nativeExtensions.branch.functions.RedeemRewardsFunction;
@@ -100,32 +102,48 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 
 	
 	@Override
-	public Map<String, FREFunction> getFunctions() 
+	public Map<String, FREFunction> getFunctions()
 	{
 		Map<String, FREFunction> functionMap = new HashMap<String, FREFunction>();
-		
-		functionMap.put( "isSupported", 	new IsSupportedFunction() );
-		functionMap.put( "version",   		new VersionFunction() );
-		functionMap.put( "implementation", 	new ImplementationFunction() );
 
-		functionMap.put( "invoke", 			new InvokeFunction() );
+		functionMap.put( "isSupported", new IsSupportedFunction() );
+		functionMap.put( "version", new VersionFunction() );
+		functionMap.put( "implementation", new ImplementationFunction() );
 
-		functionMap.put("init", new InitFunction());
-		functionMap.put("setIdentity", new SetIdentityFunction());
-		functionMap.put("logout", new LogoutFunction());
-		functionMap.put("getLatestReferringParams", new GetLatestReferringParamsFunction());
-		functionMap.put("getFirstReferringParams", new GetFirstReferringParamsFunction());
-		functionMap.put("userCompletedAction", new UserCompletedActionFunction());
-		functionMap.put("getCredits", new GetCreditsFunction());
-		functionMap.put("redeemRewards", new RedeemRewardsFunction());
-		functionMap.put("getCreditsHistory", new GetCreditsHistoryFunction());
+		functionMap.put( "invoke", new InvokeFunction() );
 
-		functionMap.put("getShortUrl", new GetShortUrlFunction());
+		functionMap.put( "initSession", new InitSessionFunction() );
+		functionMap.put( "setIdentity", new SetIdentityFunction() );
+		functionMap.put( "logout", new LogoutFunction() );
+		functionMap.put( "getLatestReferringParams", new GetLatestReferringParamsFunction() );
+		functionMap.put( "getFirstReferringParams", new GetFirstReferringParamsFunction() );
+		functionMap.put( "userCompletedAction", new UserCompletedActionFunction() );
+		functionMap.put( "getCredits", new GetCreditsFunction() );
+		functionMap.put( "redeemRewards", new RedeemRewardsFunction() );
+		functionMap.put( "getCreditsHistory", new GetCreditsHistoryFunction() );
 
-		functionMap.put("getReferralCode", new GetReferralCodeFunction());
-		functionMap.put("applyReferralCode", new ApplyReferralCodeFunction());
-		functionMap.put("createReferralCode", new CreateReferralCodeFunction());
-		functionMap.put("validateReferralCode", new ValidateReferralCodeFunction());
+		functionMap.put( "handleDeepLink", new HandleDeepLinkFunction() );
+
+
+		//
+		//	TRACKING
+		//
+
+		functionMap.put( "logEvent", new LogEventFunction() );
+
+
+
+
+
+		//
+		// Deprecated
+
+		functionMap.put( "getShortUrl", new GetShortUrlFunction() );
+
+		functionMap.put( "getReferralCode", new GetReferralCodeFunction() );
+		functionMap.put( "applyReferralCode", new ApplyReferralCodeFunction() );
+		functionMap.put( "createReferralCode", new CreateReferralCodeFunction() );
+		functionMap.put( "validateReferralCode", new ValidateReferralCodeFunction() );
 
 		return functionMap;
 	}

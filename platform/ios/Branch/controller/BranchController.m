@@ -30,31 +30,14 @@
 }
 
 
-- (void) initBranch:(BOOL) useTestKey
+-(void) initSession:(BOOL)useTestKey
 {
-    [context log: Branch_TAG message: @"BranchController::initBranch: %@", useTestKey ? @"true" : @"false"];
+    [context log: Branch_TAG message: @"BranchController::initSession: %@", useTestKey ? @"true" : @"false"];
     Branch.useTestBranchKey = useTestKey;
-//    branch = [Branch getInstance];
-    
-//    [branch initSessionWithLaunchOptions: @{}
-//              andRegisterDeepLinkHandler: ^(NSDictionary *params, NSError *error)
-//    {
-//        if (!error)
-//        {
-//            NSString *JSONString = [TypeConversion ConvertNSDictionaryToJSONString:params];
-//
-//            [self.context dispatch:@"INIT_SUCCESSED" data:JSONString];
-//
-//        }
-//        else
-//        {
-//            [self.context dispatch: @"INIT_FAILED" data: error.description];
-//        }
-//    }];
 }
 
 
-- (void) setIdentity:(NSString *) userId
+-(void) setIdentity:(NSString *) userId
 {
     [context log: Branch_TAG message: @"BranchController::setIdentity: %@", userId];
     __weak typeof(self) weakSelf = self;
@@ -73,7 +56,7 @@
 }
 
 
-- (void) getShortURL:(NSString *) json
+-(void) getShortURL:(NSString *) json
              andTags:(NSArray *) tags
           andChannel:(NSString *) channel
           andFeature:(NSString *) feature
@@ -137,10 +120,46 @@
 }
 
 
-- (void) logout
+-(void) logout
 {
     [context log: Branch_TAG message: @"BranchController::logout"];
     [[Branch getInstance] logout];
+}
+
+
+-(NSString *) getLatestReferringParams
+{
+    [context log: Branch_TAG message: @"BranchController::getLatestReferringParams"];
+    NSDictionary* paramsDict = [[Branch getInstance] getLatestReferringParams];
+    return [TypeConversion ConvertNSDictionaryToJSONString: paramsDict];
+}
+
+
+-(NSString *) getFirstReferringParams
+{
+    [context log: Branch_TAG message: @"BranchController::getFirstReferringParams"];
+    NSDictionary* paramsDict = [[Branch getInstance] getFirstReferringParams];
+    return [TypeConversion ConvertNSDictionaryToJSONString: paramsDict];
+}
+
+
+-(void) handleDeepLink: (NSString*)link forceNewSession:(Boolean)forceNewSession
+{
+    @try
+    {
+        [context log: Branch_TAG message: @"BranchController::handleDeepLink: %@" , link ];
+        if (forceNewSession)
+        {
+            [[Branch getInstance] handleDeepLinkWithNewSession: [NSURL URLWithString: link]];
+        }
+        else
+        {
+            [[Branch getInstance] handleDeepLink: [NSURL URLWithString: link]];
+        }
+    }
+    @catch (NSException* e)
+    {
+    }
 }
 
 
@@ -158,20 +177,91 @@
     }
 }
 
-- (NSString *) getLatestReferringParams
+
+-(Boolean) logEvent: (NSString*)eventJSONString
 {
-    [context log: Branch_TAG message: @"BranchController::getLatestReferringParams"];
-    NSDictionary* paramsDict = [[Branch getInstance] getLatestReferringParams];
-    return [TypeConversion ConvertNSDictionaryToJSONString: paramsDict];
+    @try
+    {
+        [context log: Branch_TAG message: @"BranchController::logEvent: %@" , eventJSONString ];
+        
+        NSData *data = [eventJSONString dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *jsonError;
+        NSDictionary* eventDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+        
+        if (!jsonError)
+        {
+            NSString* eventName = [eventDict objectForKey: @"eventName"];
+            
+            BranchEvent* event;
+            if ([eventDict objectForKey: @"isStandardEvent"])
+            {
+                [context log: Branch_TAG message: @"BranchController::logEvent: standard" ];
+                event = [BranchEvent standardEvent: eventName];
+            }
+            else
+            {
+                [context log: Branch_TAG message: @"BranchController::logEvent: custom" ];
+                event = [BranchEvent customEventWithName: eventName];
+            }
+            
+            for (NSString* key in eventDict)
+            {
+                if ([key isEqualToString: @"transaction_id"])
+                {
+                    event.transactionID = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"currency"])
+                {
+                    event.currency = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"revenue"])
+                {
+                    event.revenue = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"shipping"])
+                {
+                    event.shipping = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"tax"])
+                {
+                    event.tax = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"coupon"])
+                {
+                    event.coupon = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"affiliation"])
+                {
+                    event.affiliation = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"description"])
+                {
+                    event.eventDescription = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"search_query"])
+                {
+                    event.searchQuery = [eventDict objectForKey: key];
+                }
+                else if ([key isEqualToString: @"customData"])
+                {
+                    event.customData = [eventDict objectForKey: key];
+                }
+            }
+            
+            [event logEvent];
+            
+            return true;
+        }
+        
+    }
+    @catch (NSException* e)
+    {
+    }
+    return false;
 }
 
 
-- (NSString *) getFirstReferringParams
-{
-    [context log: Branch_TAG message: @"BranchController::getFirstReferringParams"];
-    NSDictionary* paramsDict = [[Branch getInstance] getFirstReferringParams];
-    return [TypeConversion ConvertNSDictionaryToJSONString: paramsDict];
-}
+
 
 
 - (void) getCredits:(NSString *) bucket
@@ -226,61 +316,9 @@
     }];
 }
 
-- (void) getReferralCode
-{
-//    [[Branch getInstance] getPromoCodeWithCallback:^(NSDictionary *params, NSError *error) {
-//
-//        if (!error)
-//            [self.context dispatch:@"GET_REFERRAL_CODE_SUCCESSED" data:[params objectForKey:@"promo_code"]];
-//
-//        else
-//            [self.context dispatch:@"GET_REFERRAL_CODE_FAILED" data:error.description];
-//    }];
-}
 
-- (void) createReferralCode:(NSString *)prefix amount:(NSInteger)amount expiration:(NSInteger)expiration bucket:(NSString *)bucket usageType:(NSInteger)usageType rewardLocation:(NSInteger)rewardLocation
-{
-//    [[Branch getInstance] getPromoCodeWithPrefix:prefix amount:amount expiration:[NSDate dateWithTimeIntervalSince1970:expiration / 1000] bucket:bucket usageType:usageType rewardLocation:rewardLocation callback:^(NSDictionary *params, NSError *error) {
-//
-//        if (!error)
-//            [self.context dispatch:@"CREATE_REFERRAL_CODE_SUCCESSED" data:[params objectForKey:@"promo_code"]];
-//
-//        else
-//            [self.context dispatch:@"CREATE_REFERRAL_CODE_FAILED" data:error.description];
-//    }];
-}
 
-- (void) validateReferralCode:(NSString *) code
-{
-//    [[Branch getInstance] validatePromoCode:code callback:^(NSDictionary *params, NSError *error) {
-//
-//        if (!error) {
-//
-//            if ([code isEqualToString:[params objectForKey:@"promo_code"]])
-//                [self.context dispatch:@"VALIDATE_REFERRAL_CODE_SUCCESSED" data:@""];
-//
-//            else
-//                [self.context dispatch:@"VALIDATE_REFERRAL_CODE_FAILED" data:@"invalid (should never happen)"];
-//
-//        } else
-//            [self.context dispatch:@"VALIDATE_REFERRAL_CODE_FAILED" data:error.description];
-//    }];
-}
 
-- (void) applyReferralCode:(NSString *) code
-{
-//    [[Branch getInstance] applyPromoCode:code callback:^(NSDictionary *params, NSError *error) {
-//
-//        if (!error) {
-//
-//            NSString *JSONString = [TypeConversion ConvertNSDictionaryToJSONString:params];
-//
-//            [self.context dispatch:@"APPLY_REFERRAL_CODE_SUCCESSED" data:JSONString];
-//
-//        } else
-//            [self.context dispatch:@"APPLY_REFERRAL_CODE_FAILED" data:error.description];
-//    }];
-}
 
 
 
@@ -291,7 +329,8 @@
 -(void) didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [context log: Branch_TAG message: @"BranchController::didFinishLaunchingWithOptions: %@", launchOptions];
-    [[Branch getInstance] initSessionWithLaunchOptions:launchOptions andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error)
+    [[Branch getInstance] initSessionWithLaunchOptions: launchOptions
+                            andRegisterDeepLinkHandler: ^(NSDictionary *params, NSError *error)
     {
         if (!error)
         {
@@ -305,6 +344,7 @@
     }];
 }
 
+
 -(void) openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     [context log: Branch_TAG message: @"BranchController::openURL: %@ sourceApplication: %@", url, sourceApplication];
@@ -316,11 +356,13 @@
 
 }
 
+
 -(void) openURL:(NSURL *)url options: (NSDictionary*)options
 {
     [context log: Branch_TAG message: @"BranchController::openURL: %@", url];
     [[Branch getInstance] handleDeepLink:url];
 }
+
 
 -(void) continueUserActivity: (NSUserActivity*)userActivity
 {

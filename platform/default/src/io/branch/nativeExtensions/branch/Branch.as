@@ -79,9 +79,7 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		public function getShortUrl( tags:Array = null, channel:String = "", feature:String = "", stage:String = "", json:String = "{}", alias:String = "", type:int = -1 ):void
-		{
-		}
+		
 		
 		
 		public function logout():void
@@ -121,24 +119,67 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
+		
+		public function handleDeepLink( link:String, forceNewSession:Boolean=true ):void
+		{
+		}
+		
+		//
+		//	TRACKING
+		//
+		
+		public function logEvent( event:Object ):Boolean
+		{
+			return false;
+		}
+		
+		
+		
+		//
+		//
+		//	LEGACY
+		//
+		//
+		
+		public function getShortUrl( tags:Array = null, channel:String = "", feature:String = "", stage:String = "", json:String = "{}", alias:String = "", type:int = -1 ):void
+		{
+		}
+		
+		
+		
+		
+		//
+		//
+		//	DEPRECATED
+		//
+		//
+		
+		
+		
+		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
 		public function getReferralCode():void
 		{
 		}
 		
 		
+		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
 		public function createReferralCode( prefix:String, amount:int, expiration:int, bucket:String, calculationType:int, location:int ):void
 		{
 		}
 		
 		
+		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
 		public function validateReferralCode( code:String ):void
 		{
 		}
 		
 		
+		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
 		public function applyReferralCode( code:String ):void
 		{
 		}
+		
+		
 		
 	}
 	

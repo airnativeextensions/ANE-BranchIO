@@ -85,8 +85,8 @@ package com.distriqt.test.branch
 			_text.y = 40;
 			_text.touchable = false;
 			
-			var layout:HorizontalLayout = new HorizontalLayout();
-			layout.horizontalAlign = HorizontalAlign.LEFT;
+			var layout:VerticalLayout = new VerticalLayout();
+			layout.horizontalAlign = HorizontalAlign.RIGHT;
 			layout.verticalAlign = VerticalAlign.BOTTOM;
 			layout.gap = 5;
 			
@@ -99,6 +99,10 @@ package com.distriqt.test.branch
 			_tests = new BranchTests( this );
 			
 			addAction( "Initialise", _tests.init );
+			addAction( "Get Short Url", _tests.getShortUrl );
+			
+			addAction( "Standard :Track", _tests.trackStandard );
+			addAction( "Custom :Track", _tests.trackCustom );
 			
 			addChild( _text );
 			addChild( _tests );

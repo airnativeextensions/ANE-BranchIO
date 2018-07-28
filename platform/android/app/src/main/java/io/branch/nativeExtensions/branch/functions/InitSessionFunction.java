@@ -7,7 +7,7 @@ import com.adobe.fre.FREObject;
 import io.branch.nativeExtensions.branch.BranchContext;
 import io.branch.nativeExtensions.branch.utils.Errors;
 
-public class InitFunction implements FREFunction
+public class InitSessionFunction implements FREFunction
 {
 
 	@Override
@@ -20,7 +20,7 @@ public class InitFunction implements FREFunction
 
 			BranchContext ctx = (BranchContext)context;
 
-			ctx.controller().init( useTestKey );
+			ctx.controller().initSession( useTestKey );
 		}
 		catch (Exception e)
 		{

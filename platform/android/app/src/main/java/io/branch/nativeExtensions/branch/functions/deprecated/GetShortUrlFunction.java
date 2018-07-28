@@ -4,16 +4,20 @@ import com.adobe.fre.FREArray;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
+import com.distriqt.core.utils.FREUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.Iterator;
 
+import io.branch.indexing.BranchUniversalObject;
 import io.branch.nativeExtensions.branch.BranchExtension;
 import io.branch.nativeExtensions.branch.utils.Errors;
 import io.branch.referral.Branch.BranchLinkCreateListener;
 import io.branch.referral.BranchError;
+import io.branch.referral.util.ContentMetadata;
+import io.branch.referral.util.LinkProperties;
 
 public class GetShortUrlFunction extends BaseFunction implements FREFunction
 {
@@ -24,55 +28,95 @@ public class GetShortUrlFunction extends BaseFunction implements FREFunction
 		FREObject result = null;
 		try
 		{
+			String[] tags = FREUtils.GetObjectAsArrayOfStrings( (FREArray) args[0] );
+			String channel = args[1].getAsString();
+			String feature = args[2].getAsString();
+			String stage = args[3].getAsString();
+			String json = args[4].getAsString();
+			String alias = args[5].getAsString();
+			int type = args[6].getAsInt();
 
+			JSONObject obj;
+			try
+			{
+				obj = new JSONObject( json );
+			}
+			catch (JSONException e)
+			{
+				BranchExtension.context.dispatchStatusEventAsync( "GET_SHORT_URL_FAILED", "Could not parse malformed JSON" );
+				Errors.handleException( e );
+				return null;
+			}
+
+
+			// https://github.com/BranchMetrics/android-branch-deep-linking#creating-a-deep-link
+			LinkProperties linkProperties = new LinkProperties()
+					.setChannel( channel )
+					.setFeature( feature )
+					.setStage( stage );
+
+			if (alias.length() != 0) linkProperties.setAlias( alias );
+
+			for (String tag : tags)
+			{
+				linkProperties.addTag( tag );
+			}
+
+			BranchUniversalObject branchUniversalObject = new BranchUniversalObject();
+
+			if (obj != null)
+			{
+				if (obj.has( "$og_title" )) branchUniversalObject.setTitle( obj.getString( "$og_title" ) );
+				if (obj.has( "$og_image_url" )) branchUniversalObject.setContentImageUrl( obj.getString( "$og_image_url" ) );
+				if (obj.has( "$og_description" )) branchUniversalObject.setContentDescription( obj.getString( "$og_description" ) );
+
+				ContentMetadata contentMetadata = new ContentMetadata();
+				for (Iterator<String> iter = obj.keys(); iter.hasNext(); )
+				{
+					String key = iter.next();
+
+					// Ignore BUO properties
+					if (key.equals( "$og_title" ) || key.equals( "$og_image_url" ) || key.equals( "$og_description" ))
+						continue;
+
+					try
+					{
+						contentMetadata.addCustomMetadata( key, obj.getString( key ) );
+					}
+					catch (Exception e)
+					{
+					}
+				}
+				branchUniversalObject.setContentMetadata( contentMetadata );
+			}
+
+			branchUniversalObject.generateShortUrl(
+					context.getActivity(),
+					linkProperties,
+					new BranchLinkCreateListener()
+					{
+
+						@Override
+						public void onLinkCreate( String url, BranchError error )
+						{
+							if (error == null)
+							{
+								BranchExtension.context.dispatchStatusEventAsync( "GET_SHORT_URL_SUCCESSED", url );
+							}
+							else
+							{
+								BranchExtension.context.dispatchStatusEventAsync( "GET_SHORT_URL_FAILED", error.getMessage() );
+							}
+						}
+					} );
 
 		}
 		catch (Exception e)
 		{
-			Errors.handleException( context, e );
+			Errors.handleException( e );
 		}
-
-		List<String> tags = getListOfStringFromFREArray((FREArray)args[0]);
-		String channel = getStringFromFREObject(args[1]);
-		String feature = getStringFromFREObject(args[2]);
-		String stage = getStringFromFREObject(args[3]);
-		String json = getStringFromFREObject(args[4]);
-		String alias = getStringFromFREObject(args[5]);
-		int type = getIntFromFREObject(args[6]);
-		
-		try {
-			
-			JSONObject obj = new JSONObject(json);
-			
-			BranchLinkCreateListener callback = new BranchLinkCreateListener() {
-				
-				@Override
-				public void onLinkCreate(String url, BranchError error) {
-					
-					if (error == null)
-						BranchExtension.context.dispatchStatusEventAsync("GET_SHORT_URL_SUCCESSED", url);
-						
-					else
-						BranchExtension.context.dispatchStatusEventAsync("GET_SHORT_URL_FAILED", error.getMessage());
-					
-				}
-			};
-			
-			//if (alias.length() != 0)
-			//	BranchActivity.branch.getShortUrl(alias, tags, channel, feature, stage, obj, callback);
-			//
-			//else if (type != -1)
-			//	BranchActivity.branch.getShortUrl(type, tags, channel, feature, stage, obj, callback);
-			//
-			//else
-			//	BranchActivity.branch.getShortUrl(tags, channel, feature, stage, obj, callback);
-			
-		} catch (JSONException t) {
-			
-			BranchExtension.context.dispatchStatusEventAsync("GET_SHORT_URL_FAILED", "Could not parse malformed JSON");
-			t.printStackTrace();
-		}
-		
-		return null;
+		return result;
 	}
+
 }
+

@@ -14,14 +14,17 @@
  */
 package com.distriqt.test.branch
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
+	import flash.events.InvokeEvent;
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	
 	import io.branch.nativeExtensions.branch.Branch;
 	import io.branch.nativeExtensions.branch.BranchConst;
-	import io.branch.nativeExtensions.branch.BranchEvent;
+	import io.branch.nativeExtensions.branch.events.BranchEvent;
+	import io.branch.nativeExtensions.branch.tracking.BranchEventBuilder;
 	
 	import starling.core.Starling;
 	
@@ -58,15 +61,11 @@ package com.distriqt.test.branch
 				{
 					log( "Branch Version:   " + Branch.instance.version );
 					
-					
-					Branch.instance.addEventListener( BranchEvent.INIT_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
+					NativeApplication.nativeApplication.addEventListener( InvokeEvent.INVOKE, invokeHandler );
 					
 					Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_FAILED, branch_genericHandler );
 					Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_SUCCESSED, branch_genericHandler );
 					
-					Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_SUCCESSED, branch_genericHandler );
 					
 					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_FAILED, branch_genericHandler );
 					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_SUCCESSED, branch_genericHandler );
@@ -76,18 +75,6 @@ package com.distriqt.test.branch
 					
 					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_HISTORY_FAILED, branch_genericHandler );
 					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_HISTORY_SUCCESSED, branch_genericHandler );
-					
-					Branch.instance.addEventListener( BranchEvent.GET_REFERRAL_CODE_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.GET_REFERRAL_CODE_SUCCESSED, branch_genericHandler );
-					
-					Branch.instance.addEventListener( BranchEvent.CREATE_REFERRAL_CODE_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.CREATE_REFERRAL_CODE_SUCCESSED, branch_genericHandler );
-					
-					Branch.instance.addEventListener( BranchEvent.VALIDATE_REFERRAL_CODE_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.VALIDATE_REFERRAL_CODE_SUCCESSED, branch_genericHandler );
-					
-					Branch.instance.addEventListener( BranchEvent.APPLY_REFERRAL_CODE_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.APPLY_REFERRAL_CODE_SUCCESSED, branch_genericHandler );
 					
 				}
 				
@@ -108,22 +95,101 @@ package com.distriqt.test.branch
 			log( "init()" );
 			if (Branch.isSupported)
 			{
-				Branch.instance.init();
+				Branch.instance.addEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
+				Branch.instance.addEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
+				
+				Branch.instance.init( true );
 			}
 		}
 		
-		
 		private function init_successHandler( event:BranchEvent ):void
 		{
-			log( "BranchEvent.INIT_SUCCESSED" + event.informations );
+			log( event.type + "::" + event.informations );
+			
+			Branch.instance.removeEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
+			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
 			
 			// params are the deep linked params associated with the link that the user clicked before showing up
 			// params will be empty if no data found
 			
-			var referringParams:Object = JSON.parse( event.informations );
-			//trace(referringParams.user);
-			
 			Branch.instance.setIdentity( "Bob" );
+			
+//			Branch.instance.getCredits();
+//			Branch.instance.getCreditsHistory();
+			
+			var sessionParams:String = Branch.instance.getLatestReferringParams();
+			log( "sessionParams: " + sessionParams );
+			
+			var installParams:String = Branch.instance.getFirstReferringParams();
+			log( "installParams: " + installParams );
+		}
+		
+		
+		private function init_failedHandler( event:BranchEvent ):void
+		{
+			log( event.type + "::" + event.informations );
+			
+			Branch.instance.removeEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
+			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
+		}
+		
+		
+		
+		//
+		//	INVOKE
+		//
+		
+		private function invokeHandler( event:InvokeEvent ):void
+		{
+			log( "invoke" );
+			
+			var sessionParams:String = Branch.instance.getLatestReferringParams();
+			log( "sessionParams: " + sessionParams );
+		}
+		
+		
+		
+		//
+		//	TRACKING
+		//
+		
+		public function trackStandard():void
+		{
+			log( "trackStandard()" );
+			Branch.instance.logEvent(
+					new BranchEventBuilder( BranchEventBuilder.STANDARD_EVENT_PURCHASE )
+							.setRevenue( 1.23 )
+							.setTax( 0.12 )
+							.setTransactionID( "XXDDCCFFDD" )
+							.setCurrency("USD")
+							.setShipping(0)
+							.build()
+			);
+		}
+		
+		
+		
+		public function trackCustom():void
+		{
+			log( "trackCustom()" );
+			Branch.instance.logEvent(
+					new BranchEventBuilder( "your_custom_event" )
+							.addCustomDataProperty("your_custom_key", "your_custom_value")
+							.build()
+			);
+		}
+		
+		
+		
+		
+		
+		//
+		//	SHORT URL
+		//
+		
+		public function getShortUrl():void
+		{
+			log( "getShortUrl()" );
 			
 			var dataToInclude:Object = {
 				user:        "Joe",
@@ -138,24 +204,49 @@ package com.distriqt.test.branch
 			
 			var tags:Array = [ "version1", "trial6" ];
 			
-			Branch.instance.getShortUrl( tags, "text_message", BranchConst.FEATURE_TAG_SHARE, "level_3", JSON.stringify( dataToInclude ) );
 			
-			Branch.instance.getCredits();
+			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
+			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_SUCCESSED, getShortUrl_successHandler );
 			
-			Branch.instance.getCreditsHistory();
-			
-			Branch.instance.getReferralCode();
-			
-			//Branch.instance.createReferralCode(prefix, amount, expiration, bucket, calculationType, location)
-			//Branch.instance.validateReferralCode(code);
-			//Branch.instance.applyReferralCode(code);
-			
-			var sessionParams:String = Branch.instance.getLatestReferringParams();
-			log( "sessionParams: " + sessionParams );
-			
-			var installParams:String = Branch.instance.getFirstReferringParams();
-			log( "installParams: " + installParams );
+			Branch.instance.getShortUrl(
+					tags,
+					"text_message",
+					BranchConst.FEATURE_TAG_SHARE,
+					"level_3",
+					JSON.stringify(dataToInclude)
+			);
+
 		}
+		
+		
+		private function getShortUrl_failedHandler( event:BranchEvent ):void
+		{
+			log( event.type + "::" + event.informations );
+			
+			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
+			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESSED, getShortUrl_successHandler );
+		}
+		
+		
+		private function getShortUrl_successHandler( event:BranchEvent ):void
+		{
+			log( event.type + "::" + event.informations );
+			
+			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
+			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESSED, getShortUrl_successHandler );
+		
+
+			Branch.instance.handleDeepLink( event.informations );
+		
+		}
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		private function branch_genericHandler( event:BranchEvent ):void

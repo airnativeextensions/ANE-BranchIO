@@ -2,9 +2,11 @@ package {
 	
 	import io.branch.nativeExtensions.branch.Branch;
 	import io.branch.nativeExtensions.branch.BranchConst;
-	import io.branch.nativeExtensions.branch.BranchEvent;
 	
 	import flash.display.Sprite;
+	
+	import io.branch.nativeExtensions.branch.events.BranchEvent;
+	
 	
 	/**
 	 * @author Aymeric
@@ -31,18 +33,6 @@ package {
 			
 			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_FAILED, _branchEventCallback);
 			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_SUCCESSED, _branchEventCallback);
-			
-			Branch.instance.addEventListener(BranchEvent.GET_REFERRAL_CODE_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.GET_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
-			
-			Branch.instance.addEventListener(BranchEvent.CREATE_REFERRAL_CODE_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.CREATE_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
-			
-			Branch.instance.addEventListener(BranchEvent.VALIDATE_REFERRAL_CODE_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.VALIDATE_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
-			
-			Branch.instance.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.APPLY_REFERRAL_CODE_SUCCESSED, _branchEventCallback);
 			
 			Branch.instance.init();
 		}
@@ -77,11 +67,6 @@ package {
 			
 			Branch.instance.getCreditsHistory();
 			
-			Branch.instance.getReferralCode();
-			
-			//Branch.instance.createReferralCode(prefix, amount, expiration, bucket, calculationType, location)
-			//Branch.instance.validateReferralCode(code);
-			//Branch.instance.applyReferralCode(code);
 			
 			var sessionParams:String = Branch.instance.getLatestReferringParams();
 			trace("sessionParams: " + sessionParams);
