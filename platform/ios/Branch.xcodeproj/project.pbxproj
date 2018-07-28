@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E30005BC210C771D007E6CF2 /* BranchOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E30005BA210C771D007E6CF2 /* BranchOptions.h */; };
+		E30005BD210C771D007E6CF2 /* BranchOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = E30005BB210C771D007E6CF2 /* BranchOptions.m */; };
 		E3244A9C1FAC0B8700EB5924 /* BranchController.h in Headers */ = {isa = PBXBuildFile; fileRef = E3244A9A1FAC0B8700EB5924 /* BranchController.h */; };
 		E3244A9D1FAC0B8700EB5924 /* BranchController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3244A9B1FAC0B8700EB5924 /* BranchController.m */; };
 		E33ED8AA1BBD15AE00D23A8C /* BranchContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E33ED8A91BBD15AE00D23A8C /* BranchContext.h */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E30005BA210C771D007E6CF2 /* BranchOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BranchOptions.h; sourceTree = "<group>"; };
+		E30005BB210C771D007E6CF2 /* BranchOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BranchOptions.m; sourceTree = "<group>"; };
 		E3244A9A1FAC0B8700EB5924 /* BranchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchController.h; sourceTree = "<group>"; };
 		E3244A9B1FAC0B8700EB5924 /* BranchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BranchController.m; sourceTree = "<group>"; };
 		E33692DA17CF44850021F35A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -59,6 +63,8 @@
 			children = (
 				E3244A9A1FAC0B8700EB5924 /* BranchController.h */,
 				E3244A9B1FAC0B8700EB5924 /* BranchController.m */,
+				E30005BA210C771D007E6CF2 /* BranchOptions.h */,
+				E30005BB210C771D007E6CF2 /* BranchOptions.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -134,6 +140,7 @@
 				E3244A9C1FAC0B8700EB5924 /* BranchController.h in Headers */,
 				E34144302102F0C400FA0F27 /* TypeConversion.h in Headers */,
 				E3F4A7C3153D8C4A0057A446 /* FlashRuntimeExtensions.h in Headers */,
+				E30005BC210C771D007E6CF2 /* BranchOptions.h in Headers */,
 				E33ED8AA1BBD15AE00D23A8C /* BranchContext.h in Headers */,
 				E34D85B31BB0D81B000DA3F9 /* BranchTag.h in Headers */,
 			);
@@ -191,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3F4A7BC153D8C110057A446 /* Branch.m in Sources */,
+				E30005BD210C771D007E6CF2 /* BranchOptions.m in Sources */,
 				E34144332102F0C400FA0F27 /* TypeConversion.m in Sources */,
 				E34D85BB1BB0D88D000DA3F9 /* BranchExtensionContext.m in Sources */,
 				E3244A9D1FAC0B8700EB5924 /* BranchController.m in Sources */,

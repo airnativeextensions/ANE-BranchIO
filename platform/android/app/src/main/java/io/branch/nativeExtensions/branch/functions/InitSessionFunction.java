@@ -5,6 +5,7 @@ import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 
 import io.branch.nativeExtensions.branch.BranchContext;
+import io.branch.nativeExtensions.branch.controller.BranchOptions;
 import io.branch.nativeExtensions.branch.utils.Errors;
 
 public class InitSessionFunction implements FREFunction
@@ -16,11 +17,13 @@ public class InitSessionFunction implements FREFunction
 		FREObject result = null;
 		try
 		{
-			boolean useTestKey = args[0].getAsBool();
-
 			BranchContext ctx = (BranchContext)context;
 
-			ctx.controller().initSession( useTestKey );
+			BranchOptions options = new BranchOptions();
+			options.useTestKey = args[0].getProperty( "useTestKey" ).getAsBool();
+			options.delayInitToCheckForSearchAds = args[0].getProperty( "delayInitToCheckForSearchAds" ).getAsBool();
+
+			ctx.controller().initSession( options );
 		}
 		catch (Exception e)
 		{

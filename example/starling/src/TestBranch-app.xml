@@ -112,6 +112,7 @@
         <extensionID>com.distriqt.Core</extensionID>
 
         <extensionID>com.distriqt.androidsupport.V4</extensionID>
+        <extensionID>com.distriqt.androidsupport.CustomTabs</extensionID>
         <extensionID>com.distriqt.androidsupport.InstallReferrer</extensionID>
 
         <extensionID>io.branch.nativeExtensions.Branch</extensionID>

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreNativeExtension/CoreNativeExtension.h>
 
+#import "BranchOptions.h"
 #import "BranchContext.h"
 
 
@@ -16,7 +17,7 @@
 
 @property id<BranchContext> context;
 
--(void) initSession:(BOOL) useTestKey;
+-(void) initSession:(BranchOptions*)options;
 -(void) setIdentity:(NSString *) userId;
 -(void) logout;
 

@@ -81,10 +81,13 @@ FREObject Branch_initSession(FREContext ctx, void* funcData, uint32_t argc, FREO
     FREObject result = NULL;
     @autoreleasepool
     {
-        Boolean useTestKey = [DTFREUtils getFREObjectAsBoolean: argv[0]];
-        
-        [branch_controller initSession: useTestKey];
-        
+        BranchOptions* options = [[BranchOptions alloc] init];
+        options.useTestKey = [DTFREUtils getFREObjectPropertyAsBoolean: @"useTestKey" object: argv[0]];
+        options.delayInitToCheckForSearchAds = [DTFREUtils getFREObjectPropertyAsBoolean: @"delayInitToCheckForSearchAds" object: argv[0]];
+
+        [branch_controller initSession: options];
+
+        // This will trigger didfinishlaunching etc
         [branch_notifications checkLaunchOptions];
     }
     return result;

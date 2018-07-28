@@ -186,9 +186,20 @@ package io.branch.nativeExtensions.branch
 		//
 		//
 		
+		/**
+		 * <p>
+		 * Initialise the Branch SDK.
+		 * </p>
+		 * <p>
+		 *     Note: You should use <code>initSession( options:BranchOptions )</code>
+		 *     to get access to the updated Branch features.
+		 * </p>
+		 *
+		 * @param useTestKey Set it to <code>true</code> to use the key test.
+		 */
 		public function init( useTestKey:Boolean = false ):void
 		{
-			return initSession( useTestKey );
+			return initSession( new BranchOptions().setUseTestKey( useTestKey ) );
 		}
 		
 		
@@ -203,18 +214,34 @@ package io.branch.nativeExtensions.branch
 		 * <code>BranchEvent.INIT_SUCCESSED</code> event.
 		 * </p>
 		 *
-		 * @param useTestKey Set it to <code>true</code> to use the key test.
+		 * @example
+		 *
+		 * This example shows how to set the test mode and delay initialisation to check
+		 * for search ads.
+		 *
+		 * <listing version="3.0">
+		 * Branch.instance.initSession(
+		 * 	new BranchOptions()
+		 * 		.setUseTestKey()
+		 * 		.setDelayInitToCheckForSearchAds()
+		 * );
+		 * </listing>
+		 *
+		 * @see BranchOptions
 		 */
-		public function initSession( useTestKey:Boolean = false ):void
+		public function initSession( options:BranchOptions=null ):void
 		{
 			try
 			{
-				_extensionContext.call( "initSession", useTestKey );
+				if (options == null) options = new BranchOptions();
+				
+				_extensionContext.call( "initSession", options );
 			}
 			catch (e:Error)
 			{
 			}
 		}
+		
 		
 		
 		/**
@@ -381,7 +408,7 @@ package io.branch.nativeExtensions.branch
 		 *
 		 * @return <code>true</code> if the event is logged to Branch
 		 *
-		 * @see io.branch.nativeExtensions.branch.tracking#BranchEventBuilder
+		 * @see io.branch.nativeExtensions.branch.tracking.BranchEventBuilder
 		 */
 		public function logEvent( event:Object ):Boolean
 		{

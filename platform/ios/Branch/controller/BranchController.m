@@ -30,10 +30,17 @@
 }
 
 
--(void) initSession:(BOOL)useTestKey
+-(void) initSession:(BranchOptions*)options
 {
-    [context log: Branch_TAG message: @"BranchController::initSession: %@", useTestKey ? @"true" : @"false"];
-    Branch.useTestBranchKey = useTestKey;
+    [context log: Branch_TAG message: @"BranchController::initSession: %@", options.useTestKey ? @"true" : @"false"];
+    if (options.useTestKey)
+    {
+        Branch.useTestBranchKey = YES;
+    }
+    if (options.delayInitToCheckForSearchAds)
+    {
+        [[Branch getInstance] delayInitToCheckForSearchAds];
+    }
 }
 
 

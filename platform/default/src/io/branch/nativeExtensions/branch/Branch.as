@@ -74,17 +74,20 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
+		public function initSession( options:BranchOptions=null ):void
+		{
+		}
+		
+		
 		public function setIdentity( userId:String ):void
 		{
 		}
 		
 		
-		
-		
-		
 		public function logout():void
 		{
 		}
+		
 		
 		
 		public function getLatestReferringParams():String

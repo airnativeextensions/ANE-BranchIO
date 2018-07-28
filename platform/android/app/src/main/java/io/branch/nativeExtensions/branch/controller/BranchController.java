@@ -74,53 +74,54 @@ public class BranchController extends ActivityStateListener
 	}
 
 
-	public void initSession( boolean useTestKey )
+	public void initSession( BranchOptions options )
 	{
-		Logger.d( TAG, "initSession( %b )", useTestKey );
+		Logger.d( TAG, "initSession( %b )", options.useTestKey );
 		try
 		{
 			Intent i = new Intent( _extContext.getActivity().getApplicationContext(), BranchActivity.class );
-			i.putExtra( BranchActivity.extraPrefix + ".useTestKey", useTestKey );
+			i.putExtra( BranchActivity.extraPrefix + ".useTestKey", options.useTestKey );
 			_extContext.getActivity().startActivity(i);
 
 			//
 			//	THIS DOESN'T WORK HERE
 			// Branch must need some activity callback that we can't manually trigger
 
-			//if (useTestKey)
+			//if (options.useTestKey)
 			//{
 			//	Branch.getTestInstance( _extContext.getActivity().getApplication() );
 			//}
 			//else
 			//{
-			//	Branch.getInstance( _extContext.getActivity().getApplication() );
+			//	Branch.getAutoInstance( _extContext.getActivity().getApplication() );
 			//}
 			//
-			//Branch.getInstance().resetUserSession();
-			//Branch.getInstance().initSession(
-			//		new Branch.BranchReferralInitListener()
-			//		{
-			//			@Override
-			//			public void onInitFinished( JSONObject referringParams, BranchError error )
-			//			{
-			//				Logger.d( TAG, "onInitFinished( %s, %s )",
-			//						referringParams == null ? "null" : referringParams.toString(),
-			//						error == null ? "null" : error.getMessage() );
-			//
-			//				if (error == null)
-			//				{
-			//					_extContext.dispatchEvent( "INIT_SUCCESSED", referringParams.toString().replace( "\\", "" ) );
-			//				}
-			//				else
-			//				{
-			//					_extContext.dispatchEvent( "INIT_FAILED", error.getMessage() );
-			//				}
-			//			}
-			//		},
-			//		_extContext.getActivity().getIntent().getData(),
-			//		_extContext.getActivity()
-			//);
-			//
+
+			Branch.getInstance().initSession(
+					new Branch.BranchReferralInitListener()
+					{
+						@Override
+						public void onInitFinished( JSONObject referringParams, BranchError error )
+						{
+							Logger.d( TAG, "onInitFinished( %s, %s )",
+									referringParams == null ? "null" : referringParams.toString(),
+									error == null ? "null" : error.getMessage() );
+
+							if (error == null)
+							{
+								_extContext.dispatchEvent( "INIT_SUCCESSED", referringParams.toString().replace( "\\", "" ) );
+							}
+							else
+							{
+								_extContext.dispatchEvent( "INIT_FAILED", error.getMessage() );
+							}
+						}
+					},
+					_extContext.getActivity().getIntent().getData(),
+					_extContext.getActivity()
+			);
+
+
 			//IntegrationValidator.validate( _extContext.getActivity() );
 
 		}
