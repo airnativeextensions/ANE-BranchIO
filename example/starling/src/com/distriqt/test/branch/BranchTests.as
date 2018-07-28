@@ -23,6 +23,7 @@ package com.distriqt.test.branch
 	
 	import io.branch.nativeExtensions.branch.Branch;
 	import io.branch.nativeExtensions.branch.BranchConst;
+	import io.branch.nativeExtensions.branch.BranchOptions;
 	import io.branch.nativeExtensions.branch.events.BranchEvent;
 	import io.branch.nativeExtensions.branch.tracking.BranchEventBuilder;
 	
@@ -90,15 +91,19 @@ package com.distriqt.test.branch
 		//  
 		//
 		
-		public function init():void
+		public function initSession():void
 		{
-			log( "init()" );
+			log( "initSession()" );
 			if (Branch.isSupported)
 			{
 				Branch.instance.addEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
 				Branch.instance.addEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
 				
-				Branch.instance.init( true );
+				Branch.instance.initSession(
+						new BranchOptions()
+								.setUseTestKey()
+								.setDelayInitToCheckForSearchAds()
+				);
 			}
 		}
 		

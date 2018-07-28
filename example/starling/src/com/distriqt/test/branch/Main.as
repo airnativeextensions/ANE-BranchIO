@@ -98,7 +98,7 @@ package com.distriqt.test.branch
 			
 			_tests = new BranchTests( this );
 			
-			addAction( "Initialise", _tests.init );
+			addAction( "Initialise", _tests.initSession );
 			addAction( "Get Short Url", _tests.getShortUrl );
 			
 			addAction( "Standard :Track", _tests.trackStandard );
