@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import org.json.JSONObject;
 
+import io.branch.nativeExtensions.branch.events.BranchEvent;
 import io.branch.nativeExtensions.branch.utils.Logger;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
@@ -49,11 +50,11 @@ public class BranchActivity extends Activity
 
 						if (error == null)
 						{
-							BranchExtension.context.dispatchEvent( "INIT_SUCCESSED", referringParams.toString().replace( "\\", "" ) );
+							BranchExtension.context.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
 						}
 						else
 						{
-							BranchExtension.context.dispatchEvent( "INIT_FAILED", error.getMessage() );
+							BranchExtension.context.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
 						}
 						finish();
 					}

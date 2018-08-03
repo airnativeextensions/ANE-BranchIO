@@ -7,17 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E30005BC210C771D007E6CF2 /* BranchOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E30005BA210C771D007E6CF2 /* BranchOptions.h */; };
-		E30005BD210C771D007E6CF2 /* BranchOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = E30005BB210C771D007E6CF2 /* BranchOptions.m */; };
-		E3244A9C1FAC0B8700EB5924 /* BranchController.h in Headers */ = {isa = PBXBuildFile; fileRef = E3244A9A1FAC0B8700EB5924 /* BranchController.h */; };
-		E3244A9D1FAC0B8700EB5924 /* BranchController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3244A9B1FAC0B8700EB5924 /* BranchController.m */; };
-		E33ED8AA1BBD15AE00D23A8C /* BranchContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E33ED8A91BBD15AE00D23A8C /* BranchContext.h */; };
-		E34144302102F0C400FA0F27 /* TypeConversion.h in Headers */ = {isa = PBXBuildFile; fileRef = E341442B2102F0C400FA0F27 /* TypeConversion.h */; };
-		E34144332102F0C400FA0F27 /* TypeConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = E341442E2102F0C400FA0F27 /* TypeConversion.m */; };
+		E30005BC210C771D007E6CF2 /* BIOBranchOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = E30005BA210C771D007E6CF2 /* BIOBranchOptions.h */; };
+		E30005BD210C771D007E6CF2 /* BIOBranchOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = E30005BB210C771D007E6CF2 /* BIOBranchOptions.m */; };
+		E3244A9C1FAC0B8700EB5924 /* BIOBranchController.h in Headers */ = {isa = PBXBuildFile; fileRef = E3244A9A1FAC0B8700EB5924 /* BIOBranchController.h */; };
+		E3244A9D1FAC0B8700EB5924 /* BIOBranchController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3244A9B1FAC0B8700EB5924 /* BIOBranchController.m */; };
+		E33E7EBF211447BC0088FA15 /* BIOBranchEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = E33E7EBD211447BC0088FA15 /* BIOBranchEvent.h */; };
+		E33E7EC0211447BC0088FA15 /* BIOBranchEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = E33E7EBE211447BC0088FA15 /* BIOBranchEvent.m */; };
+		E33E7EC321144A750088FA15 /* BIOBranchCreditsEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = E33E7EC121144A750088FA15 /* BIOBranchCreditsEvent.h */; };
+		E33E7EC421144A750088FA15 /* BIOBranchCreditsEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = E33E7EC221144A750088FA15 /* BIOBranchCreditsEvent.m */; };
+		E33ED8AA1BBD15AE00D23A8C /* BIOBranchContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E33ED8A91BBD15AE00D23A8C /* BIOBranchContext.h */; };
+		E34144302102F0C400FA0F27 /* BIOTypeConversion.h in Headers */ = {isa = PBXBuildFile; fileRef = E341442B2102F0C400FA0F27 /* BIOTypeConversion.h */; };
+		E34144332102F0C400FA0F27 /* BIOTypeConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = E341442E2102F0C400FA0F27 /* BIOTypeConversion.m */; };
 		E34144362102F0D900FA0F27 /* Branch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E34144352102F0D900FA0F27 /* Branch.framework */; };
-		E34D85B31BB0D81B000DA3F9 /* BranchTag.h in Headers */ = {isa = PBXBuildFile; fileRef = E34D85B21BB0D81B000DA3F9 /* BranchTag.h */; };
-		E34D85BA1BB0D88D000DA3F9 /* BranchExtensionContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E34D85B81BB0D88D000DA3F9 /* BranchExtensionContext.h */; };
-		E34D85BB1BB0D88D000DA3F9 /* BranchExtensionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = E34D85B91BB0D88D000DA3F9 /* BranchExtensionContext.m */; };
+		E34D85B31BB0D81B000DA3F9 /* BIOBranchTag.h in Headers */ = {isa = PBXBuildFile; fileRef = E34D85B21BB0D81B000DA3F9 /* BIOBranchTag.h */; };
+		E34D85BA1BB0D88D000DA3F9 /* BIOBranchExtensionContext.h in Headers */ = {isa = PBXBuildFile; fileRef = E34D85B81BB0D88D000DA3F9 /* BIOBranchExtensionContext.h */; };
+		E34D85BB1BB0D88D000DA3F9 /* BIOBranchExtensionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = E34D85B91BB0D88D000DA3F9 /* BIOBranchExtensionContext.m */; };
 		E3F4A7B6153D8C110057A446 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3F4A7B5153D8C110057A446 /* Foundation.framework */; };
 		E3F4A7BC153D8C110057A446 /* Branch.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F4A7BB153D8C110057A446 /* Branch.m */; };
 		E3F4A7C3153D8C4A0057A446 /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = E3F4A7C2153D8C4A0057A446 /* FlashRuntimeExtensions.h */; };
@@ -25,18 +29,22 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E30005BA210C771D007E6CF2 /* BranchOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BranchOptions.h; sourceTree = "<group>"; };
-		E30005BB210C771D007E6CF2 /* BranchOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BranchOptions.m; sourceTree = "<group>"; };
-		E3244A9A1FAC0B8700EB5924 /* BranchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchController.h; sourceTree = "<group>"; };
-		E3244A9B1FAC0B8700EB5924 /* BranchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BranchController.m; sourceTree = "<group>"; };
+		E30005BA210C771D007E6CF2 /* BIOBranchOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BIOBranchOptions.h; sourceTree = "<group>"; };
+		E30005BB210C771D007E6CF2 /* BIOBranchOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BIOBranchOptions.m; sourceTree = "<group>"; };
+		E3244A9A1FAC0B8700EB5924 /* BIOBranchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BIOBranchController.h; sourceTree = "<group>"; };
+		E3244A9B1FAC0B8700EB5924 /* BIOBranchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BIOBranchController.m; sourceTree = "<group>"; };
 		E33692DA17CF44850021F35A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		E33ED8A91BBD15AE00D23A8C /* BranchContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchContext.h; sourceTree = "<group>"; };
-		E341442B2102F0C400FA0F27 /* TypeConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeConversion.h; sourceTree = "<group>"; };
-		E341442E2102F0C400FA0F27 /* TypeConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TypeConversion.m; sourceTree = "<group>"; };
+		E33E7EBD211447BC0088FA15 /* BIOBranchEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BIOBranchEvent.h; sourceTree = "<group>"; };
+		E33E7EBE211447BC0088FA15 /* BIOBranchEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BIOBranchEvent.m; sourceTree = "<group>"; };
+		E33E7EC121144A750088FA15 /* BIOBranchCreditsEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BIOBranchCreditsEvent.h; sourceTree = "<group>"; };
+		E33E7EC221144A750088FA15 /* BIOBranchCreditsEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BIOBranchCreditsEvent.m; sourceTree = "<group>"; };
+		E33ED8A91BBD15AE00D23A8C /* BIOBranchContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BIOBranchContext.h; sourceTree = "<group>"; };
+		E341442B2102F0C400FA0F27 /* BIOTypeConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BIOTypeConversion.h; sourceTree = "<group>"; };
+		E341442E2102F0C400FA0F27 /* BIOTypeConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BIOTypeConversion.m; sourceTree = "<group>"; };
 		E34144352102F0D900FA0F27 /* Branch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Branch.framework; sourceTree = "<group>"; };
-		E34D85B21BB0D81B000DA3F9 /* BranchTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchTag.h; sourceTree = "<group>"; };
-		E34D85B81BB0D88D000DA3F9 /* BranchExtensionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchExtensionContext.h; sourceTree = "<group>"; };
-		E34D85B91BB0D88D000DA3F9 /* BranchExtensionContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BranchExtensionContext.m; sourceTree = "<group>"; };
+		E34D85B21BB0D81B000DA3F9 /* BIOBranchTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BIOBranchTag.h; sourceTree = "<group>"; };
+		E34D85B81BB0D88D000DA3F9 /* BIOBranchExtensionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BIOBranchExtensionContext.h; sourceTree = "<group>"; };
+		E34D85B91BB0D88D000DA3F9 /* BIOBranchExtensionContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BIOBranchExtensionContext.m; sourceTree = "<group>"; };
 		E3F4A7B2153D8C110057A446 /* libBranch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBranch.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3F4A7B5153D8C110057A446 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E3F4A7B9153D8C110057A446 /* Branch-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Branch-Prefix.pch"; sourceTree = "<group>"; };
@@ -61,12 +69,23 @@
 		E3244A991FAC0B8700EB5924 /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				E3244A9A1FAC0B8700EB5924 /* BranchController.h */,
-				E3244A9B1FAC0B8700EB5924 /* BranchController.m */,
-				E30005BA210C771D007E6CF2 /* BranchOptions.h */,
-				E30005BB210C771D007E6CF2 /* BranchOptions.m */,
+				E3244A9A1FAC0B8700EB5924 /* BIOBranchController.h */,
+				E3244A9B1FAC0B8700EB5924 /* BIOBranchController.m */,
+				E30005BA210C771D007E6CF2 /* BIOBranchOptions.h */,
+				E30005BB210C771D007E6CF2 /* BIOBranchOptions.m */,
 			);
 			path = controller;
+			sourceTree = "<group>";
+		};
+		E33E7EBC211447900088FA15 /* events */ = {
+			isa = PBXGroup;
+			children = (
+				E33E7EBD211447BC0088FA15 /* BIOBranchEvent.h */,
+				E33E7EBE211447BC0088FA15 /* BIOBranchEvent.m */,
+				E33E7EC121144A750088FA15 /* BIOBranchCreditsEvent.h */,
+				E33E7EC221144A750088FA15 /* BIOBranchCreditsEvent.m */,
+			);
+			path = events;
 			sourceTree = "<group>";
 		};
 		E34144342102F0D900FA0F27 /* libs */ = {
@@ -107,14 +126,15 @@
 		E3F4A7B7153D8C110057A446 /* Branch */ = {
 			isa = PBXGroup;
 			children = (
-				E341442B2102F0C400FA0F27 /* TypeConversion.h */,
-				E341442E2102F0C400FA0F27 /* TypeConversion.m */,
+				E341442B2102F0C400FA0F27 /* BIOTypeConversion.h */,
+				E341442E2102F0C400FA0F27 /* BIOTypeConversion.m */,
 				E3F4A7BB153D8C110057A446 /* Branch.m */,
+				E33E7EBC211447900088FA15 /* events */,
 				E3244A991FAC0B8700EB5924 /* controller */,
 				E3F4A7B8153D8C110057A446 /* Supporting Files */,
-				E34D85B81BB0D88D000DA3F9 /* BranchExtensionContext.h */,
-				E34D85B91BB0D88D000DA3F9 /* BranchExtensionContext.m */,
-				E33ED8A91BBD15AE00D23A8C /* BranchContext.h */,
+				E34D85B81BB0D88D000DA3F9 /* BIOBranchExtensionContext.h */,
+				E34D85B91BB0D88D000DA3F9 /* BIOBranchExtensionContext.m */,
+				E33ED8A91BBD15AE00D23A8C /* BIOBranchContext.h */,
 			);
 			path = Branch;
 			sourceTree = "<group>";
@@ -122,7 +142,7 @@
 		E3F4A7B8153D8C110057A446 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E34D85B21BB0D81B000DA3F9 /* BranchTag.h */,
+				E34D85B21BB0D81B000DA3F9 /* BIOBranchTag.h */,
 				E3F4A7C2153D8C4A0057A446 /* FlashRuntimeExtensions.h */,
 				E3F4A7B9153D8C110057A446 /* Branch-Prefix.pch */,
 			);
@@ -136,13 +156,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E34D85BA1BB0D88D000DA3F9 /* BranchExtensionContext.h in Headers */,
-				E3244A9C1FAC0B8700EB5924 /* BranchController.h in Headers */,
-				E34144302102F0C400FA0F27 /* TypeConversion.h in Headers */,
+				E33E7EBF211447BC0088FA15 /* BIOBranchEvent.h in Headers */,
+				E34D85BA1BB0D88D000DA3F9 /* BIOBranchExtensionContext.h in Headers */,
+				E3244A9C1FAC0B8700EB5924 /* BIOBranchController.h in Headers */,
+				E34144302102F0C400FA0F27 /* BIOTypeConversion.h in Headers */,
 				E3F4A7C3153D8C4A0057A446 /* FlashRuntimeExtensions.h in Headers */,
-				E30005BC210C771D007E6CF2 /* BranchOptions.h in Headers */,
-				E33ED8AA1BBD15AE00D23A8C /* BranchContext.h in Headers */,
-				E34D85B31BB0D81B000DA3F9 /* BranchTag.h in Headers */,
+				E33E7EC321144A750088FA15 /* BIOBranchCreditsEvent.h in Headers */,
+				E30005BC210C771D007E6CF2 /* BIOBranchOptions.h in Headers */,
+				E33ED8AA1BBD15AE00D23A8C /* BIOBranchContext.h in Headers */,
+				E34D85B31BB0D81B000DA3F9 /* BIOBranchTag.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,10 +220,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3F4A7BC153D8C110057A446 /* Branch.m in Sources */,
-				E30005BD210C771D007E6CF2 /* BranchOptions.m in Sources */,
-				E34144332102F0C400FA0F27 /* TypeConversion.m in Sources */,
-				E34D85BB1BB0D88D000DA3F9 /* BranchExtensionContext.m in Sources */,
-				E3244A9D1FAC0B8700EB5924 /* BranchController.m in Sources */,
+				E30005BD210C771D007E6CF2 /* BIOBranchOptions.m in Sources */,
+				E34144332102F0C400FA0F27 /* BIOTypeConversion.m in Sources */,
+				E34D85BB1BB0D88D000DA3F9 /* BIOBranchExtensionContext.m in Sources */,
+				E33E7EC421144A750088FA15 /* BIOBranchCreditsEvent.m in Sources */,
+				E3244A9D1FAC0B8700EB5924 /* BIOBranchController.m in Sources */,
+				E33E7EC0211447BC0088FA15 /* BIOBranchEvent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

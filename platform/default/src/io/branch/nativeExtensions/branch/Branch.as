@@ -5,6 +5,70 @@ package io.branch.nativeExtensions.branch
 	import flash.external.ExtensionContext;
 	
 	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.INIT_SUCCESS
+	 */
+	[Event(name="init:success", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.INIT_FAILED
+	 */
+	[Event(name="init:failed", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.SET_IDENTITY_SUCCESS
+	 */
+	[Event(name="setidentity:success", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.SET_IDENTITY_FAILED
+	 */
+	[Event(name="setidentity:failed", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.GET_SHORT_URL_SUCCESS
+	 */
+	[Event(name="getshorturl:success", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.GET_SHORT_URL_FAILED
+	 */
+	[Event(name="getshorturl:failed", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_SUCCESS
+	 */
+	[Event(name="getcredits:success", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_FAILED
+	 */
+	[Event(name="getcredits:failed", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.REDEEM_REWARDS_SUCCESS
+	 */
+	[Event(name="redeemrewards:success", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.REDEEM_REWARDS_FAILED
+	 */
+	[Event(name="redeemrewards:failed", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_HISTORY_SUCCESS
+	 */
+	[Event(name="getcreditshistory:success", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED
+	 */
+	[Event(name="getcreditshistory:failed", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	
+	
 	public class Branch extends EventDispatcher
 	{
 		////////////////////////////////////////////////////////

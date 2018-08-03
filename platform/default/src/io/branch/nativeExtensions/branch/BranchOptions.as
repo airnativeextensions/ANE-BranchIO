@@ -33,20 +33,37 @@ package io.branch.nativeExtensions.branch
         //
 	
 		/**
+		 * <p>
 		 * If true then the Branch SDK will use the test key.
 		 * You should not do this for production apps.
+		 * </p>
+		 *
+		 * <p>
+		 * Note: When this is set to the default (<code>false</code>) settings in
+		 * your manifest (Android) and info additions (iOS) will override this.
+		 * When you set it to <code>true</code> it will override any setting in your
+		 * manifest / info additions and force usage of the test key.
+		 * </p>
+		 *
+		 * @default false
 		 */
 		public var useTestKey:Boolean = false;
 	
 		
 		/**
-		 * iOS only
-		 *
+		 * <p>
+		 * iOS only (no affect on Android)
+		 * </p>
+		 * <p>
 		 * Allows Branch to track Apple Search Ads deep linking analytics.
-		 *
+		 * </p>
+		 * <p>
 		 * Analytics from Apple's API have been slow which will make our analytics lower.
 		 * Additionally, Apple's API does not send us all the data of an ad every time
 		 * which will make ads tracked by us to show a generic campaign sometimes.
+		 * </p>
+		 *
+		 * @default false
 		 */
 		public var delayInitToCheckForSearchAds:Boolean = false;
 		

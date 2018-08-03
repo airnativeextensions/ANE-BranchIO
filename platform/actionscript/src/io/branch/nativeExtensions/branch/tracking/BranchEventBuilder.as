@@ -19,11 +19,20 @@ package io.branch.nativeExtensions.branch.tracking
 	
 	
 	/**
+	 * <p>
 	 * Class for creating Branch events for tracking and analytical purpose.
 	 * This class can construct both standard and custom Branch events.
+	 * </p>
+	 * <p>
 	 * Standard Branch events are defined with a name from the predefined constants
 	 * <code>STANDARD_EVENT_...</code>.
-	 * Please use #logEvent() method to log the events for tracking.
+	 * </p>
+	 * <p>
+	 * Please use <code>Branch.instance.logEvent()</code> method to log the events for tracking.
+	 * </p>
+	 *
+	 * @example
+	 *
 	 *
 	 * @see io.branch.nativeExtensions.branch.Branch#logEvent()
 	 */
@@ -68,6 +77,8 @@ package io.branch.nativeExtensions.branch.tracking
 		private var _event : Object;
 		private var _customData : Object;
 		
+		
+		
  		////////////////////////////////////////////////////////
         //  FUNCTIONALITY
         //
@@ -86,6 +97,7 @@ package io.branch.nativeExtensions.branch.tracking
 			_customData = {};
 		}
 
+		
 		private function isStandardEvent( eventName:String ):Boolean
 		{
 			switch (eventName)

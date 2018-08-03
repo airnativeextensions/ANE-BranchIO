@@ -23,7 +23,10 @@ import com.distriqt.core.utils.IExtensionContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import io.branch.nativeExtensions.branch.BranchActivity;
+import java.lang.reflect.Method;
+
+import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
+import io.branch.nativeExtensions.branch.events.BranchEvent;
 import io.branch.nativeExtensions.branch.utils.Errors;
 import io.branch.nativeExtensions.branch.utils.Logger;
 import io.branch.referral.Branch;
@@ -79,25 +82,26 @@ public class BranchController extends ActivityStateListener
 		Logger.d( TAG, "initSession( %b )", options.useTestKey );
 		try
 		{
-			Intent i = new Intent( _extContext.getActivity().getApplicationContext(), BranchActivity.class );
-			i.putExtra( BranchActivity.extraPrefix + ".useTestKey", options.useTestKey );
-			_extContext.getActivity().startActivity(i);
+			Branch branch;
+			if (options.useTestKey)
+			{
+				// Force test instance usage
+				branch = Branch.getTestInstance( _extContext.getActivity().getApplication() );
+			}
+			else
+			{
+				// Auto method from manifest settings
+				branch = Branch.getAutoInstance( _extContext.getActivity().getApplication() );
+			}
 
-			//
-			//	THIS DOESN'T WORK HERE
-			// Branch must need some activity callback that we can't manually trigger
+			// This triggers reinitialisation - without this Branch waits for activity lifecycle events
+			// which may not occur until app minimised.
+			Method method = branch.getClass().getDeclaredMethod( "registerAppReInit" );
+			method.setAccessible( true );
+			method.invoke( branch );
 
-			//if (options.useTestKey)
-			//{
-			//	Branch.getTestInstance( _extContext.getActivity().getApplication() );
-			//}
-			//else
-			//{
-			//	Branch.getAutoInstance( _extContext.getActivity().getApplication() );
-			//}
-			//
-
-			Branch.getInstance().initSession(
+			// Initialise Branch and session
+			branch.initSession(
 					new Branch.BranchReferralInitListener()
 					{
 						@Override
@@ -109,11 +113,11 @@ public class BranchController extends ActivityStateListener
 
 							if (error == null)
 							{
-								_extContext.dispatchEvent( "INIT_SUCCESSED", referringParams.toString().replace( "\\", "" ) );
+								_extContext.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
 							}
 							else
 							{
-								_extContext.dispatchEvent( "INIT_FAILED", error.getMessage() );
+								_extContext.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
 							}
 						}
 					},
@@ -121,13 +125,13 @@ public class BranchController extends ActivityStateListener
 					_extContext.getActivity()
 			);
 
-
 			//IntegrationValidator.validate( _extContext.getActivity() );
 
 		}
 		catch (Exception e)
 		{
 			Errors.handleException( e );
+			_extContext.dispatchEvent( "INIT_FAILED", e.getMessage() );
 		}
 	}
 
@@ -144,11 +148,11 @@ public class BranchController extends ActivityStateListener
 				{
 					if (error == null)
 					{
-						_extContext.dispatchEvent( "SET_IDENTITY_SUCCESSED", "" );
+						_extContext.dispatchEvent( BranchEvent.SET_IDENTITY_SUCCESS, "" );
 					}
 					else
 					{
-						_extContext.dispatchEvent( "SET_IDENTITY_FAILED", error.getMessage() );
+						_extContext.dispatchEvent( BranchEvent.SET_IDENTITY_FAILED, error.getMessage() );
 					}
 				}
 			} );
@@ -269,14 +273,14 @@ public class BranchController extends ActivityStateListener
 					if (error == null)
 					{
 						_extContext.dispatchEvent(
-								"GET_CREDITS_SUCCESSED",
+								BranchCreditsEvent.GET_CREDITS_SUCCESS,
 								String.valueOf( Branch.getInstance().getCreditsForBucket( bucket ) )
 						);
 					}
 					else
 					{
 						_extContext.dispatchEvent(
-								"GET_CREDITS_FAILED",
+								BranchCreditsEvent.GET_CREDITS_FAILED,
 								error.getMessage()
 						);
 					}
@@ -300,11 +304,11 @@ public class BranchController extends ActivityStateListener
 					{
 						if (error == null)
 						{
-							_extContext.dispatchEvent( "REDEEM_REWARDS_SUCCESSED", "" );
+							_extContext.dispatchEvent( BranchCreditsEvent.REDEEM_REWARDS_SUCCESS, "" );
 						}
 						else
 						{
-							_extContext.dispatchEvent( "REDEEM_REWARDS_FAILED", error.getMessage() );
+							_extContext.dispatchEvent( BranchCreditsEvent.REDEEM_REWARDS_FAILED, error.getMessage() );
 						}
 					}
 				} );
@@ -331,11 +335,11 @@ public class BranchController extends ActivityStateListener
 					{
 						if (error == null)
 						{
-							_extContext.dispatchEvent( "GET_CREDITS_HISTORY_SUCCESSED", list.toString() );
+							_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_SUCCESS, list.toString() );
 						}
 						else
 						{
-							_extContext.dispatchEvent( "GET_CREDITS_HISTORY_FAILED", error.getMessage() );
+							_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED, error.getMessage() );
 						}
 					}
 				});

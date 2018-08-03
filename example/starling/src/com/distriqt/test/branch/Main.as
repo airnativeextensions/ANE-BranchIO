@@ -100,6 +100,7 @@ package com.distriqt.test.branch
 			
 			addAction( "Initialise", _tests.initSession );
 			addAction( "Get Short Url", _tests.getShortUrl );
+			addAction( "Set Identity", _tests.setIdentity );
 			
 			addAction( "Standard :Track", _tests.trackStandard );
 			addAction( "Custom :Track", _tests.trackCustom );

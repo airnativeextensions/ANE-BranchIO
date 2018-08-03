@@ -18,8 +18,6 @@ package io.branch.nativeExtensions.branch;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Handler;
-import android.os.Looper;
 
 import com.adobe.air.ActivityResultCallback;
 import com.adobe.air.AndroidActivityWrapper;
@@ -35,14 +33,11 @@ import io.branch.nativeExtensions.branch.controller.BranchController;
 import io.branch.nativeExtensions.branch.functions.HandleDeepLinkFunction;
 import io.branch.nativeExtensions.branch.functions.InvokeFunction;
 import io.branch.nativeExtensions.branch.functions.LogEventFunction;
-import io.branch.nativeExtensions.branch.functions.deprecated.ApplyReferralCodeFunction;
-import io.branch.nativeExtensions.branch.functions.deprecated.CreateReferralCodeFunction;
 import io.branch.nativeExtensions.branch.functions.GetCreditsFunction;
 import io.branch.nativeExtensions.branch.functions.GetCreditsHistoryFunction;
 import io.branch.nativeExtensions.branch.functions.GetFirstReferringParamsFunction;
 import io.branch.nativeExtensions.branch.functions.GetLatestReferringParamsFunction;
-import io.branch.nativeExtensions.branch.functions.deprecated.GetReferralCodeFunction;
-import io.branch.nativeExtensions.branch.functions.deprecated.GetShortUrlFunction;
+import io.branch.nativeExtensions.branch.functions.GetShortUrlFunction;
 import io.branch.nativeExtensions.branch.functions.ImplementationFunction;
 import io.branch.nativeExtensions.branch.functions.InitSessionFunction;
 import io.branch.nativeExtensions.branch.functions.IsSupportedFunction;
@@ -50,7 +45,6 @@ import io.branch.nativeExtensions.branch.functions.LogoutFunction;
 import io.branch.nativeExtensions.branch.functions.RedeemRewardsFunction;
 import io.branch.nativeExtensions.branch.functions.SetIdentityFunction;
 import io.branch.nativeExtensions.branch.functions.UserCompletedActionFunction;
-import io.branch.nativeExtensions.branch.functions.deprecated.ValidateReferralCodeFunction;
 import io.branch.nativeExtensions.branch.functions.VersionFunction;
 
 public class BranchContext extends FREContext implements IExtensionContext, ActivityResultCallback, StateChangeCallback
@@ -132,18 +126,12 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		functionMap.put( "logEvent", new LogEventFunction() );
 
 
-
-
-
 		//
-		// Deprecated
+		// LEGACY
+		//
 
 		functionMap.put( "getShortUrl", new GetShortUrlFunction() );
 
-		functionMap.put( "getReferralCode", new GetReferralCodeFunction() );
-		functionMap.put( "applyReferralCode", new ApplyReferralCodeFunction() );
-		functionMap.put( "createReferralCode", new CreateReferralCodeFunction() );
-		functionMap.put( "validateReferralCode", new ValidateReferralCodeFunction() );
 
 		return functionMap;
 	}
@@ -237,14 +225,6 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		}
 		catch (Exception e)
 		{
-			new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					BranchExtension.context.dispatchEvent( code, data );
-				}
-			}, 500 );
 		}
 	}
 	

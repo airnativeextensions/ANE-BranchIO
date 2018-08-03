@@ -1,7 +1,7 @@
 package io.branch.nativeExtensions.branch.events
 {
 	import flash.events.Event;
-
+	
 	
 	public class BranchEvent extends Event
 	{
@@ -10,74 +10,48 @@ package io.branch.nativeExtensions.branch.events
 		//
 		
 		/**
-		 * Dispatched when the key has been succesfully set up. See event's <code>informations</code> for referringParams.
+		 * Dispatched when the key has been successfully set up. See event's <code>data</code> for referringParams.
+		 *
+		 * @eventType init:success
 		 */
-		public static const INIT_SUCCESSED:String = "INIT_SUCCESSED";
+		public static const INIT_SUCCESS:String = "init:success";
 		
 		/**
-		 * Dispatched when the key init has failed. See event's <code>informations</code> for details.
+		 * Dispatched when the key init has failed. See event's <code>data</code> for details.
+		 *
+		 * @eventType init:failed
 		 */
-		public static const INIT_FAILED:String = "INIT_FAILED";
-		
-		
-		
-		/**
-		 * Dispatched when the identity has been succesfully set up.
-		 */
-		public static const SET_IDENTITY_SUCCESSED:String = "SET_IDENTITY_SUCCESSED";
-		
-		/**
-		 * Dispatched when the identity set up has failed. See event's <code>informations</code> for details.
-		 */
-		public static const SET_IDENTITY_FAILED:String = "SET_IDENTITY_FAILED";
-		
+		public static const INIT_FAILED:String = "init:failed";
 		
 		
 		/**
-		 * Dispatched when the short url has been succesfully created. See event's <code>informations</code> for the result.
+		 * Dispatched when the identity has been successfully set up.
+		 *
+		 * @eventType setidentity:success
 		 */
-		public static const GET_SHORT_URL_SUCCESSED:String = "GET_SHORT_URL_SUCCESSED";
+		public static const SET_IDENTITY_SUCCESS:String = "setidentity:success";
 		
 		/**
-		 * Dispatched when the <code>getShortUrl</code> has failed. See event's <code>informations</code> for details.
+		 * Dispatched when the identity set up has failed. See event's <code>data</code> for details.
+		 *
+		 * @eventType setidentity:failed
 		 */
-		public static const GET_SHORT_URL_FAILED:String = "GET_SHORT_URL_FAILED";
-		
-		
-		
-		/**
-		 * Dispatched when the <code>getCredits</code> method is called and successed. See event's <code>informations</code> for details.
-		 */
-		public static const GET_CREDITS_SUCCESSED:String = "GET_CREDITS_SUCCESSED";
-		
-		/**
-		 * Dispatched when the <code>getCredits</code> has failed. See event's <code>informations</code> for details.
-		 */
-		public static const GET_CREDITS_FAILED:String = "GET_CREDITS_FAILED";
-		
+		public static const SET_IDENTITY_FAILED:String = "setidentity:failed";
 		
 		
 		/**
-		 * Dispatched when the <code>redeemRewards</code> has successed.
+		 * Dispatched when the short url has been successfully created. See event's <code>data</code> for the result.
+		 *
+		 * @eventType getshorturl:success
 		 */
-		public static const REDEEM_REWARDS_SUCCESSED:String = "REDEEM_REWARDS_SUCCESSED";
+		public static const GET_SHORT_URL_SUCCESS:String = "getshorturl:success";
 		
 		/**
-		 * Dispatched when the <code>redeemRewards</code> has failed. See event's <code>informations</code> for details.
+		 * Dispatched when the <code>getShortUrl</code> has failed. See event's <code>data</code> for details.
+		 *
+		 * @eventType getshorturl:failed
 		 */
-		public static const REDEEM_REWARDS_FAILED:String = "REDEEM_REWARDS_FAILED";
-		
-		
-		
-		/**
-		 * Dispatched when the <code>getCreditsHistory</code> method is called and successed. See event's <code>informations</code> for details.
-		 */
-		public static const GET_CREDITS_HISTORY_SUCCESSED:String = "GET_CREDITS_HISTORY_SUCCESSED";
-		
-		/**
-		 * Dispatched when the <code>getCreditsHistory</code> has failed. See event's <code>informations</code> for details.
-		 */
-		public static const GET_CREDITS_HISTORY_FAILED:String = "GET_CREDITS_HISTORY_FAILED";
+		public static const GET_SHORT_URL_FAILED:String = "getshorturl:failed";
 		
 		
 		
@@ -87,30 +61,31 @@ package io.branch.nativeExtensions.branch.events
 		//
 		
 		/**
-		 * <code>informations</code> contains the error from the base SDK or the the result expected like for <code>getShortUrl</code>, <code>getReferralCode</code>, <code>createReferralCode</code>.
-		 * It can also contains credits, think to turn them into <code>int</code>!
-		 * And also the credits history as a stringified array!
-		 * Or the code referral applied as stringified JSON.
+		 * <p>
+		 * For failed events <code>data</code> contains an error message describing the error that occurred.
+		 * </p>
+		 *
+		 * <p>
+		 * For success events generally this consists of a JSON object that can be converted using <code>JSON.parse( event.data );</code>
+		 * </p>
 		 */
-		public var informations:String;
-		
+		public var data:String;
 		
 		
 		////////////////////////////////////////////////////////
 		//  FUNCTIONALITY
 		//
 		
-		public function BranchEvent( type:String, informations:String, bubbles:Boolean = false, cancelable:Boolean = false )
+		public function BranchEvent( type:String, data:String, bubbles:Boolean = false, cancelable:Boolean = false )
 		{
 			super( type, bubbles, cancelable );
-			
-			this.informations = informations;
+			this.data = data;
 		}
 		
 		
 		override public function clone():Event
 		{
-			return new BranchEvent( type, informations, bubbles, cancelable );
+			return new BranchEvent( type, data, bubbles, cancelable );
 		}
 		
 		

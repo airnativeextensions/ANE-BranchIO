@@ -8,9 +8,78 @@ package io.branch.nativeExtensions.branch
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
 	
+	import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
+	
 	import io.branch.nativeExtensions.branch.events.BranchEvent;
 	
 	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.INIT_SUCCESS
+	 */
+	[Event(name="init:success", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.INIT_FAILED
+	 */
+	[Event(name="init:failed", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.SET_IDENTITY_SUCCESS
+	 */
+	[Event(name="setidentity:success", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.SET_IDENTITY_FAILED
+	 */
+	[Event(name="setidentity:failed", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.GET_SHORT_URL_SUCCESS
+	 */
+	[Event(name="getshorturl:success", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.GET_SHORT_URL_FAILED
+	 */
+	[Event(name="getshorturl:failed", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
+	
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_SUCCESS
+	 */
+	[Event(name="getcredits:success", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_FAILED
+	 */
+	[Event(name="getcredits:failed", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.REDEEM_REWARDS_SUCCESS
+	 */
+	[Event(name="redeemrewards:success", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.REDEEM_REWARDS_FAILED
+	 */
+	[Event(name="redeemrewards:failed", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_HISTORY_SUCCESS
+	 */
+	[Event(name="getcreditshistory:success", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	/**
+	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED
+	 */
+	[Event(name="getcreditshistory:failed", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
+	
+	
+	/**
+	 * <p>
+	 * Main interface to the Branch SDK for the Branch native extension.
+	 * </p>
+	 */
 	public class Branch extends EventDispatcher
 	{
 		////////////////////////////////////////////////////////
@@ -25,7 +94,6 @@ package io.branch.nativeExtensions.branch
 		private static const ERROR_SINGLETON:String = "The singleton has already been created. Use Branch.instance to access the functionality";
 		
 		
-		
 		////////////////////////////////////////////////////////
 		//	VARIABLES
 		//
@@ -33,7 +101,6 @@ package io.branch.nativeExtensions.branch
 		private static var _instance:Branch = null;
 		private static var _shouldCreateInstance:Boolean = false;
 		private static var _extensionContext:ExtensionContext;
-		
 		
 		
 		////////////////////////////////////////////////////////
@@ -59,13 +126,12 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		
 		////////////////////////////////////////////////////////
 		//	FUNCTIONALITY
 		//
 		
 		/**
-		 * <code>Branch</code> is a Singleton, it can only be initialized one time.
+		 * <code>Branch</code> is a Singleton, it should be access through the <code>Branch.instance</code> reference.
 		 */
 		public function Branch()
 		{
@@ -167,7 +233,7 @@ package io.branch.nativeExtensions.branch
 		public function dispose():void
 		{
 			NativeApplication.nativeApplication.removeEventListener( InvokeEvent.INVOKE, nativeApplication_invokeHandler );
-
+			
 			if (_extensionContext)
 			{
 				_extensionContext.removeEventListener( StatusEvent.STATUS, extension_statusHandler );
@@ -177,7 +243,6 @@ package io.branch.nativeExtensions.branch
 			
 			_instance = null;
 		}
-		
 		
 		
 		//
@@ -221,15 +286,15 @@ package io.branch.nativeExtensions.branch
 		 *
 		 * <listing version="3.0">
 		 * Branch.instance.initSession(
-		 * 	new BranchOptions()
-		 * 		.setUseTestKey()
-		 * 		.setDelayInitToCheckForSearchAds()
+		 *    new BranchOptions()
+		 *        .setUseTestKey()
+		 *        .setDelayInitToCheckForSearchAds()
 		 * );
 		 * </listing>
 		 *
 		 * @see BranchOptions
 		 */
-		public function initSession( options:BranchOptions=null ):void
+		public function initSession( options:BranchOptions = null ):void
 		{
 			try
 			{
@@ -243,16 +308,22 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		
 		/**
 		 * Often, you might have your own user IDs, or want referral and event data to persist across platforms or uninstall/reinstall.
-		 * It's helpful if you know your users access your service from different devices. This where we introduce the concept of an 'identity'.
+		 * It's helpful if you know your users access your service from different devices.
+		 * This where we introduce the concept of an 'identity'.
 		 *
 		 * @param userId Identify a user, with his user id.
 		 */
 		public function setIdentity( userId:String ):void
 		{
-			_extensionContext.call( "setIdentity", userId );
+			try
+			{
+				_extensionContext.call( "setIdentity", userId );
+			}
+			catch (e:Error)
+			{
+			}
 		}
 		
 		
@@ -281,7 +352,14 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function getLatestReferringParams():String
 		{
-			return _extensionContext.call( "getLatestReferringParams" ) as String;
+			try
+			{
+				return _extensionContext.call( "getLatestReferringParams" ) as String;
+			}
+			catch (e:Error)
+			{
+			}
+			return null;
 		}
 		
 		
@@ -293,7 +371,14 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function getFirstReferringParams():String
 		{
-			return _extensionContext.call( "getFirstReferringParams" ) as String;
+			try
+			{
+				return _extensionContext.call( "getFirstReferringParams" ) as String;
+			}
+			catch (e:Error)
+			{
+			}
+			return null;
 		}
 		
 		
@@ -306,10 +391,10 @@ package io.branch.nativeExtensions.branch
 		 * </p>
 		 *
 		 *
-		 * @param link			The deep link
-		 * @param forceNewSession	If <code>true</code> a new session is created
+		 * @param link            The deep link
+		 * @param forceNewSession    If <code>true</code> a new session is created
 		 */
-		public function handleDeepLink( link:String, forceNewSession:Boolean=true ):void
+		public function handleDeepLink( link:String, forceNewSession:Boolean = true ):void
 		{
 			try
 			{
@@ -321,9 +406,6 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		
-		
-		
 		/**
 		 * Register Custom Events
 		 *
@@ -333,7 +415,13 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function userCompletedAction( action:String, stateStringifiedJSON:String = "{}" ):void
 		{
-			_extensionContext.call( "userCompletedAction", action, stateStringifiedJSON );
+			try
+			{
+				_extensionContext.call( "userCompletedAction", action, stateStringifiedJSON );
+			}
+			catch (e:Error)
+			{
+			}
 		}
 		
 		
@@ -345,7 +433,13 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function getCredits( bucket:String = "" ):void
 		{
-			_extensionContext.call( "getCredits", bucket );
+			try
+			{
+				_extensionContext.call( "getCredits", bucket );
+			}
+			catch (e:Error)
+			{
+			}
 		}
 		
 		
@@ -358,7 +452,13 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function redeemRewards( credits:int, bucket:String = "" ):void
 		{
-			_extensionContext.call( "redeemRewards", credits, bucket );
+			try
+			{
+				_extensionContext.call( "redeemRewards", credits, bucket );
+			}
+			catch (e:Error)
+			{
+			}
 		}
 		
 		
@@ -370,11 +470,14 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function getCreditsHistory( bucket:String = "" ):void
 		{
-			_extensionContext.call( "getCreditsHistory", bucket );
+			try
+			{
+				_extensionContext.call( "getCreditsHistory", bucket );
+			}
+			catch (e:Error)
+			{
+			}
 		}
-		
-		
-		
 		
 		
 		//
@@ -392,7 +495,21 @@ package io.branch.nativeExtensions.branch
 		 * You should use a <code>BranchEventBuilder</code> to construct the parameter for this function.
 		 * </p>
 		 *
-		 * @param event	An object representing the Branch event
+		 * @param event    An object representing the Branch event
+		 *
+		 * @example
+		 *
+		 * To log a standard event:
+		 *
+		 * <listing version="3.0">
+		 * Branch.instance.logEvent(
+		 *    new BranchEventBuilder( BranchEventBuilder.STANDARD_EVENT_PURCHASE )
+		 *        .setCurrency( "USD" )
+		 *        .setRevenue( 1.23 )
+		 *        .build()
+		 * );
+		 * </listing>
+		 *
 		 *
 		 * @example
 		 *
@@ -400,9 +517,9 @@ package io.branch.nativeExtensions.branch
 		 *
 		 * <listing version="3.0">
 		 * Branch.instance.logEvent(
-		 * 	new BranchEventBuilder( "your_custom_event" )
-		 * 		.addCustomDataProperty("your_custom_key", "your_custom_value")
-		 * 		.build()
+		 *    new BranchEventBuilder( "your_custom_event" )
+		 *        .addCustomDataProperty("your_custom_key", "your_custom_value")
+		 *        .build()
 		 * );
 		 * </listing>
 		 *
@@ -414,14 +531,13 @@ package io.branch.nativeExtensions.branch
 		{
 			try
 			{
-				return _extensionContext.call( "logEvent", JSON.stringify(event) );
+				return _extensionContext.call( "logEvent", JSON.stringify( event ) );
 			}
 			catch (e:Error)
 			{
 			}
 			return false;
 		}
-		
 		
 		
 		//
@@ -446,13 +562,14 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function getShortUrl( tags:Array = null, channel:String = "", feature:String = "", stage:String = "", json:String = "{}", alias:String = "", type:int = -1 ):void
 		{
-			_extensionContext.call( "getShortUrl", tags, channel, feature, stage, json, alias, type );
+			try
+			{
+				_extensionContext.call( "getShortUrl", tags, channel, feature, stage, json, alias, type );
+			}
+			catch (e:Error)
+			{
+			}
 		}
-		
-		
-		
-		
-		
 		
 		
 		////////////////////////////////////////////////////////
@@ -466,6 +583,23 @@ package io.branch.nativeExtensions.branch
 			{
 				switch (event.code)
 				{
+					case BranchCreditsEvent.GET_CREDITS_SUCCESS:
+					case BranchCreditsEvent.GET_CREDITS_FAILED:
+					case BranchCreditsEvent.GET_CREDITS_HISTORY_SUCCESS:
+					case BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED:
+					case BranchCreditsEvent.REDEEM_REWARDS_SUCCESS:
+					case BranchCreditsEvent.REDEEM_REWARDS_FAILED:
+					{
+						dispatchEvent( new BranchCreditsEvent( event.code, event.level ) );
+						break;
+					}
+					
+					case BranchEvent.INIT_SUCCESS:
+					case BranchEvent.GET_SHORT_URL_SUCCESS:
+					case BranchEvent.SET_IDENTITY_SUCCESS:
+					case BranchEvent.INIT_FAILED:
+					case BranchEvent.GET_SHORT_URL_FAILED:
+					case BranchEvent.SET_IDENTITY_FAILED:
 					default:
 					{
 						dispatchEvent( new BranchEvent( event.code, event.level ) );
@@ -489,14 +623,6 @@ package io.branch.nativeExtensions.branch
 			{
 			}
 		}
-
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		//
@@ -506,7 +632,6 @@ package io.branch.nativeExtensions.branch
 		//
 		
 		
-		
 		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
 		/**
 		 * Retrieve the referral code created by current user.
@@ -514,7 +639,6 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function getReferralCode():void
 		{
-			_extensionContext.call( "getReferralCode" );
 		}
 		
 		
@@ -532,7 +656,6 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function createReferralCode( prefix:String, amount:int, expiration:int, bucket:String, calculationType:int, location:int ):void
 		{
-			_extensionContext.call( "createReferralCode", prefix, amount, expiration, bucket, calculationType, location );
 		}
 		
 		
@@ -546,7 +669,6 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function validateReferralCode( code:String ):void
 		{
-			_extensionContext.call( "validateReferralCode", code );
 		}
 		
 		
@@ -558,11 +680,9 @@ package io.branch.nativeExtensions.branch
 		 */
 		public function applyReferralCode( code:String ):void
 		{
-			_extensionContext.call( "applyReferralCode", code );
 		}
 		
 		
-		
 	}
-
+	
 }

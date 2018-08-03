@@ -18,8 +18,8 @@
 
 
 #import "FlashRuntimeExtensions.h"
-#import "BranchController.h"
-#import "BranchExtensionContext.h"
+#import "BIOBranchController.h"
+#import "BIOBranchExtensionContext.h"
 
 #import <CoreNativeExtension/CoreNativeExtension.h>
 
@@ -28,8 +28,8 @@ NSString * const Branch_VERSION = @"1.0";
 NSString * const Branch_IMPLEMENTATION = @"iOS";
 
 FREContext branch_ctx = nil;
-BranchExtensionContext* branch_extensionContext = nil;
-BranchController* branch_controller = nil;
+BIOBranchExtensionContext* branch_extensionContext = nil;
+BIOBranchController* branch_controller = nil;
 DTNotifications* branch_notifications = nil;
 
 ////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ FREObject Branch_initSession(FREContext ctx, void* funcData, uint32_t argc, FREO
     FREObject result = NULL;
     @autoreleasepool
     {
-        BranchOptions* options = [[BranchOptions alloc] init];
+        BIOBranchOptions* options = [[BIOBranchOptions alloc] init];
         options.useTestKey = [DTFREUtils getFREObjectPropertyAsBoolean: @"useTestKey" object: argv[0]];
         options.delayInitToCheckForSearchAds = [DTFREUtils getFREObjectPropertyAsBoolean: @"delayInitToCheckForSearchAds" object: argv[0]];
 
@@ -293,10 +293,10 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
 	
     branch_ctx = ctx;
     
-    branch_extensionContext = [[BranchExtensionContext alloc] init];
+    branch_extensionContext = [[BIOBranchExtensionContext alloc] init];
     branch_extensionContext.context = branch_ctx;
     
-    branch_controller = [[BranchController alloc] init];
+    branch_controller = [[BIOBranchController alloc] init];
     branch_controller.context = branch_extensionContext;
     
     branch_notifications = [[DTNotifications alloc] init];

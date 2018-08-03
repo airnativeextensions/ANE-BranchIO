@@ -24,6 +24,7 @@ package com.distriqt.test.branch
 	import io.branch.nativeExtensions.branch.Branch;
 	import io.branch.nativeExtensions.branch.BranchConst;
 	import io.branch.nativeExtensions.branch.BranchOptions;
+	import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 	import io.branch.nativeExtensions.branch.events.BranchEvent;
 	import io.branch.nativeExtensions.branch.tracking.BranchEventBuilder;
 	
@@ -61,22 +62,7 @@ package com.distriqt.test.branch
 				if (Branch.isSupported)
 				{
 					log( "Branch Version:   " + Branch.instance.version );
-					
 					NativeApplication.nativeApplication.addEventListener( InvokeEvent.INVOKE, invokeHandler );
-					
-					Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_SUCCESSED, branch_genericHandler );
-					
-					
-					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_SUCCESSED, branch_genericHandler );
-					
-					Branch.instance.addEventListener( BranchEvent.REDEEM_REWARDS_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.REDEEM_REWARDS_SUCCESSED, branch_genericHandler );
-					
-					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_HISTORY_FAILED, branch_genericHandler );
-					Branch.instance.addEventListener( BranchEvent.GET_CREDITS_HISTORY_SUCCESSED, branch_genericHandler );
-					
 				}
 				
 			}
@@ -97,7 +83,7 @@ package com.distriqt.test.branch
 			if (Branch.isSupported)
 			{
 				Branch.instance.addEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
-				Branch.instance.addEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
+				Branch.instance.addEventListener( BranchEvent.INIT_SUCCESS, init_successHandler );
 				
 				Branch.instance.initSession(
 						new BranchOptions()
@@ -109,10 +95,10 @@ package com.distriqt.test.branch
 		
 		private function init_successHandler( event:BranchEvent ):void
 		{
-			log( event.type + "::" + event.informations );
+			log( event.type + "::" + event.data );
 			
 			Branch.instance.removeEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
+			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESS, init_successHandler );
 			
 			// params are the deep linked params associated with the link that the user clicked before showing up
 			// params will be empty if no data found
@@ -132,10 +118,10 @@ package com.distriqt.test.branch
 		
 		private function init_failedHandler( event:BranchEvent ):void
 		{
-			log( event.type + "::" + event.informations );
+			log( event.type + "::" + event.data );
 			
 			Branch.instance.removeEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESSED, init_successHandler );
+			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESS, init_successHandler );
 		}
 		
 		
@@ -151,6 +137,8 @@ package com.distriqt.test.branch
 			var sessionParams:String = Branch.instance.getLatestReferringParams();
 			log( "sessionParams: " + sessionParams );
 		}
+		
+		
 		
 		
 		
@@ -211,7 +199,7 @@ package com.distriqt.test.branch
 			
 			
 			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
-			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_SUCCESSED, getShortUrl_successHandler );
+			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
 			
 			Branch.instance.getShortUrl(
 					tags,
@@ -226,40 +214,52 @@ package com.distriqt.test.branch
 		
 		private function getShortUrl_failedHandler( event:BranchEvent ):void
 		{
-			log( event.type + "::" + event.informations );
+			log( event.type + "::" + event.data );
 			
 			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESSED, getShortUrl_successHandler );
+			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
 		}
 		
 		
 		private function getShortUrl_successHandler( event:BranchEvent ):void
 		{
-			log( event.type + "::" + event.informations );
+			log( event.type + "::" + event.data );
 			
 			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESSED, getShortUrl_successHandler );
+			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
 		
 
-			Branch.instance.handleDeepLink( event.informations );
+			Branch.instance.handleDeepLink( event.data );
 		
 		}
 		
 		
 		
 		
+		//
+		//	SET IDENTITY
+		//
 		
-		
-		
-		
-		
-		
-		private function branch_genericHandler( event:BranchEvent ):void
+		public function setIdentity():void
 		{
-			log( event.type + "::"+ event.informations );
+			log( "setIdentity()" );
 			
-			if (event.type == BranchEvent.GET_CREDITS_SUCCESSED)
-				Branch.instance.redeemRewards( 5 );
+			var userId:String = "user" + int(Math.random()* 100000);
+			
+			Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_FAILED, setIdentityHandler );
+			Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_SUCCESS, setIdentityHandler );
+		
+			Branch.instance.setIdentity( userId );
+		}
+		
+		
+		
+		private function setIdentityHandler( event:BranchEvent ):void
+		{
+			log( event.type + "::" + event.data );
+			
+			Branch.instance.removeEventListener( BranchEvent.SET_IDENTITY_FAILED, setIdentityHandler );
+			Branch.instance.removeEventListener( BranchEvent.SET_IDENTITY_SUCCESS, setIdentityHandler );
 		}
 		
 		
