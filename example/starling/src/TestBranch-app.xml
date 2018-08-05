@@ -97,12 +97,6 @@
                         </intent-filter>
                     </receiver>
 
-
-                    <activity
-                        android:name="io.branch.nativeExtensions.branch.BranchActivity"
-                        android:launchMode="singleTask"
-                        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-
                 </application>
 			</manifest>
 		]]></manifestAdditions>

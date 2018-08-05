@@ -1,19 +1,3 @@
-/**
- *        __       __               __ 
- *   ____/ /_ ____/ /______ _ ___  / /_
- *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
- * http://distriqt.com
- *
- * @file   		Main.as
- * @brief  		
- * @author 		"Michael Archbold (ma&#64;distriqt.com)"
- * @created		08/01/2016
- * @copyright	http://distriqt.com/copyright/license.txt
- */
 package com.distriqt.test.branch
 {
 	import feathers.controls.Button;
@@ -30,9 +14,6 @@ package com.distriqt.test.branch
 	import starling.text.TextFormat;
 	import starling.utils.Color;
 	
-	/**	
-	 * 
-	 */
 	public class Main extends Sprite implements ILogger
 	{
 		////////////////////////////////////////////////////////

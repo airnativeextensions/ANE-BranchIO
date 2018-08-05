@@ -1,17 +1,3 @@
-/**
- *        __       __               __ 
- *   ____/ /_ ____/ /______ _ ___  / /_
- *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
- * http://distriqt.com
- *
- * @author 		"Michael Archbold (ma&#64;distriqt.com)"
- * @created		08/01/2016
- * @copyright	http://distriqt.com/copyright/license.txt
- */
 package com.distriqt.test.branch
 {
 	import flash.desktop.NativeApplication;
@@ -35,6 +21,7 @@ package com.distriqt.test.branch
 	
 	
 	/**
+	 * This class demonstrates Branch functionality in small test cases
 	 */
 	public class BranchTests extends Sprite
 	{
@@ -93,6 +80,7 @@ package com.distriqt.test.branch
 			}
 		}
 		
+		
 		private function init_successHandler( event:BranchEvent ):void
 		{
 			log( event.type + "::" + event.data );
@@ -104,7 +92,7 @@ package com.distriqt.test.branch
 			// params will be empty if no data found
 			
 			Branch.instance.setIdentity( "Bob" );
-			
+
 //			Branch.instance.getCredits();
 //			Branch.instance.getCreditsHistory();
 			
@@ -125,7 +113,6 @@ package com.distriqt.test.branch
 		}
 		
 		
-		
 		//
 		//	INVOKE
 		//
@@ -137,9 +124,6 @@ package com.distriqt.test.branch
 			var sessionParams:String = Branch.instance.getLatestReferringParams();
 			log( "sessionParams: " + sessionParams );
 		}
-		
-		
-		
 		
 		
 		//
@@ -154,12 +138,11 @@ package com.distriqt.test.branch
 							.setRevenue( 1.23 )
 							.setTax( 0.12 )
 							.setTransactionID( "XXDDCCFFDD" )
-							.setCurrency("USD")
-							.setShipping(0)
+							.setCurrency( "USD" )
+							.setShipping( 0 )
 							.build()
 			);
 		}
-		
 		
 		
 		public function trackCustom():void
@@ -167,13 +150,10 @@ package com.distriqt.test.branch
 			log( "trackCustom()" );
 			Branch.instance.logEvent(
 					new BranchEventBuilder( "your_custom_event" )
-							.addCustomDataProperty("your_custom_key", "your_custom_value")
+							.addCustomDataProperty( "your_custom_key", "your_custom_value" )
 							.build()
 			);
 		}
-		
-		
-		
 		
 		
 		//
@@ -206,9 +186,9 @@ package com.distriqt.test.branch
 					"text_message",
 					BranchConst.FEATURE_TAG_SHARE,
 					"level_3",
-					JSON.stringify(dataToInclude)
+					JSON.stringify( dataToInclude )
 			);
-
+			
 		}
 		
 		
@@ -227,13 +207,11 @@ package com.distriqt.test.branch
 			
 			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
 			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
-		
-
+			
+			
 			Branch.instance.handleDeepLink( event.data );
-		
+			
 		}
-		
-		
 		
 		
 		//
@@ -244,14 +222,13 @@ package com.distriqt.test.branch
 		{
 			log( "setIdentity()" );
 			
-			var userId:String = "user" + int(Math.random()* 100000);
+			var userId:String = "user" + int( Math.random() * 100000 );
 			
 			Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_FAILED, setIdentityHandler );
 			Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_SUCCESS, setIdentityHandler );
-		
+			
 			Branch.instance.setIdentity( userId );
 		}
-		
 		
 		
 		private function setIdentityHandler( event:BranchEvent ):void
@@ -264,4 +241,5 @@ package com.distriqt.test.branch
 		
 		
 	}
+	
 }
