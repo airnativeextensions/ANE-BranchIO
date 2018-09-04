@@ -335,6 +335,12 @@
 
 
 
+-(void) validateConfiguration
+{
+    [context log: Branch_TAG message: @"BIOBranchController::validateConfiguration" ];
+    [[Branch getInstance] validateSDKIntegration];
+}
+
 
 
 

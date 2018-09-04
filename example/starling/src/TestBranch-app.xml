@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <application xmlns="http://ns.adobe.com/air/application/30.0">
+    <!--<id>com.airnativeextensions.test</id>-->
     <id>com.distriqt.test</id>
     <filename>TestBranch</filename>
     <name>TestBranch</name>
@@ -47,9 +48,9 @@
             <key>branch_key</key>
             <dict>
                 <key>live</key>
-                <string>key_live_dde6bQercbNACMAvXgQT1aafEylOXffc</string>
+                <string>key_live_mkBWYDOfYf4HYFEjTIxUQepfxElQrcR2</string>
                 <key>test</key>
-                <string>key_test_dmjYhTkwnjJFAGwEYhV12dkjsFoIWcju</string>
+                <string>key_test_abvY6tToZb9I6CBfPJEPYlpluFkHFiXk</string>
             </dict>
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
@@ -57,8 +58,8 @@
             <![CDATA[
                 <key>com.apple.developer.associated-domains</key>
 		        <array>
-                    <string>applinks:ap8q.test-app.link</string>
-                    <string>applinks:ap8q-alternate.test-app.link</string>
+                    <string>applinks:rc0e.app.link</string>
+                    <string>applinks:rc0e-alternate.app.link</string>
                 </array>
             ]]>
         </Entitlements>
@@ -80,16 +81,25 @@
 
                         <!-- Branch URI scheme -->
                         <intent-filter>
-                            <data android:scheme="branch-ane-test" android:host="open" />
+                            <data android:scheme="branch-ane-test" />
                             <action android:name="android.intent.action.VIEW" />
                             <category android:name="android.intent.category.DEFAULT" />
                             <category android:name="android.intent.category.BROWSABLE" />
                         </intent-filter>
+
+                        <!-- Branch App Links (optional) -->
+                        <intent-filter android:autoVerify="true">
+                            <action android:name="android.intent.action.VIEW" />
+                            <category android:name="android.intent.category.DEFAULT" />
+                            <category android:name="android.intent.category.BROWSABLE" />
+                            <data android:scheme="https" android:host="rc0e.app.link" />
+                            <data android:scheme="https" android:host="rc0e-alternate.app.link" />
+                        </intent-filter>
                     </activity>
 
-                    <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
-                    <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_dcixJiAqOixZkdkLxgiTLkeovycqdUPp" />
-                    <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_okaqTPsqXpKE0Jib8MDZlalhtuhLjsJO" />
+                    <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+                    <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_mkBWYDOfYf4HYFEjTIxUQepfxElQrcR2" />
+                    <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_abvY6tToZb9I6CBfPJEPYlpluFkHFiXk" />
 
                     <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
                         <intent-filter>
@@ -106,6 +116,7 @@
         <extensionID>com.distriqt.Core</extensionID>
 
         <extensionID>com.distriqt.androidsupport.V4</extensionID>
+        <extensionID>com.distriqt.androidsupport.AppCompatV7</extensionID>
         <extensionID>com.distriqt.androidsupport.CustomTabs</extensionID>
         <extensionID>com.distriqt.androidsupport.InstallReferrer</extensionID>
 

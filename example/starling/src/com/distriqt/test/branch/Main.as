@@ -80,11 +80,14 @@ package com.distriqt.test.branch
 			_tests = new BranchTests( this );
 			
 			addAction( "Initialise", _tests.initSession );
+			addAction( "Latest Params", _tests.getLatestReferringParams );
+			
 			addAction( "Get Short Url", _tests.getShortUrl );
 			addAction( "Set Identity", _tests.setIdentity );
 			
 			addAction( "Standard :Track", _tests.trackStandard );
 			addAction( "Custom :Track", _tests.trackCustom );
+			
 			
 			addChild( _text );
 			addChild( _tests );

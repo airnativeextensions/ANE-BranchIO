@@ -30,22 +30,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.branch.nativeExtensions.branch.controller.BranchController;
-import io.branch.nativeExtensions.branch.functions.HandleDeepLinkFunction;
-import io.branch.nativeExtensions.branch.functions.InvokeFunction;
-import io.branch.nativeExtensions.branch.functions.LogEventFunction;
 import io.branch.nativeExtensions.branch.functions.GetCreditsFunction;
 import io.branch.nativeExtensions.branch.functions.GetCreditsHistoryFunction;
 import io.branch.nativeExtensions.branch.functions.GetFirstReferringParamsFunction;
 import io.branch.nativeExtensions.branch.functions.GetLatestReferringParamsFunction;
 import io.branch.nativeExtensions.branch.functions.GetShortUrlFunction;
+import io.branch.nativeExtensions.branch.functions.HandleDeepLinkFunction;
 import io.branch.nativeExtensions.branch.functions.ImplementationFunction;
 import io.branch.nativeExtensions.branch.functions.InitSessionFunction;
+import io.branch.nativeExtensions.branch.functions.InvokeFunction;
 import io.branch.nativeExtensions.branch.functions.IsSupportedFunction;
+import io.branch.nativeExtensions.branch.functions.LogEventFunction;
 import io.branch.nativeExtensions.branch.functions.LogoutFunction;
 import io.branch.nativeExtensions.branch.functions.RedeemRewardsFunction;
 import io.branch.nativeExtensions.branch.functions.SetIdentityFunction;
 import io.branch.nativeExtensions.branch.functions.UserCompletedActionFunction;
+import io.branch.nativeExtensions.branch.functions.ValidateIntegrationFunction;
 import io.branch.nativeExtensions.branch.functions.VersionFunction;
+import io.branch.nativeExtensions.branch.utils.Logger;
 
 public class BranchContext extends FREContext implements IExtensionContext, ActivityResultCallback, StateChangeCallback
 {
@@ -133,6 +135,13 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		functionMap.put( "getShortUrl", new GetShortUrlFunction() );
 
 
+		//
+		//	DEBUG
+		//
+
+		functionMap.put( "validateIntegration", new ValidateIntegrationFunction() );
+
+
 		return functionMap;
 	}
 
@@ -173,6 +182,7 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 	@Override
 	public void onActivityStateChanged( AndroidActivityWrapper.ActivityState state )
 	{
+		Logger.d( TAG, "onActivityStateChanged()" );
 		if (_controller != null)
 		{
 			switch (state)

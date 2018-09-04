@@ -36,6 +36,8 @@
 -(void) getCreditsHistory:(NSString *) bucket;
 
 
+-(void) validateConfiguration;
+
 
 //
 //  LEGACY

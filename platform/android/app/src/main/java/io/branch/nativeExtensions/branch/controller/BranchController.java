@@ -16,14 +16,18 @@
 package io.branch.nativeExtensions.branch.controller;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 
 import com.distriqt.core.ActivityStateListener;
+import com.distriqt.core.utils.DebugUtil;
 import com.distriqt.core.utils.IExtensionContext;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
 
 import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 import io.branch.nativeExtensions.branch.events.BranchEvent;
@@ -31,6 +35,7 @@ import io.branch.nativeExtensions.branch.utils.Errors;
 import io.branch.nativeExtensions.branch.utils.Logger;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+import io.branch.referral.validators.IntegrationValidator;
 
 public class BranchController extends ActivityStateListener
 {
@@ -73,6 +78,20 @@ public class BranchController extends ActivityStateListener
 		if (Branch.getInstance() != null)
 		{
 			//_extContext.getActivity().setIntent(  );
+
+			Bundle extras = _extContext.getActivity().getIntent().getExtras();
+			if (extras != null && extras.keySet() != null)
+			{
+				Iterator<?> keys = extras.keySet().iterator();
+				while (keys.hasNext())
+				{
+					String key = (String) keys.next();
+					Logger.d( TAG, "Deep Linked Param: " + key + " = " + extras.get( key ) );
+				}
+			}
+
+			Logger.d( TAG, "EXTRAS: %s", DebugUtil.bundleToString( extras ));
+
 		}
 	}
 
@@ -93,6 +112,23 @@ public class BranchController extends ActivityStateListener
 				// Auto method from manifest settings
 				branch = Branch.getAutoInstance( _extContext.getActivity().getApplication() );
 			}
+
+
+
+			try
+			{
+				Uri dataUri = _extContext.getActivity().getIntent().getData();
+				Bundle extras = _extContext.getActivity().getIntent().getExtras();
+
+				Logger.d( TAG, "INTENT DATA: %s", dataUri == null ? "null" : dataUri.toString() );
+				Logger.d( TAG, "INTENT EXTRAS: %s", DebugUtil.bundleToString( extras ));
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
 
 			// This triggers reinitialisation - without this Branch waits for activity lifecycle events
 			// which may not occur until app minimised.
@@ -119,13 +155,16 @@ public class BranchController extends ActivityStateListener
 							{
 								_extContext.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
 							}
+
+							//
 						}
 					},
 					_extContext.getActivity().getIntent().getData(),
 					_extContext.getActivity()
 			);
 
-			//IntegrationValidator.validate( _extContext.getActivity() );
+
+
 
 		}
 		catch (Exception e)
@@ -362,6 +401,24 @@ public class BranchController extends ActivityStateListener
 
 
 
+
+	//
+	//	DEBUG UTILS
+	//
+
+
+	public void validateIntegration()
+	{
+		Logger.d( TAG, "validateIntegration()" );
+		try
+		{
+			IntegrationValidator.validate( _extContext.getActivity() );
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( e );
+		}
+	}
 
 
 

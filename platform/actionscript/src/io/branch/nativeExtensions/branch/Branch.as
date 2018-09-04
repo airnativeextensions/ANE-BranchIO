@@ -572,6 +572,36 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
+		
+		
+		//
+		//	DEBUG
+		//
+		
+		/**
+		 * <p>
+		 * This will attempt to validate the current application's Branch integration
+		 * and will output results to the device log
+		 * </p>
+		 * <p>
+		 * This is for testing in development only! Make sure you remove or comment out this line of code in your release versions.
+		 * </p>
+		 *
+		 *
+		 *
+		 */
+		public function validateIntegration():void
+		{
+			try
+			{
+				_extensionContext.call( "validateIntegration" );
+			}
+			catch (e:Error)
+			{
+			}
+		}
+		
+		
 		////////////////////////////////////////////////////////
 		//	EVENT HANDLERS
 		//
@@ -623,6 +653,10 @@ package io.branch.nativeExtensions.branch
 			{
 			}
 		}
+		
+		
+		
+		
 		
 		
 		//
@@ -681,6 +715,9 @@ package io.branch.nativeExtensions.branch
 		public function applyReferralCode( code:String ):void
 		{
 		}
+		
+		
+		
 		
 		
 	}

@@ -126,8 +126,6 @@
 		E3F4A7B7153D8C110057A446 /* Branch */ = {
 			isa = PBXGroup;
 			children = (
-				E341442B2102F0C400FA0F27 /* BIOTypeConversion.h */,
-				E341442E2102F0C400FA0F27 /* BIOTypeConversion.m */,
 				E3F4A7BB153D8C110057A446 /* Branch.m */,
 				E33E7EBC211447900088FA15 /* events */,
 				E3244A991FAC0B8700EB5924 /* controller */,
@@ -135,6 +133,8 @@
 				E34D85B81BB0D88D000DA3F9 /* BIOBranchExtensionContext.h */,
 				E34D85B91BB0D88D000DA3F9 /* BIOBranchExtensionContext.m */,
 				E33ED8A91BBD15AE00D23A8C /* BIOBranchContext.h */,
+				E341442B2102F0C400FA0F27 /* BIOTypeConversion.h */,
+				E341442E2102F0C400FA0F27 /* BIOTypeConversion.m */,
 			);
 			path = Branch;
 			sourceTree = "<group>";

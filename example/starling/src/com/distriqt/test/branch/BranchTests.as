@@ -2,10 +2,12 @@ package com.distriqt.test.branch
 {
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
+	import flash.events.Event;
 	import flash.events.InvokeEvent;
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
+	import flash.utils.setTimeout;
 	
 	import io.branch.nativeExtensions.branch.Branch;
 	import io.branch.nativeExtensions.branch.BranchConst;
@@ -74,8 +76,8 @@ package com.distriqt.test.branch
 				
 				Branch.instance.initSession(
 						new BranchOptions()
-								.setUseTestKey()
-								.setDelayInitToCheckForSearchAds()
+//								.setUseTestKey()
+//								.setDelayInitToCheckForSearchAds()
 				);
 			}
 		}
@@ -90,17 +92,15 @@ package com.distriqt.test.branch
 			
 			// params are the deep linked params associated with the link that the user clicked before showing up
 			// params will be empty if no data found
-			
-			Branch.instance.setIdentity( "Bob" );
 
-//			Branch.instance.getCredits();
-//			Branch.instance.getCreditsHistory();
-			
 			var sessionParams:String = Branch.instance.getLatestReferringParams();
 			log( "sessionParams: " + sessionParams );
 			
 			var installParams:String = Branch.instance.getFirstReferringParams();
 			log( "installParams: " + installParams );
+			
+			
+			Branch.instance.setIdentity( "Bob" );
 		}
 		
 		
@@ -119,10 +119,14 @@ package com.distriqt.test.branch
 		
 		private function invokeHandler( event:InvokeEvent ):void
 		{
-			log( "invoke" );
-			
+			log( "invoke: " + event.arguments.join(",") );
 			var sessionParams:String = Branch.instance.getLatestReferringParams();
 			log( "sessionParams: " + sessionParams );
+		}
+		
+		public function getLatestReferringParams():void
+		{
+			log( "getLatestReferringParams:" + Branch.instance.getLatestReferringParams() );
 		}
 		
 		
