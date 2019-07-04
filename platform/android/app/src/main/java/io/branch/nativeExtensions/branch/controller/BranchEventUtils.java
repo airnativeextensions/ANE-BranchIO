@@ -79,7 +79,7 @@ public class BranchEventUtils
 	{
 		for (BRANCH_STANDARD_EVENT event : BRANCH_STANDARD_EVENT.values())
 		{
-			if (event.getName() == name)
+			if (event.getName().equals( name ))
 			{
 				return event;
 			}

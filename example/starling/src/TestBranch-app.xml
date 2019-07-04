@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/30.0">
+<application xmlns="http://ns.adobe.com/air/application/32.0">
     <!--<id>com.airnativeextensions.test</id>-->
     <id>com.distriqt.test</id>
     <filename>TestBranch</filename>
     <name>TestBranch</name>
-    <versionNumber>0.0.1</versionNumber>
+    <versionNumber>0.0.25</versionNumber>
 
     <initialWindow>
         <content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
@@ -22,8 +22,11 @@
         <image48x48>icons/icon48x48.png</image48x48>
         <image57x57>icons/icon57x57.png</image57x57>
         <image72x72>icons/icon72x72.png</image72x72>
+        <image76x76>icons/icon76x76.png</image76x76>
         <image114x114>icons/icon114x114.png</image114x114>
+        <image120x120>icons/icon120x120.png</image120x120>
         <image128x128>icons/icon128x128.png</image128x128>
+        <image152x152>icons/icon152x152.png</image152x152>
         <image512x512>icons/icon512x512.png</image512x512>
     </icon>
 
