@@ -19,4 +19,5 @@ public class BranchOptions
 {
 	public boolean useTestKey = false;
 	public boolean delayInitToCheckForSearchAds = false;
+	public boolean enableDebugging = true;
 }

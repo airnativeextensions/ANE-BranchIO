@@ -17,33 +17,24 @@ package {
 		public function TestBranch() {
 			
 			Branch.instance.addEventListener(BranchEvent.INIT_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.INIT_SUCCESSED, _initSuccessed);
+			Branch.instance.addEventListener(BranchEvent.INIT_SUCCESS, _initSuccessed);
 			
 			Branch.instance.addEventListener(BranchEvent.SET_IDENTITY_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.SET_IDENTITY_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.SET_IDENTITY_SUCCESS, _branchEventCallback);
 			
 			Branch.instance.addEventListener(BranchEvent.GET_SHORT_URL_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.GET_SHORT_URL_SUCCESSED, _branchEventCallback);
-			
-			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_SUCCESSED, _branchEventCallback);
-			
-			Branch.instance.addEventListener(BranchEvent.REDEEM_REWARDS_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.REDEEM_REWARDS_SUCCESSED, _branchEventCallback);
-			
-			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_FAILED, _branchEventCallback);
-			Branch.instance.addEventListener(BranchEvent.GET_CREDITS_HISTORY_SUCCESSED, _branchEventCallback);
+			Branch.instance.addEventListener(BranchEvent.GET_SHORT_URL_SUCCESS, _branchEventCallback);
 			
 			Branch.instance.init();
 		}
 		
 		private function _initSuccessed(bEvt:BranchEvent):void {
-			trace("BranchEvent.INIT_SUCCESSED", bEvt.informations);
+			trace("BranchEvent.INIT_SUCCESSED", bEvt.data);
 			
 			// params are the deep linked params associated with the link that the user clicked before showing up
 			// params will be empty if no data found
 			
-			var referringParams:Object = JSON.parse(bEvt.informations);
+			var referringParams:Object = JSON.parse(bEvt.data);
 			//trace(referringParams.user);
 			
 			Branch.instance.setIdentity("Bob");
@@ -77,10 +68,8 @@ package {
 		
 		private function _branchEventCallback(bEvt:BranchEvent):void {
 			
-			trace(bEvt.type, bEvt.informations);
+			trace(bEvt.type, bEvt.data);
 			
-			if (bEvt.type == BranchEvent.GET_CREDITS_SUCCESSED)
-				Branch.instance.redeemRewards(5);
 		}
 	}
 }

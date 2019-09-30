@@ -1,16 +1,16 @@
 <platform xmlns="http://ns.adobe.com/air/extension/4.0">
 	<sdkVersion>1.0.0</sdkVersion>
 	<linkerOptions>
-		<option>-ios_version_min 8.0</option>
+		<option>-ios_version_min 9.0</option>
 		<option>-w</option>
 		<option>-framework AdSupport</option>
 		<option>-framework SafariServices</option>
 		<option>-framework MobileCoreServices</option>
 		<option>-framework CoreSpotlight</option>
+		<option>-framework Webkit</option>
 		<option>-framework iAd</option>
 		<option>-rpath @executable_path/Frameworks</option>
 	</linkerOptions>
 	<packagedDependencies>
-		<packagedDependency>Branch.framework</packagedDependency>
 	</packagedDependencies>
 </platform>

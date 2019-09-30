@@ -22,6 +22,7 @@ public class InitSessionFunction implements FREFunction
 			BranchOptions options = new BranchOptions();
 			options.useTestKey = args[0].getProperty( "useTestKey" ).getAsBool();
 			options.delayInitToCheckForSearchAds = args[0].getProperty( "delayInitToCheckForSearchAds" ).getAsBool();
+			options.enableDebugging = args[0].getProperty( "enableDebugging" ).getAsBool();
 
 			ctx.controller().initSession( options );
 		}

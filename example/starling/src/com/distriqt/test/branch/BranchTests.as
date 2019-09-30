@@ -51,7 +51,7 @@ package com.distriqt.test.branch
 				if (Branch.isSupported)
 				{
 					log( "Branch Version:   " + Branch.instance.version );
-					NativeApplication.nativeApplication.addEventListener( InvokeEvent.INVOKE, invokeHandler );
+//					NativeApplication.nativeApplication.addEventListener( InvokeEvent.INVOKE, invokeHandler );
 				}
 				
 			}
@@ -76,6 +76,7 @@ package com.distriqt.test.branch
 				
 				Branch.instance.initSession(
 						new BranchOptions()
+								.setDebugMode()
 //								.setUseTestKey()
 //								.setDelayInitToCheckForSearchAds()
 				);
@@ -83,33 +84,56 @@ package com.distriqt.test.branch
 		}
 		
 		
+		private function getPropertyFromParams( params:Object, propertyName:String, defaultValue:* ):*
+		{
+			if (params.hasOwnProperty(propertyName))
+				return params[propertyName];
+			return defaultValue;
+		}
+		
+		
 		private function init_successHandler( event:BranchEvent ):void
 		{
 			log( event.type + "::" + event.data );
 			
-			Branch.instance.removeEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESS, init_successHandler );
-			
 			// params are the deep linked params associated with the link that the user clicked before showing up
 			// params will be empty if no data found
+			
+			try
+			{
+				var sessionParams:Object = JSON.parse(event.data);
+				
+				var clicked_branch_link:Boolean = getPropertyFromParams( sessionParams, "+clicked_branch_link", false );
+				var match_guaranteed:Boolean = getPropertyFromParams( sessionParams, "+match_guaranteed", false );
+				
+				if (clicked_branch_link && match_guaranteed)
+				{
+					log( "CLICKED BRANCH LINK" );
+				}
+			}
+			catch (e:Error)
+			{
+			}
+			
 
-			var sessionParams:String = Branch.instance.getLatestReferringParams();
-			log( "sessionParams: " + sessionParams );
+//			var sessionParamsString:String = Branch.instance.getLatestReferringParams();
+//			log( "sessionParams: " + sessionParamsString );
+
+//			var installParams:String = Branch.instance.getFirstReferringParams();
+//			log( "installParams: " + installParams );
 			
-			var installParams:String = Branch.instance.getFirstReferringParams();
-			log( "installParams: " + installParams );
 			
-			
-			Branch.instance.setIdentity( "Bob" );
+//			Branch.instance.setIdentity( "Bob" );
+		
+		
+		
+		
 		}
 		
 		
 		private function init_failedHandler( event:BranchEvent ):void
 		{
 			log( event.type + "::" + event.data );
-			
-			Branch.instance.removeEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.INIT_SUCCESS, init_successHandler );
 		}
 		
 		
@@ -242,6 +266,18 @@ package com.distriqt.test.branch
 			Branch.instance.removeEventListener( BranchEvent.SET_IDENTITY_FAILED, setIdentityHandler );
 			Branch.instance.removeEventListener( BranchEvent.SET_IDENTITY_SUCCESS, setIdentityHandler );
 		}
+		
+		
+		
+		//
+		//	DEBUG
+		//
+		
+		public function validateIntegration():void
+		{
+			Branch.instance.validateIntegration();
+		}
+		
 		
 		
 	}

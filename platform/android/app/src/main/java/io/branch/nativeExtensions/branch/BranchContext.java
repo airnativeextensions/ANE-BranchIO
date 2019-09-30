@@ -218,7 +218,10 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 	@Override
 	public void onConfigurationChanged( Configuration paramConfiguration )
 	{
-		_controller.onConfigurationChanged( paramConfiguration );
+		if (_controller != null)
+		{
+			_controller.onConfigurationChanged( paramConfiguration );
+		}
 	}
 
 

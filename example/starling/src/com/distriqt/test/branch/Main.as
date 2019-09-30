@@ -88,6 +88,8 @@ package com.distriqt.test.branch
 			addAction( "Standard :Track", _tests.trackStandard );
 			addAction( "Custom :Track", _tests.trackCustom );
 			
+			addAction( "Validate :Debug", _tests.validateIntegration );
+			
 			
 			addChild( _text );
 			addChild( _tests );

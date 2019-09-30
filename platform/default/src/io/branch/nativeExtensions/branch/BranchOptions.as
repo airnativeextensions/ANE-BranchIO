@@ -68,7 +68,10 @@ package io.branch.nativeExtensions.branch
 		public var delayInitToCheckForSearchAds:Boolean = false;
 		
 		
+		public var enableDebugging:Boolean = false;
 
+		
+		
  		////////////////////////////////////////////////////////
         //  FUNCTIONALITY
         //
@@ -106,6 +109,13 @@ package io.branch.nativeExtensions.branch
 		public function setDelayInitToCheckForSearchAds( delay:Boolean=true ):BranchOptions
 		{
 			delayInitToCheckForSearchAds = delay;
+			return this;
+		}
+		
+		
+		public function setDebugMode(enabled:Boolean=true ):BranchOptions
+		{
+			enableDebugging = enabled;
 			return this;
 		}
 		

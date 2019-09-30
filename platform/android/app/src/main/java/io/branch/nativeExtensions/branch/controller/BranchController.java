@@ -18,6 +18,8 @@ package io.branch.nativeExtensions.branch.controller;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.distriqt.core.ActivityStateListener;
 import com.distriqt.core.utils.DebugUtil;
@@ -27,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
-import java.util.Iterator;
 
 import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 import io.branch.nativeExtensions.branch.events.BranchEvent;
@@ -43,7 +44,7 @@ public class BranchController extends ActivityStateListener
 	//	CONSTANTS
 	//
 
-	public static final String TAG = BranchController.class.getSimpleName();
+	private static final String TAG = BranchController.class.getSimpleName();
 
 
 	////////////////////////////////////////////////////////////
@@ -53,6 +54,9 @@ public class BranchController extends ActivityStateListener
 
 	private IExtensionContext _extContext;
 
+	private Handler _handler;
+
+	private boolean _initialised;
 
 
 	////////////////////////////////////////////////////////////
@@ -62,6 +66,8 @@ public class BranchController extends ActivityStateListener
 	public BranchController( IExtensionContext extensionContext )
 	{
 		_extContext = extensionContext;
+		_handler = new Handler( Looper.getMainLooper() );
+		_initialised = false;
 	}
 
 
@@ -71,29 +77,6 @@ public class BranchController extends ActivityStateListener
 	}
 
 
-	public void onNewIntent()
-	{
-		Logger.d( TAG, "onNewIntent()" );
-		// TODO
-		if (Branch.getInstance() != null)
-		{
-			//_extContext.getActivity().setIntent(  );
-
-			Bundle extras = _extContext.getActivity().getIntent().getExtras();
-			if (extras != null && extras.keySet() != null)
-			{
-				Iterator<?> keys = extras.keySet().iterator();
-				while (keys.hasNext())
-				{
-					String key = (String) keys.next();
-					Logger.d( TAG, "Deep Linked Param: " + key + " = " + extras.get( key ) );
-				}
-			}
-
-			Logger.d( TAG, "EXTRAS: %s", DebugUtil.bundleToString( extras ));
-
-		}
-	}
 
 
 	public void initSession( BranchOptions options )
@@ -101,6 +84,9 @@ public class BranchController extends ActivityStateListener
 		Logger.d( TAG, "initSession( %b )", options.useTestKey );
 		try
 		{
+			if (options.enableDebugging)
+				Branch.enableDebugMode();
+
 			Branch branch;
 			if (options.useTestKey)
 			{
@@ -112,7 +98,6 @@ public class BranchController extends ActivityStateListener
 				// Auto method from manifest settings
 				branch = Branch.getAutoInstance( _extContext.getActivity().getApplication() );
 			}
-
 
 
 			try
@@ -136,35 +121,35 @@ public class BranchController extends ActivityStateListener
 			method.setAccessible( true );
 			method.invoke( branch );
 
-			// Initialise Branch and session
-			branch.initSession(
-					new Branch.BranchReferralInitListener()
+
+			_handler.postDelayed( new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
 					{
-						@Override
-						public void onInitFinished( JSONObject referringParams, BranchError error )
-						{
-							Logger.d( TAG, "onInitFinished( %s, %s )",
-									referringParams == null ? "null" : referringParams.toString(),
-									error == null ? "null" : error.getMessage() );
-
-							if (error == null)
-							{
-								_extContext.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
-							}
-							else
-							{
-								_extContext.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
-							}
-
-							//
-						}
-					},
-					_extContext.getActivity().getIntent().getData(),
-					_extContext.getActivity()
-			);
-
-
-
+						// Initialise Branch and session
+						Branch.getInstance().initSession(
+								new Branch.BranchReferralInitListener()
+								{
+									@Override
+									public void onInitFinished( JSONObject referringParams, BranchError error )
+									{
+										_initialised = true;
+										BranchController.this.onInitFinished( referringParams, error );
+									}
+								},
+								_extContext.getActivity().getIntent().getData(),
+								_extContext.getActivity()
+						);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}, 500 );
 
 		}
 		catch (Exception e)
@@ -259,6 +244,7 @@ public class BranchController extends ActivityStateListener
 		}
 		catch (Exception e)
 		{
+			Errors.handleException( e );
 		}
 	}
 
@@ -392,13 +378,95 @@ public class BranchController extends ActivityStateListener
 
 
 
+	//
+	//	Branch.BranchReferralInitListener
+	//
+
+	public void onInitFinished( JSONObject referringParams, BranchError error )
+	{
+		try
+		{
+			Logger.d( TAG, "onInitFinished( %s, %s )",
+					referringParams == null ? "null" : referringParams.toString(),
+					error == null ? "null" : error.getMessage() );
+
+			if (error == null)
+			{
+				if (referringParams != null)
+				{
+					_extContext.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
+				}
+				else
+				{
+					_extContext.dispatchEvent( BranchEvent.INIT_SUCCESS, "{}" );
+				}
+			}
+			else
+			{
+				_extContext.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
+			}
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( e );
+		}
+	}
 
 
 
 
+	//
+	//	ActivityStateListener
+	//
+
+	@Override
+	public void onStart()
+	{
+		Logger.d( TAG, "onStart()" );
+		try
+		{
+			if (_initialised)
+			{
+				Branch.getInstance( _extContext.getActivity() ).initSession(
+						new Branch.BranchReferralInitListener()
+						{
+							@Override
+							public void onInitFinished( JSONObject referringParams, BranchError error )
+							{
+								BranchController.this.onInitFinished( referringParams, error );
+							}
+						},
+						_extContext.getActivity().getIntent().getData(),
+						_extContext.getActivity()
+				);
+			}
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( e );
+		}
+	}
 
 
+	@Override
+	public void onResume()
+	{
+		Logger.d( TAG, "onResume()" );
+	}
 
+
+	@Override
+	public void onRestart()
+	{
+		Logger.d( TAG, "onRestart()" );
+	}
+
+
+	public void onNewIntent()
+	{
+		Logger.d( TAG, "onNewIntent()" );
+		onStart();
+	}
 
 
 
@@ -419,8 +487,6 @@ public class BranchController extends ActivityStateListener
 			Errors.handleException( e );
 		}
 	}
-
-
 
 
 

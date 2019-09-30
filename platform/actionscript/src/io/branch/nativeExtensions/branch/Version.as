@@ -2,6 +2,6 @@ package io.branch.nativeExtensions.branch
 {
 	internal final class Version
 	{
-		public static const VERSION : String = "3.0.003"; 
+		public static const VERSION : String = "3.1.023"; 
 	}
 }
