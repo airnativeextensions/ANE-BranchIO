@@ -9,12 +9,14 @@
 */
 
 #if __has_feature(modules)
-#import <Foundation/Foundation.h>
+@import Foundation;
 #else
 #import <Foundation/Foundation.h>
 #endif
 
 @interface BNCApplication : NSObject
+
++ (void)loadCurrentApplicationWithCompletion:(void (^_Nullable)(BNCApplication * _Nonnull application))completion;
 
 /// A reference to the current running application.
 + (BNCApplication*_Nonnull) currentApplication;
@@ -51,4 +53,5 @@
 
 /// The team identifier for the app.
 @property (atomic, readonly) NSString*_Nullable teamID;
+
 @end

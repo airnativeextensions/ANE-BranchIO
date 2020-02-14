@@ -1,5 +1,7 @@
 package com.distriqt.test.branch
 {
+	import com.distriqt.extension.core.Core;
+	
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
 	import flash.events.Event;
@@ -47,11 +49,13 @@ package com.distriqt.test.branch
 			_l = logger;
 			try
 			{
+				Core.init();
 				log( "Branch Supported: " + Branch.isSupported );
 				if (Branch.isSupported)
 				{
 					log( "Branch Version:   " + Branch.instance.version );
 //					NativeApplication.nativeApplication.addEventListener( InvokeEvent.INVOKE, invokeHandler );
+					
 				}
 				
 			}

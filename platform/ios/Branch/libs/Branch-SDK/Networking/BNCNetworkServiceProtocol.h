@@ -7,7 +7,7 @@
 //
 
 #if __has_feature(modules)
-#import <Foundation/Foundation.h>
+@import Foundation;
 #else
 #import <Foundation/Foundation.h>
 #endif

@@ -245,12 +245,12 @@ FREObject Branch_getShortUrl(FREContext ctx, void* funcData, uint32_t argc, FREO
 }
 
 
-FREObject Branch_validateConfiguration(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+FREObject Branch_validateIntegration(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     FREObject result = NULL;
     @autoreleasepool
     {
-        [branch_controller validateConfiguration];
+        [branch_controller validateIntegration];
     }
     return result;
 }
@@ -293,7 +293,7 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
         
         MAP_FUNCTION( Branch_getShortUrl,               "getShortUrl",              NULL ),
         
-        MAP_FUNCTION( Branch_validateConfiguration,     "validateConfiguration",    NULL ),
+        MAP_FUNCTION( Branch_validateIntegration,     	"validateIntegration",    	NULL ),
         
     };
     

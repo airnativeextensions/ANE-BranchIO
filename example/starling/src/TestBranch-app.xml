@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <application xmlns="http://ns.adobe.com/air/application/32.0">
-    <id>com.airnativeextensions.test</id>
-    <!--<id>com.distriqt.test</id>-->
+    <!--<id>com.airnativeextensions.test</id>-->
+    <id>com.distriqt.test</id>
     <filename>TestBranch</filename>
     <name>TestBranch</name>
     <versionNumber>0.0.25</versionNumber>
@@ -47,6 +47,9 @@
                      </array>
                  </dict>
             </array>
+
+            <key>branch_app_domain</key>
+            <string>rc0e.app.link</string>
 
             <key>branch_key</key>
             <dict>

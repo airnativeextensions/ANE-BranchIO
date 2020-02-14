@@ -335,7 +335,7 @@
 
 
 
--(void) validateConfiguration
+-(void) validateIntegration
 {
     [context log: Branch_TAG message: @"BIOBranchController::validateConfiguration" ];
     [[Branch getInstance] validateSDKIntegration];
@@ -353,7 +353,8 @@
     [[Branch getInstance] initSessionWithLaunchOptions: launchOptions
                             andRegisterDeepLinkHandler: ^(NSDictionary *params, NSError *error)
     {
-        if (!error)
+		[self.context log: Branch_TAG message: @"BIOBranchController::didFinishLaunchingWithOptions: initSessionWithLaunchOptions: complete: %@ error: %@", params, error ];
+		if (!error)
         {
             NSString *JSONString = [BIOTypeConversion ConvertNSDictionaryToJSONString:params];
             [self.context dispatch: BIO_BRANCHEVENT_INIT_SUCCESS data:JSONString];
@@ -363,6 +364,33 @@
             [self.context dispatch: BIO_BRANCHEVENT_INIT_FAILED data:error.description];
         }
     }];
+	
+	
+	//
+	// Handle issue with launch not detecting urls, so manually send to Branch
+	
+	if (launchOptions != nil)
+	{
+		if ([launchOptions.allKeys containsObject:UIApplicationLaunchOptionsURLKey])
+		{
+			NSURL* url = [launchOptions objectForKey: UIApplicationLaunchOptionsURLKey];
+			[[Branch getInstance] handleDeepLink: url];
+		}
+		else if ([launchOptions.allKeys containsObject:UIApplicationLaunchOptionsUserActivityDictionaryKey])
+		{
+			[self.context log: Branch_TAG message: @"BIOBranchController::didFinishLaunchingWithOptions: options contains UIApplicationLaunchOptionsUserActivityDictionaryKey" ];
+			 
+			NSDictionary* userActivityDictionary = [launchOptions objectForKey: UIApplicationLaunchOptionsUserActivityDictionaryKey];
+			[self.context log: Branch_TAG message: @"BIOBranchController::didFinishLaunchingWithOptions: userActivityDictionary = %@", userActivityDictionary];
+			 
+			 
+			NSUserActivity* userActivity = [userActivityDictionary objectForKey: @"UIApplicationLaunchOptionsUserActivityKey"];
+			[self.context log: Branch_TAG message: @"BIOBranchController::didFinishLaunchingWithOptions: userActivity = %@", userActivity];
+			
+			[[Branch getInstance] continueUserActivity: userActivity];
+		}
+	}
+	
 }
 
 
@@ -373,7 +401,14 @@
     // if handleDeepLink returns YES, and you registered a callback in initSessionAndRegisterDeepLinkHandler,
     // the callback will be called with the data associated with the deep link
 
-    [[Branch getInstance] handleDeepLink:url];
+//    [[Branch getInstance] handleDeepLink:url];
+
+
+	[[Branch getInstance] application: [UIApplication sharedApplication]
+							  openURL: url
+					sourceApplication: sourceApplication
+						   annotation: annotation];
+	
 
 }
 
@@ -381,7 +416,11 @@
 -(void) openURL:(NSURL *)url options: (NSDictionary*)options
 {
     [context log: Branch_TAG message: @"BIOBranchController::openURL: %@", url];
-    [[Branch getInstance] handleDeepLink:url];
+//    [[Branch getInstance] handleDeepLink:url];
+
+	[[Branch getInstance] application: [UIApplication sharedApplication]
+							  openURL: url
+							  options: options];
 }
 
 

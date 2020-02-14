@@ -7,9 +7,9 @@
 		<option>-framework SafariServices</option>
 		<option>-framework MobileCoreServices</option>
 		<option>-framework CoreSpotlight</option>
+		<option>-framework CoreTelephony</option>
 		<option>-framework Webkit</option>
 		<option>-framework iAd</option>
-		<option>-rpath @executable_path/Frameworks</option>
 	</linkerOptions>
 	<packagedDependencies>
 	</packagedDependencies>

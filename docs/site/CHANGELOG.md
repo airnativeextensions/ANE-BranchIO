@@ -1,5 +1,17 @@
 
 
+###### 2020.02.14 [v3.2.032]
+
+```
+SDK Update
+  - iOS v0.31.4
+  - Android v3.2.0
+
+Updates:
+  - Corrected issue with launch link parameters (resolves #7)  
+```
+
+
 ###### 2019.09.30 [v3.1.023]
 
 ```
