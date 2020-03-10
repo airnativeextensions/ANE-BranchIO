@@ -1,11 +1,12 @@
-<platform xmlns="http://ns.adobe.com/air/extension/4.0">
+<platform xmlns="http://ns.adobe.com/air/extension/@AIRVERSION@">
+	<copyright>2019 // distriqt</copyright>
 	<packagedDependencies>
 @JARS@
 	</packagedDependencies>
 	<packagedResources>
 	     <packagedResource>
-		 	<packageName>io.branch.nativeExtensions.branch</packageName>
-	        <folderName>io.branch.nativeExtensions.branch-res</folderName>
+		    <packageName>@ANDROIDPACKAGE@</packageName> 
+		    <folderName>@ANDROIDRES@</folderName> 
 		</packagedResource>
 	</packagedResources>
 </platform>

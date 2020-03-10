@@ -40,8 +40,7 @@ Branch IO Adobe AIR Native Extension for iOS and Android gives you access to the
 - Event Tracking (standard and custom)
 
 
-The [Wiki](https://github.com/distriqt/ANE-BranchIO/wiki) forms the best source of detailed documentation for the extension along with 
-the [asdocs](https://distriqt.github.io/ANE-BranchIO/asdocs). 
+The [Wiki](https://github.com/distriqt/ANE-BranchIO/wiki) forms the best source of detailed documentation for the extension along with the [asdocs](https://distriqt.github.io/ANE-BranchIO/asdocs). 
 
 
 ![](images/promo.png)

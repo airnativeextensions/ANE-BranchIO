@@ -3,10 +3,10 @@ package io.branch.nativeExtensions.branch;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import org.json.JSONObject;
 
+import androidx.annotation.Nullable;
 import io.branch.nativeExtensions.branch.events.BranchEvent;
 import io.branch.nativeExtensions.branch.utils.Logger;
 import io.branch.referral.Branch;

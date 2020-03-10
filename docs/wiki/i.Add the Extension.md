@@ -5,43 +5,54 @@ First step is always to add the extension to your development environment.
 To do this use the tutorial located [here](https://airnativeextensions.github.io/tutorials/getting-started).
 
 
+### AIR SDK
 
-## Required ANEs
 
-### Core ANE
+This ANE currently requires at least AIR 33+. This is required in order to support versions of Android > 9.0 (API 28). We always recommend using the most recent build with AIR especially for mobile development where the OS changes rapidly.
 
-The Core ANE is required by this ANE. You must include and package this extension in your application.
 
-The Core ANE doesn't provide any functionality in itself but provides support libraries and frameworks used by our extensions.
+
+## Dependencies
+
+Many of our extensions use some common libraries, for example, the Android Support libraries.
+
+We have to separate these libraries into separate extensions in order to avoid multiple versions of the libraries being included in your application and causing packaging conflicts. This means that you need to include some additional extensions in your application along with the main extension file.
+
+You will add these extensions as you do with any other extension, and you need to ensure it is packaged with your application.
+
+
+### Core 
+
+The Core extension is required by this extension. You must include this extension in your application.
+
+The Core extension doesn't provide any functionality in itself but provides support libraries and frameworks used by our extensions.
 It also includes some centralised code for some common actions that can cause issues if they are implemented in each individual extension.
 
 You can access this extension here: [https://github.com/distriqt/ANE-Core](https://github.com/distriqt/ANE-Core).
 
 
-### Android Support ANE
+### Android Support
 
-Due to several of our ANE's using the Android Support library the library has been separated 
-into a separate ANE allowing you to avoid conflicts and duplicate definitions.
-This means that you need to include the some of the android support native extensions in 
-your application along with this extension. 
+The Android Support libraries encompass the Android Support, Android X and common Google libraries. 
 
-You will add these extensions as you do with any other ANE, and you need to ensure it is 
-packaged with your application. There is no problems including this on all platforms, 
-they are just **required** on Android.
+These libraries are specific to Android. There are no issues including these on all platforms, they are just **required** for Android.
 
-This ANE requires the following Android Support extensions:
+This extension requires the following extensions:
 
-- [com.distriqt.androidsupport.V4.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.distriqt.androidsupport.V4.ane)
-- [com.distriqt.androidsupport.CustomTabs.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.distriqt.androidsupport.CustomTabs.ane)
-- [com.distriqt.androidsupport.InstallReferrer.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.distriqt.androidsupport.InstallReferrer.ane)
+- [androidx.appcompat.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.appcompat.ane)
+- [androidx.browser.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.browser.ane)
+- [androidx.core.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.core.ane)
+- [com.android.installreferrer.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.android.installreferrer.ane)
 
 You can access these extensions here: [https://github.com/distriqt/ANE-AndroidSupport](https://github.com/distriqt/ANE-AndroidSupport).
 
+
 >
-> **Note**: if you have been using the older `com.distriqt.AndroidSupport.ane` you should remove that
-> ANE and replace it with the equivalent `com.distriqt.androidsupport.V4.ane`. This is the new 
-> version of this ANE and has been renamed to better identify the ANE with regards to its contents.
+> **Note**: if you have been using the older `com.distriqt.androidsupport.*` (Android Support) extensions you should remove these extensions and replace it with the `androidx` extensions listed above. This is the new version of the android support libraries and moving forward all our extensions will require AndroidX.
 >
+
+
+
 
 ### Extension IDs
 
@@ -52,14 +63,19 @@ The following should be added to your extensions node in your application descri
     <extensionID>io.branch.nativeExtensions.Branch</extensionID>
 
     <extensionID>com.distriqt.Core</extensionID>
-    <extensionID>com.distriqt.androidsupport.V4</extensionID>
-    <extensionID>com.distriqt.androidsupport.CustomTabs</extensionID>
-    <extensionID>com.distriqt.androidsupport.InstallReferrer</extensionID>
+
+    <extensionID>androidx.core</extensionID>
+    <extensionID>androidx.appcompat</extensionID>
+    <extensionID>androidx.browser</extensionID>
+    <extensionID>com.android.installreferrer</extensionID>
 </extensions>
 ```
 
 
 ## Android
+
+### Manifest Additions
+
 
 There are several additions to the manifest required for the Branch extension. In order to correctly gather install referrer information you need to add the `com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE` permission and the following receiver to your application node: 
 
@@ -152,6 +168,32 @@ If you are adding a deep link / custom url scheme to be able to launch your appl
     ]]></manifestAdditions>
 </android>
 ```
+
+
+
+### MultiDex Applications 
+
+If you have a large application and are supporting Android 4.x then you will need to ensure you enable your application to correctly support MultiDex to allow the application to be broken up into smaller dex packages.
+
+This is enabled by default with releases of AIR v25+, except in the Android 4.x case where you need to change the manifest additions for the application tag to match the following and use the `MultiDexApplication`.
+
+
+#### Using AndroidX
+
+This will require the addition of the `androidx.multidex` extension which contains the `androidx.multidex.MultiDexApplication` implementation.
+
+```xml
+<manifest android:installLocation="auto">
+	<!-- PERMISSIONS -->
+
+	<application android:name="androidx.multidex.MultiDexApplication">
+
+		<!-- ACTIVITIES / RECEIVERS / SERVICES -->
+
+	</application>
+</manifest>
+```
+
 
 
 ## iOS

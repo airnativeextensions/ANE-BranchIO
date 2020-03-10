@@ -86,9 +86,9 @@ package io.branch.nativeExtensions.branch
 		//	CONSTANTS
 		//
 		
-		public static const EXT_CONTEXT_ID:String = "io.branch.nativeExtensions.Branch";
+		public static const EXT_CONTEXT_ID:String = Const.EXTENSIONID;
 		
-		public static const VERSION:String = Version.VERSION;
+		public static const VERSION:String = Const.VERSION;
 		
 		private static const ERROR_CREATION:String = "The native extension context could not be created";
 		private static const ERROR_SINGLETON:String = "The singleton has already been created. Use Branch.instance to access the functionality";

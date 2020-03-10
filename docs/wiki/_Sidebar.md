@@ -31,6 +31,13 @@ Deprecated Functionality
 
 ---
 
+Help
+
+- [[Migrating to AndroidX|h.Migrating to AndroidX]]
+
+
+---
+
 External Links
 
 - [ASdocs](https://distriqt.github.io/ANE-BranchIO/asdocs/)
