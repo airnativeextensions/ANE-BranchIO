@@ -47,12 +47,14 @@ import io.branch.nativeExtensions.branch.functions.SetIdentityFunction;
 import io.branch.nativeExtensions.branch.functions.UserCompletedActionFunction;
 import io.branch.nativeExtensions.branch.functions.ValidateIntegrationFunction;
 import io.branch.nativeExtensions.branch.functions.VersionFunction;
+import io.branch.nativeExtensions.branch.functions.buo.GenerateShortUrlFunction;
 import io.branch.nativeExtensions.branch.utils.Logger;
+import io.branch.referral.BuildConfig;
 
 public class BranchContext extends FREContext implements IExtensionContext, ActivityResultCallback, StateChangeCallback
 {
 	public static final String TAG = BranchContext.class.getSimpleName();
-	public static final String VERSION = "1.0";
+	public static final String VERSION = BuildConfig.VERSION_NAME;
 	public static final String IMPLEMENTATION = "Android";
 
 
@@ -100,7 +102,7 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 	@Override
 	public Map<String, FREFunction> getFunctions()
 	{
-		Map<String, FREFunction> functionMap = new HashMap<String, FREFunction>();
+		Map<String, FREFunction> functionMap = new HashMap<>();
 
 		functionMap.put( "isSupported", new IsSupportedFunction() );
 		functionMap.put( "version", new VersionFunction() );
@@ -126,6 +128,15 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		//
 
 		functionMap.put( "logEvent", new LogEventFunction() );
+
+
+		//
+		// BRANCH UNIVERSAL OBJECTS
+		//
+
+
+		functionMap.put( "buo_generateShortUrl", new GenerateShortUrlFunction() );
+
 
 
 		//

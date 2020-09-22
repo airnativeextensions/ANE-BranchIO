@@ -4,6 +4,8 @@ package io.branch.nativeExtensions.branch
 	import flash.events.EventDispatcher;
 	import flash.external.ExtensionContext;
 	
+	import io.branch.nativeExtensions.branch.buo.BranchUniversalObject;
+	
 	
 	/**
 	 * @eventType io.branch.nativeExtensions.branch.events.BranchEvent.INIT_SUCCESS
@@ -200,6 +202,23 @@ package io.branch.nativeExtensions.branch
 			return false;
 		}
 		
+		
+		
+		//
+		//
+		//	BRANCH UNIVERSAL OBJECTS
+		//
+		//
+		
+		/**
+		 *
+		 * @param builder
+		 * @return
+		 */
+		public function createUniversalObject():BranchUniversalObject
+		{
+			return null;
+		}
 		
 		
 		//

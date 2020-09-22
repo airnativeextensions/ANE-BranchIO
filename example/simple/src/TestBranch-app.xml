@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/30.0">
-	<id>com.distriqt.test</id>
-	<filename>TestBranch</filename>
-	<name>TestBranch</name>
-	<versionNumber>0.0.1</versionNumber>
+<application xmlns="http://ns.adobe.com/air/application/33.1">
+    <!--    <id>com.airnativeextensions.test</id>-->
+    <id>com.distriqt.test</id>
+    <filename>TestBranch</filename>
+    <name>TestBranch</name>
+    <versionNumber>0.0.25</versionNumber>
 
-	<initialWindow>
-		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
-		<autoOrients>false</autoOrients>
+    <initialWindow>
+        <content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
+        <autoOrients>false</autoOrients>
         <fullScreen>false</fullScreen>
         <visible>true</visible>
+        <renderMode>direct</renderMode>
     </initialWindow>
 
-	<icon>
-		<image16x16>icons/icon16x16.png</image16x16>
-		<image29x29>icons/icon29x29.png</image29x29>
-		<image32x32>icons/icon32x32.png</image32x32>
-		<image36x36>icons/icon36x36.png</image36x36>
-		<image48x48>icons/icon48x48.png</image48x48>
-		<image57x57>icons/icon57x57.png</image57x57>
-		<image72x72>icons/icon72x72.png</image72x72>
-		<image114x114>icons/icon114x114.png</image114x114>
-		<image128x128>icons/icon128x128.png</image128x128>
-		<image512x512>icons/icon512x512.png</image512x512>
-	</icon>
+    <icon>
+        <image16x16>icons/icon16x16.png</image16x16>
+        <image29x29>icons/icon29x29.png</image29x29>
+        <image32x32>icons/icon32x32.png</image32x32>
+        <image36x36>icons/icon36x36.png</image36x36>
+        <image48x48>icons/icon48x48.png</image48x48>
+        <image57x57>icons/icon57x57.png</image57x57>
+        <image72x72>icons/icon72x72.png</image72x72>
+        <image76x76>icons/icon76x76.png</image76x76>
+        <image114x114>icons/icon114x114.png</image114x114>
+        <image120x120>icons/icon120x120.png</image120x120>
+        <image128x128>icons/icon128x128.png</image128x128>
+        <image152x152>icons/icon152x152.png</image152x152>
+        <image512x512>icons/icon512x512.png</image512x512>
+    </icon>
 
-	<iPhone>
+    <iPhone>
         <InfoAdditions><![CDATA[
 			<key>UIDeviceFamily</key>
             <array>
@@ -43,53 +48,83 @@
                  </dict>
             </array>
 
+            <key>branch_app_domain</key>
+            <string>rc0e.app.link</string>
+
             <key>branch_key</key>
             <dict>
                 <key>live</key>
-                <string>key_live_dcixJiAqOixZkdkLxgiTLkeovycqdUPp</string>
+                <string>key_live_mkBWYDOfYf4HYFEjTIxUQepfxElQrcR2</string>
                 <key>test</key>
-                <string>key_test_okaqTPsqXpKE0Jib8MDZlalhtuhLjsJO</string>
+                <string>key_test_abvY6tToZb9I6CBfPJEPYlpluFkHFiXk</string>
             </dict>
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
         <Entitlements>
             <![CDATA[
+                <key>com.apple.developer.associated-domains</key>
+		        <array>
+                    <string>applinks:rc0e.app.link</string>
+                    <string>applinks:rc0e-alternate.app.link</string>
+                </array>
             ]]>
         </Entitlements>
     </iPhone>
-    
-	<android>
+
+    <android>
         <manifestAdditions><![CDATA[
 			<manifest android:installLocation="auto">
 			    <uses-permission android:name="android.permission.INTERNET"/>
 
+                <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+
 			    <application>
-                    <activity>
+                    <activity android:launchMode="singleTask">
                         <intent-filter>
                             <action android:name="android.intent.action.MAIN"/>
                             <category android:name="android.intent.category.LAUNCHER"/>
                         </intent-filter>
+
+                        <!-- Branch URI scheme -->
                         <intent-filter>
-                            <action android:name="android.intent.action.VIEW" />
                             <data android:scheme="branch-ane-test" />
+                            <action android:name="android.intent.action.VIEW" />
                             <category android:name="android.intent.category.DEFAULT" />
                             <category android:name="android.intent.category.BROWSABLE" />
                         </intent-filter>
+
+                        <!-- Branch App Links (optional) -->
+                        <intent-filter android:autoVerify="true">
+                            <action android:name="android.intent.action.VIEW" />
+                            <category android:name="android.intent.category.DEFAULT" />
+                            <category android:name="android.intent.category.BROWSABLE" />
+                            <data android:scheme="https" android:host="rc0e.app.link" />
+                            <data android:scheme="https" android:host="rc0e-alternate.app.link" />
+                        </intent-filter>
                     </activity>
 
-                    <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_dcixJiAqOixZkdkLxgiTLkeovycqdUPp" />
-                    <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_okaqTPsqXpKE0Jib8MDZlalhtuhLjsJO" />
+                    <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+                    <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_mkBWYDOfYf4HYFEjTIxUQepfxElQrcR2" />
+                    <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_abvY6tToZb9I6CBfPJEPYlpluFkHFiXk" />
 
-                    <activity android:name="io.branch.nativeExtensions.branch.BranchActivity" android:launchMode="singleTask" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
                 </application>
 			</manifest>
 		]]></manifestAdditions>
     </android>
-    
+
     <extensions>
         <extensionID>com.distriqt.Core</extensionID>
-        
+
+        <extensionID>androidx.core</extensionID>
+        <extensionID>androidx.appcompat</extensionID>
+        <extensionID>androidx.browser</extensionID>
+        <extensionID>com.android.installreferrer</extensionID>
+
+        <extensionID>com.distriqt.playservices.Base</extensionID>
+        <extensionID>com.distriqt.playservices.AdsIdentifier</extensionID>
+
+
         <extensionID>io.branch.nativeExtensions.Branch</extensionID>
     </extensions>
-    
+
 </application>

@@ -52,6 +52,28 @@ You can access these extensions here: [https://github.com/distriqt/ANE-AndroidSu
 >
 
 
+### Google Play Services
+
+This ANE requires can use of certain aspects of the Google Play Services if supplied, mainly around using the advertising identifier to attribute links correctly. 
+
+The client library is available as a series of ANEs that you add into your applications packaging options. 
+Each separate ANE provides a component from the Play Services client library and are used by different ANEs. 
+These client libraries aren't packaged with this ANE as they are used by multiple ANEs and separating them 
+will avoid conflicts, allowing you to use multiple ANEs in the one application.
+
+If you wish to use the expanded functionality add the following Google Play Services:
+
+- [`com.distriqt.playservices.Base`](https://github.com/distriqt/ANE-GooglePlayServices/raw/master/lib/com.distriqt.playservices.Base.ane)
+- [`com.distriqt.playservices.AdsIdentifier`](https://github.com/distriqt/ANE-GooglePlayServices/raw/master/lib/com.distriqt.playservices.AdsIdentifier.ane)
+
+You can access the Google Play Services client library extensions here: [https://github.com/distriqt/ANE-GooglePlayServices](https://github.com/distriqt/ANE-GooglePlayServices).
+
+>
+> **Note:** The Google Play Services and Android Support ANEs are only **required** on Android devices. 
+> There is no problem packaging these ANEs with all platforms as there are default implementations available which will allow your code to package without errors 
+> however if you are only building an iOS application feel free to remove the Google Play Services ANEs from your application.
+>
+
 
 
 ### Extension IDs
@@ -68,6 +90,9 @@ The following should be added to your extensions node in your application descri
     <extensionID>androidx.appcompat</extensionID>
     <extensionID>androidx.browser</extensionID>
     <extensionID>com.android.installreferrer</extensionID>
+   
+    <extensionID>com.distriqt.playservices.Base</extensionID>
+    <extensionID>com.distriqt.playservices.AdsIdentifier</extensionID>
 </extensions>
 ```
 
@@ -77,17 +102,13 @@ The following should be added to your extensions node in your application descri
 ### Manifest Additions
 
 
-There are several additions to the manifest required for the Branch extension. In order to correctly gather install referrer information you need to add the `com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE` permission and the following receiver to your application node: 
+There are several additions to the manifest required for the Branch extension. In order to correctly gather install referrer information you need to add the `com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE` permission : 
 
 ```xml
 <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
 
 <application>
-    <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
-        <intent-filter>
-            <action android:name="com.android.vending.INSTALL_REFERRER" />
-        </intent-filter>
-    </receiver>
+    
 </application>
 ```
 
@@ -156,12 +177,6 @@ If you are adding a deep link / custom url scheme to be able to launch your appl
                 <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
                 <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
                 <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
-
-                <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
-                    <intent-filter>
-                        <action android:name="com.android.vending.INSTALL_REFERRER" />
-                    </intent-filter>
-                </receiver>
 
             </application>
         </manifest>

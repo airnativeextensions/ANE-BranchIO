@@ -82,7 +82,7 @@ package com.distriqt.test.branch
 			addAction( "Initialise", _tests.initSession );
 			addAction( "Latest Params", _tests.getLatestReferringParams );
 			
-			addAction( "Get Short Url", _tests.getShortUrl );
+//			addAction( "Get Short Url", _tests.getShortUrl );
 			addAction( "Set Identity", _tests.setIdentity );
 			
 			addAction( "Standard :Track", _tests.trackStandard );
@@ -90,6 +90,8 @@ package com.distriqt.test.branch
 			
 			addAction( "Validate :Debug", _tests.validateIntegration );
 			
+			
+			addAction( "Generate Short Link :BUO", _tests.createObjectAndGenerateShortLink );
 			
 			addChild( _text );
 			addChild( _tests );

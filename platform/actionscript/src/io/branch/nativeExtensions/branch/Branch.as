@@ -8,6 +8,10 @@ package io.branch.nativeExtensions.branch
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
 	
+	import io.branch.nativeExtensions.branch.buo.BranchUniversalObject;
+	
+	import io.branch.nativeExtensions.branch.buo.BranchUniversalObjectBuilder;
+	
 	import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 	
 	import io.branch.nativeExtensions.branch.events.BranchEvent;
@@ -251,6 +255,7 @@ package io.branch.nativeExtensions.branch
 		//
 		//
 		
+		[Deprecated(message="Use initSession( options )")]
 		/**
 		 * <p>
 		 * Initialise the Branch SDK.
@@ -276,7 +281,7 @@ package io.branch.nativeExtensions.branch
 		 * <p>
 		 * You will get the deep linked params associated with the link
 		 * that the user clicked before showing up via the
-		 * <code>BranchEvent.INIT_SUCCESSED</code> event.
+		 * <code>BranchEvent.INIT_SUCCESS</code> event.
 		 * </p>
 		 *
 		 * @example
@@ -464,7 +469,7 @@ package io.branch.nativeExtensions.branch
 		
 		/**
 		 * This call will retrieve the entire history of credits and redemptions from the individual user.
-		 * Be sure to listen <code>GET_CREDITS_HISTORY_SUCCESSED</code> and <code>GET_CREDITS_HISTORY_FAILED</code> events.
+		 * Be sure to listen <code>GET_CREDITS_HISTORY_SUCCESS</code> and <code>GET_CREDITS_HISTORY_FAILED</code> events.
 		 *
 		 * @param bucket The bucket to get credits balance from.
 		 */
@@ -478,6 +483,26 @@ package io.branch.nativeExtensions.branch
 			{
 			}
 		}
+		
+		
+		//
+		//
+		//	BRANCH UNIVERSAL OBJECTS
+		//
+		//
+		
+		/**
+		 *
+		 * @param builder
+		 * @return
+		 */
+		public function createUniversalObject():BranchUniversalObject
+		{
+			return new _BranchUniversalObject(
+					_extensionContext
+			);
+		}
+		
 		
 		
 		//
@@ -540,38 +565,59 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		//
-		//
-		//	LEGACY
-		//
-		//
-		
-		
 		/**
-		 * With each Branch link, we pack in as much functionality and measurement as possible.
-		 * You get the powerful deep linking functionality in addition to the all the install and reengagement attribution, all in one link.
-		 * For more details on how to create links, see the <a href="https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md">Branch link creation guide</a>.
-		 *
-		 * @param tags examples: set of tags could be "version1", "trial6", etc; each tag should not exceed 64 characters
-		 * @param channel examples: "facebook", "twitter", "text_message", etc; should not exceed 128 characters
-		 * @param feature examples: Branch.FEATURE_TAG_SHARE, Branch.FEATURE_TAG_REFERRAL, "unlock", etc; should not exceed 128 characters
-		 * @param stage examples: "past_customer", "logged_in", "level_6"; should not exceed 128 characters
-		 * @param json a stringify JSON, you can access this data from any instance that installs or opens the app from this link, customize the display of the Branch link and customize the desktop redirect location
-		 * @param alias the alias for a link.
-		 * @param type can be used for scenarios where you want the link to only deep link the first time.
+		 * TODO
+		 * @param disabled
+		 * @return
 		 */
-		public function getShortUrl( tags:Array = null, channel:String = "", feature:String = "", stage:String = "", json:String = "{}", alias:String = "", type:int = -1 ):void
+		public function disableTracking( disabled:Boolean ):Boolean
 		{
 			try
 			{
-				_extensionContext.call( "getShortUrl", tags, channel, feature, stage, json, alias, type );
+				return _extensionContext.call( "disableTracking", disabled );
 			}
 			catch (e:Error)
 			{
 			}
+			return false;
 		}
 		
 		
+		
+		
+//
+//		//
+//		//
+//		//	LEGACY
+//		//
+//		//
+//
+//
+//		/**
+//		 * With each Branch link, we pack in as much functionality and measurement as possible.
+//		 * You get the powerful deep linking functionality in addition to the all the install and reengagement attribution, all in one link.
+//		 * For more details on how to create links, see the <a href="https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md">Branch link creation guide</a>.
+//		 *
+//		 * @param tags examples: set of tags could be "version1", "trial6", etc; each tag should not exceed 64 characters
+//		 * @param channel examples: "facebook", "twitter", "text_message", etc; should not exceed 128 characters
+//		 * @param feature examples: Branch.FEATURE_TAG_SHARE, Branch.FEATURE_TAG_REFERRAL, "unlock", etc; should not exceed 128 characters
+//		 * @param stage examples: "past_customer", "logged_in", "level_6"; should not exceed 128 characters
+//		 * @param json a stringify JSON, you can access this data from any instance that installs or opens the app from this link, customize the display of the Branch link and customize the desktop redirect location
+//		 * @param alias the alias for a link.
+//		 * @param type can be used for scenarios where you want the link to only deep link the first time.
+//		 */
+//		public function getShortUrl( tags:Array = null, channel:String = "", feature:String = "", stage:String = "", json:String = "{}", alias:String = "", type:int = -1 ):void
+//		{
+//			try
+//			{
+//				_extensionContext.call( "getShortUrl", tags, channel, feature, stage, json, alias, type );
+//			}
+//			catch (e:Error)
+//			{
+//			}
+//		}
+//
+//
 		
 		
 		//
@@ -652,68 +698,6 @@ package io.branch.nativeExtensions.branch
 			catch (e:Error)
 			{
 			}
-		}
-		
-		
-		
-		
-		
-		
-		//
-		//
-		// DEPRECATIONS
-		//
-		//
-		
-		
-		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
-		/**
-		 * Retrieve the referral code created by current user.
-		 * Be sure to listen <code>GET_REFERRAL_CODE_SUCCESSED</code> and <code>GET_REFERRAL_CODE_FAILED</code> events.
-		 */
-		public function getReferralCode():void
-		{
-		}
-		
-		
-		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
-		/**
-		 * Create a new referral code for the current user, only if this user doesn't have any existing non-expired referral code.
-		 * Be sure to listen <code>CREATE_REFERRAL_CODE_SUCCESSED</code> and <code>CREATE_REFERRAL_CODE_FAILED</code> events.
-		 *
-		 * @param prefix The prefix to the referral code that you desire.
-		 * @param amount The amount of credit to redeem when user applies the referral code.
-		 * @param expiration The expiration date of the referral code, a number of milliseconds since midnight January 1, 1970, universal time.
-		 * @param bucket The name of the bucket to use.
-		 * @param calculationType This defines whether the referral code can be applied indefinitely, or only once per user. Check <code>BranchConst.REFERRAL_CODE_AWARD_UNLIMITED</code>: referral code can be applied continually and <code>BranchConst.REFERRAL_CODE_AWARD_UNIQUE</code>: a user can only apply a specific referral code once.
-		 * @param location The user to reward for applying the referral code. Check <code>BranchConst.REFERRAL_CODE_LOCATION_REFERREE</code>: the user applying the referral code receives credit, <code>BranchConst.REFERRAL_CODE_LOCATION_REFERRING_USER</code>: the user who created the referral code receives credit and <code>BranchConst.REFERRAL_CODE_LOCATION_BOTH</code>: both the creator and applicant receive credit.
-		 */
-		public function createReferralCode( prefix:String, amount:int, expiration:int, bucket:String, calculationType:int, location:int ):void
-		{
-		}
-		
-		
-		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
-		/**
-		 * Validate if a referral code exists in Branch system and is still valid. A code is vaild if:
-		 * <ul><li>It hasn't expired.</li>
-		 * <li>If its calculation type is uniqe, it hasn't been applied by current user.</li></ul>
-		 * Be sure to listen <code>VALIDATE_REFERRAL_CODE_SUCCESSED</code> and <code>VALIDATE_REFERRAL_CODE_FAILED</code> events.
-		 * @param code The referral code to validate.
-		 */
-		public function validateReferralCode( code:String ):void
-		{
-		}
-		
-		
-		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
-		/**
-		 * Apply a referral code if it exists in Branch system and is still valid.
-		 * Be sure to listen <code>APPLY_REFERRAL_CODE_SUCCESSED</code> and <code>APPLY_REFERRAL_CODE_FAILED</code> events.
-		 * @param code The referral code to apply.
-		 */
-		public function applyReferralCode( code:String ):void
-		{
 		}
 		
 		

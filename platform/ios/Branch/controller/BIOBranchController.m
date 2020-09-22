@@ -10,6 +10,8 @@
 #import "BIOTypeConversion.h"
 #import "BIOBranchEvent.h"
 #import "BIOBranchCreditsEvent.h"
+#import "BIOBranchUniversalObjectEvent.h"
+#import "BIOBranchUniversalObjectUtils.h"
 
 #import <Branch/Branch.h>
 
@@ -29,6 +31,12 @@
         
     }
     return self;
+}
+
+
+-(NSString*) version
+{
+    return BNC_SDK_VERSION;
 }
 
 
@@ -340,6 +348,51 @@
     [context log: Branch_TAG message: @"BIOBranchController::validateConfiguration" ];
     [[Branch getInstance] validateSDKIntegration];
 }
+
+
+
+#pragma mark - BranchUniversalObjects
+//
+//  BRANCH UNIVERSAL OBJECTS
+//
+
+-(void) generateShortUrl: (NSString*)requestId buo: (NSDictionary*)buoProperties linkProperties:(NSDictionary*)linkProperties
+{
+    [context log: Branch_TAG message: @"BIOBranchController::generateShortUrl: %@ buo: %@ linkProperties: %@", requestId, buoProperties, linkProperties ];
+    NSString* identifier = [buoProperties objectForKey: @"identifier"];
+    
+    BranchUniversalObject* buo = [BIOBranchUniversalObjectUtils buoFromDict: [buoProperties objectForKey: @"properties"]];
+    BranchLinkProperties* lp = [BIOBranchUniversalObjectUtils linkPropertiesFromDict: linkProperties];
+    
+    [buo getShortUrlWithLinkProperties: lp andCallback:^(NSString * _Nullable url, NSError * _Nullable error)
+    {
+        [self.context log: Branch_TAG
+                  message: @"BIOBranchController::generateShortUrl:complete: %@ error: %@", url == nil ? @"nil" : url, error == nil ? @"nil" : error.localizedDescription];
+        if (error == nil)
+        {
+            [self.context dispatch: BIOBRANCHUNIVERSALOBJECTEVENT_GENERATE_SHORT_URL_SUCCESS
+                              data: [BIOBranchUniversalObjectEvent formatForEvent: identifier
+                                                                        requestId: requestId
+                                                                              url: url
+                                                                            error: error]
+             ];
+        }
+        else
+        {
+            [self.context dispatch: BIOBRANCHUNIVERSALOBJECTEVENT_GENERATE_SHORT_URL_FAILED
+                              data: [BIOBranchUniversalObjectEvent formatForEvent: identifier
+                                                                        requestId: requestId
+                                                                              url: url
+                                                                            error: error]
+             ];
+        }
+    }];
+        
+}
+
+
+
+
 
 
 

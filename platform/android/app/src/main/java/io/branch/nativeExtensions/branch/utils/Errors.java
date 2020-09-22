@@ -31,7 +31,7 @@ public class Errors
 
 	public static void handleException( Throwable e )
 	{
-		FREUtils.handleException( BranchExtension.context, e );
+		handleException( BranchExtension.context, e );
 	}
 
 

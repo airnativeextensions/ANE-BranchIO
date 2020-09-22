@@ -22,11 +22,11 @@ Usage
 6. [[Event Tracking|u.Event Tracking]]
 
 
---- 
+---
 
-Deprecated Functionality
+Branch Universal Objects
 
-1. [[Get Short URL|u.Get Short URL]]
+1. [[Branch Universal Objects|u.Branch Universal Objects]]
 
 
 ---

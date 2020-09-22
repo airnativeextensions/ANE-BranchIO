@@ -29,6 +29,12 @@
             <entry library-name="com.android.installreferrer" library-level="application">
               <dependency linkage="Merged" />
             </entry>
+            <entry library-name="com.distriqt.playservices.AdsIdentifier" library-level="application">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="com.distriqt.playservices.Base" library-level="application">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="current" />
         </dependencies>
@@ -38,22 +44,14 @@
           <files-to-package>
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/icons" path-in-package="icons" />
           </files-to-package>
-          <AirSigningOptions keystore-path="$USER_HOME$/Dropbox/work/certs/com.distriqt.test/android/distriqt_air_selfsign_cert.p12" use-temp-certificate="false" />
+          <AirSigningOptions keystore-path="$USER_HOME$/Google Drive/work/certs/com.distriqt.test/android/distriqt_air_selfsign_cert.p12" use-temp-certificate="false" />
         </packaging-android>
         <packaging-ios enabled="true" use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/src/TestBranch-app.xml" package-file-name="starling">
           <files-to-package>
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/icons" path-in-package="icons" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Assets.car" path-in-package="Assets.car" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-375w-667h@2x~iphone.png" path-in-package="Default-375w-667h@2x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-414w-736h@3x~iphone.png" path-in-package="Default-414w-736h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-568h@2x~iphone.png" path-in-package="Default-568h@2x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-812h@3x~iphone.png" path-in-package="Default-812h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-Landscape-414w-736h@3x~iphone.png" path-in-package="Default-Landscape-414w-736h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-Landscape-812h@3x~iphone.png" path-in-package="Default-Landscape-812h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default@2x~iphone.png" path-in-package="Default@2x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default~iphone.png" path-in-package="Default~iphone.png" />
           </files-to-package>
-          <AirSigningOptions keystore-path="$USER_HOME$/Dropbox/work/certs/distriqt/development/Certificates.p12" provisioning-profile-path="$USER_HOME$/Dropbox/work/certs/com.distriqt.test/development/distriqt_test_profile.mobileprovision" />
+          <AirSigningOptions keystore-path="$USER_HOME$/Google Drive/work/certs/distriqt/development/Certificates.p12" provisioning-profile-path="$USER_HOME$/Google Drive/work/certs/com.distriqt.test/development/distriqt_test_profile.mobileprovision" />
         </packaging-ios>
       </configuration>
       <configuration name="starling_dist" target-platform="Mobile" pure-as="true" main-class="TestBranch" output-file="starling_dist.swf" output-folder="$MODULE_DIR$/../../out/production/starling">
@@ -83,6 +81,12 @@
             <entry library-name="com.android.installreferrer" library-level="application">
               <dependency linkage="Merged" />
             </entry>
+            <entry library-name="com.distriqt.playservices.AdsIdentifier" library-level="application">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="com.distriqt.playservices.Base" library-level="application">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="current" />
         </dependencies>
@@ -98,16 +102,8 @@
           <files-to-package>
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/icons" path-in-package="icons" />
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Assets.car" path-in-package="Assets.car" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-375w-667h@2x~iphone.png" path-in-package="Default-375w-667h@2x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-414w-736h@3x~iphone.png" path-in-package="Default-414w-736h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-568h@2x~iphone.png" path-in-package="Default-568h@2x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-812h@3x~iphone.png" path-in-package="Default-812h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-Landscape-414w-736h@3x~iphone.png" path-in-package="Default-Landscape-414w-736h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default-Landscape-812h@3x~iphone.png" path-in-package="Default-Landscape-812h@3x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default@2x~iphone.png" path-in-package="Default@2x~iphone.png" />
-            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/Default~iphone.png" path-in-package="Default~iphone.png" />
           </files-to-package>
-          <AirSigningOptions keystore-path="$USER_HOME$/Dropbox/work/certs/distriqt/distribution/Certificates.p12" provisioning-profile-path="$USER_HOME$/Dropbox/work/certs/com.distriqt.test/distribution/distriqt_test_distribution_profile.mobileprovision" />
+          <AirSigningOptions keystore-path="$USER_HOME$/Google Drive/work/certs/distriqt/distribution/Certificates.p12" provisioning-profile-path="$USER_HOME$/Google Drive/work/certs/com.distriqt.test/distribution/distriqt_test_distribution_profile.mobileprovision" />
         </packaging-ios>
       </configuration>
     </configurations>
@@ -170,5 +166,7 @@
     <orderEntry type="library" exported="" name="androidx.browser" level="application" />
     <orderEntry type="library" exported="" name="androidx.appcompat" level="application" />
     <orderEntry type="library" exported="" name="com.android.installreferrer" level="application" />
+    <orderEntry type="library" exported="" name="com.distriqt.playservices.AdsIdentifier" level="application" />
+    <orderEntry type="library" exported="" name="com.distriqt.playservices.Base" level="application" />
   </component>
 </module>

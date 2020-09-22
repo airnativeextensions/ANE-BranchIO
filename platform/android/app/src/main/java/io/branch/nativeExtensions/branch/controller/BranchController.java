@@ -28,14 +28,16 @@ import com.distriqt.core.utils.IExtensionContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-
+import androidx.annotation.Nullable;
+import io.branch.indexing.BranchUniversalObject;
 import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 import io.branch.nativeExtensions.branch.events.BranchEvent;
+import io.branch.nativeExtensions.branch.events.BranchUniversalObjectEvent;
 import io.branch.nativeExtensions.branch.utils.Errors;
 import io.branch.nativeExtensions.branch.utils.Logger;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 import io.branch.referral.validators.IntegrationValidator;
 
 public class BranchController extends ActivityStateListener
@@ -85,7 +87,7 @@ public class BranchController extends ActivityStateListener
 		try
 		{
 			if (options.enableDebugging)
-				Branch.enableDebugMode();
+				Branch.enableLogging();
 
 			Branch branch;
 			if (options.useTestKey)
@@ -115,11 +117,18 @@ public class BranchController extends ActivityStateListener
 			}
 
 
-			// This triggers reinitialisation - without this Branch waits for activity lifecycle events
-			// which may not occur until app minimised.
-			Method method = branch.getClass().getDeclaredMethod( "registerAppReInit" );
-			method.setAccessible( true );
-			method.invoke( branch );
+			//try
+			//{
+			//	// This triggers reinitialisation - without this Branch waits for activity lifecycle events
+			//	// which may not occur until app minimised.
+			//	Method method = branch.getClass().getDeclaredMethod( "registerAppReInit" );
+			//	method.setAccessible( true );
+			//	method.invoke( branch );
+			//}
+			//catch (Exception e)
+			//{
+			//	e.printStackTrace();
+			//}
 
 
 			_handler.postDelayed( new Runnable()
@@ -130,19 +139,34 @@ public class BranchController extends ActivityStateListener
 					try
 					{
 						// Initialise Branch and session
-						Branch.getInstance().initSession(
-								new Branch.BranchReferralInitListener()
+						//Branch.getInstance().initSession(
+						//		new Branch.BranchReferralInitListener()
+						//		{
+						//			@Override
+						//			public void onInitFinished( JSONObject referringParams, BranchError error )
+						//			{
+						//				_initialised = true;
+						//				BranchController.this.onInitFinished( referringParams, error );
+						//			}
+						//		},
+						//		_extContext.getActivity().getIntent().getData(),
+						//		_extContext.getActivity()
+						//);
+
+						Branch.sessionBuilder(_extContext.getActivity())
+								.ignoreIntent( true )
+								.withCallback( new Branch.BranchReferralInitListener()
 								{
 									@Override
-									public void onInitFinished( JSONObject referringParams, BranchError error )
+									public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
 									{
 										_initialised = true;
 										BranchController.this.onInitFinished( referringParams, error );
 									}
-								},
-								_extContext.getActivity().getIntent().getData(),
-								_extContext.getActivity()
-						);
+								} )
+								.withData(_extContext.getActivity().getIntent().getData())
+								.init();
+
 					}
 					catch (Exception e)
 					{
@@ -414,6 +438,53 @@ public class BranchController extends ActivityStateListener
 
 
 
+	//
+	//	Branch Universal Objects
+	//
+
+	public void generateShortUrl( final String requestId, JSONObject buoJSON, JSONObject linkJSON  )
+	{
+		try
+		{
+			final String identifier = buoJSON.getString( "identifier" );
+
+			LinkProperties lp = BranchUniversalObjectUtils.linkPropertiesFromJSONObject( linkJSON );
+
+			BranchUniversalObject buo = BranchUniversalObjectUtils.buoFromJSONObject( buoJSON.getJSONObject( "properties" ) );
+
+			buo.generateShortUrl( _extContext.getActivity(), lp, new Branch.BranchLinkCreateListener()
+			{
+				@Override
+				public void onLinkCreate( String url, BranchError error )
+				{
+					Logger.d( TAG, "generateShortUrl:onLinkCreate:" );
+					if (error == null)
+					{
+						_extContext.dispatchEvent(
+								BranchUniversalObjectEvent.GENERATE_SHORT_URL_SUCCESS,
+								BranchUniversalObjectEvent.formatForEvent( identifier, requestId, url, error )
+						);
+					}
+					else
+					{
+						_extContext.dispatchEvent(
+								BranchUniversalObjectEvent.GENERATE_SHORT_URL_FAILED,
+								BranchUniversalObjectEvent.formatForEvent( identifier, requestId, url, error )
+						);
+					}
+				}
+			} );
+
+		}
+		catch (Exception e)
+		{
+			Errors.handleException( e );
+		}
+	}
+
+
+
+
 
 	//
 	//	ActivityStateListener
@@ -425,20 +496,35 @@ public class BranchController extends ActivityStateListener
 		Logger.d( TAG, "onStart()" );
 		try
 		{
+			// Start a new session with the new activity lifecycle start
 			if (_initialised)
 			{
-				Branch.getInstance( _extContext.getActivity() ).initSession(
-						new Branch.BranchReferralInitListener()
+				//Branch.getInstance( _extContext.getActivity() ).initSession(
+				//		new Branch.BranchReferralInitListener()
+				//		{
+				//			@Override
+				//			public void onInitFinished( JSONObject referringParams, BranchError error )
+				//			{
+				//				BranchController.this.onInitFinished( referringParams, error );
+				//			}
+				//		},
+				//		_extContext.getActivity().getIntent().getData(),
+				//		_extContext.getActivity()
+				//);
+
+				Branch.sessionBuilder(_extContext.getActivity())
+						.ignoreIntent( false )
+						.withCallback( new Branch.BranchReferralInitListener()
 						{
 							@Override
-							public void onInitFinished( JSONObject referringParams, BranchError error )
+							public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
 							{
+								_initialised = true;
 								BranchController.this.onInitFinished( referringParams, error );
 							}
-						},
-						_extContext.getActivity().getIntent().getData(),
-						_extContext.getActivity()
-				);
+						} )
+						.withData(_extContext.getActivity().getIntent().getData())
+						.init();
 			}
 		}
 		catch (Exception e)

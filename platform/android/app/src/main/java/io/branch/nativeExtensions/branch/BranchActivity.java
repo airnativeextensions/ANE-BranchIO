@@ -38,29 +38,59 @@ public class BranchActivity extends Activity
 			Branch.getAutoInstance( this.getApplication() );
 		}
 
-		Branch.getInstance().initSession(
-				new Branch.BranchReferralInitListener()
-				{
-					@Override
-					public void onInitFinished( JSONObject referringParams, BranchError error )
-					{
-						Logger.d( TAG, "onInitFinished( %s, %s )",
-								referringParams == null ? "null" : referringParams.toString(),
-								error == null ? "null" : error.getMessage() );
 
-						if (error == null)
-						{
-							BranchExtension.context.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
-						}
-						else
-						{
-							BranchExtension.context.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
-						}
-						finish();
+		//Branch.sessionBuilder(this)
+		//		.withCallback( new Branch.BranchReferralInitListener()
+		//		{
+		//			@Override
+		//			public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
+		//			{
+		//				Logger.d( TAG, "onInitFinished( %s, %s )",
+		//						referringParams == null ? "null" : referringParams.toString(),
+		//						error == null ? "null" : error.getMessage() );
+		//
+		//				if (error == null)
+		//				{
+		//					String data = "";
+		//					if (referringParams != null)
+		//					{
+		//						data = referringParams.toString().replace( "\\", "" );
+		//					}
+		//					BranchExtension.context.dispatchEvent( BranchEvent.INIT_SUCCESS, data );
+		//				}
+		//				else
+		//				{
+		//					BranchExtension.context.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
+		//				}
+		//				finish();
+		//			}
+		//		} )
+		//		.withData(getIntent().getData())
+		//		.init();
+
+		Branch.getInstance().initSession(
+			new Branch.BranchReferralInitListener()
+			{
+				@Override
+				public void onInitFinished( JSONObject referringParams, BranchError error )
+				{
+					Logger.d( TAG, "onInitFinished( %s, %s )",
+							referringParams == null ? "null" : referringParams.toString(),
+							error == null ? "null" : error.getMessage() );
+
+					if (error == null)
+					{
+						BranchExtension.context.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
 					}
-				},
-				getIntent().getData(),
-				this
+					else
+					{
+						BranchExtension.context.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
+					}
+					finish();
+				}
+			},
+			getIntent().getData(),
+			this
 		);
 	}
 

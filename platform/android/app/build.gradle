@@ -20,6 +20,7 @@ android {
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'io.branch.sdk.android:library:3.2.0'
+    implementation 'io.branch.sdk.android:library:5.0.3'
+//    implementation 'io.branch.sdk.android:library:3.2.0'
 
 }

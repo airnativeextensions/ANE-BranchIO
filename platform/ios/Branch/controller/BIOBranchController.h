@@ -12,10 +12,13 @@
 #import "BIOBranchOptions.h"
 #import "BIOBranchContext.h"
 
+#import "BNCConfig.h"
 
 @interface BIOBranchController : NSObject<DTNotificationsDelegate>
 
 @property id<BIOBranchContext> context;
+
+-(NSString*) version;
 
 -(void) initSession:(BIOBranchOptions*)options;
 -(void) setIdentity:(NSString *) userId;
@@ -37,6 +40,14 @@
 
 
 -(void) validateIntegration;
+
+
+//
+//  BRANCH UNIVERSAL OBJECTS
+//
+
+-(void) generateShortUrl: (NSString*)requestId buo: (NSDictionary*)buoProperties linkProperties:(NSDictionary*)linkProperties;
+
 
 
 //

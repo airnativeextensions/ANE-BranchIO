@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <application xmlns="http://ns.adobe.com/air/application/33.1">
-    <!--<id>com.airnativeextensions.test</id>-->
+<!--    <id>com.airnativeextensions.test</id>-->
     <id>com.distriqt.test</id>
     <filename>TestBranch</filename>
     <name>TestBranch</name>
@@ -107,12 +107,6 @@
                     <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_mkBWYDOfYf4HYFEjTIxUQepfxElQrcR2" />
                     <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_abvY6tToZb9I6CBfPJEPYlpluFkHFiXk" />
 
-                    <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
-                        <intent-filter>
-                            <action android:name="com.android.vending.INSTALL_REFERRER" />
-                        </intent-filter>
-                    </receiver>
-
                 </application>
 			</manifest>
 		]]></manifestAdditions>
@@ -125,6 +119,12 @@
         <extensionID>androidx.appcompat</extensionID>
         <extensionID>androidx.browser</extensionID>
         <extensionID>com.android.installreferrer</extensionID>
+
+        <extensionID>com.distriqt.playservices.Base</extensionID>
+        <extensionID>com.distriqt.playservices.AdsIdentifier</extensionID>
+
+
+
 
         <extensionID>io.branch.nativeExtensions.Branch</extensionID>
     </extensions>

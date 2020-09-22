@@ -13,7 +13,11 @@ package com.distriqt.test.branch
 	
 	import io.branch.nativeExtensions.branch.Branch;
 	import io.branch.nativeExtensions.branch.BranchConst;
+	import io.branch.nativeExtensions.branch.BranchError;
 	import io.branch.nativeExtensions.branch.BranchOptions;
+	import io.branch.nativeExtensions.branch.buo.BranchUniversalObject;
+	import io.branch.nativeExtensions.branch.buo.ContentMetadata;
+	import io.branch.nativeExtensions.branch.buo.LinkProperties;
 	import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 	import io.branch.nativeExtensions.branch.events.BranchEvent;
 	import io.branch.nativeExtensions.branch.tracking.BranchEventBuilder;
@@ -54,6 +58,7 @@ package com.distriqt.test.branch
 				if (Branch.isSupported)
 				{
 					log( "Branch Version:   " + Branch.instance.version );
+					log( "Branch SDK Version:   " + Branch.instance.nativeVersion );
 //					NativeApplication.nativeApplication.addEventListener( InvokeEvent.INVOKE, invokeHandler );
 					
 				}
@@ -188,62 +193,111 @@ package com.distriqt.test.branch
 		}
 		
 		
+//		//
+//		//	SHORT URL
+//		//
+//
+//		public function getShortUrl():void
+//		{
+//			log( "getShortUrl()" );
+//
+//			var dataToInclude:Object = {
+//				user:        "Joe",
+//				profile_pic: "https://avatars3.githubusercontent.com/u/7772941?v=3&s=200",
+//				description: "Joe likes long walks on the beach...",
+//
+//				// customize the display of the Branch link
+//				"$og_title":       "Joe's My App Referral",
+//				"$og_image_url":   "https://branch.io/img/logo_white.png",
+//				"$og_description": "Join Joe in My App - it's awesome"
+//			};
+//
+//			var tags:Array = [ "version1", "trial6" ];
+//
+//
+//			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
+//			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
+//
+//			Branch.instance.getShortUrl(
+//					tags,
+//					"text_message",
+//					BranchConst.FEATURE_TAG_SHARE,
+//					"level_3",
+//					JSON.stringify( dataToInclude )
+//			);
+//
+//		}
+//
+//
+//		private function getShortUrl_failedHandler( event:BranchEvent ):void
+//		{
+//			log( event.type + "::" + event.data );
+//
+//			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
+//			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
+//		}
+//
+//
+//		private function getShortUrl_successHandler( event:BranchEvent ):void
+//		{
+//			log( event.type + "::" + event.data );
+//
+//			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
+//			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
+//
+//
+//			Branch.instance.handleDeepLink( event.data );
+//
+//		}
+		
+		
 		//
-		//	SHORT URL
+		//	BRANCH UNIVERSAL OBJECTS
 		//
 		
-		public function getShortUrl():void
+		public function createObjectAndGenerateShortLink():void
 		{
-			log( "getShortUrl()" );
+			log( "createObjectAndGenerateShortLink()" );
 			
-			var dataToInclude:Object = {
-				user:        "Joe",
-				profile_pic: "https://avatars3.githubusercontent.com/u/7772941?v=3&s=200",
-				description: "Joe likes long walks on the beach...",
-				
-				// customize the display of the Branch link
-				"$og_title":       "Joe's My App Referral",
-				"$og_image_url":   "https://branch.io/img/logo_white.png",
-				"$og_description": "Join Joe in My App - it's awesome"
-			};
+			var buo:BranchUniversalObject = Branch.instance.createUniversalObject()
+					.setCanonicalIdentifier( "content/12345" )
+					.setTitle( "My Content Title" )
+					.setContentDescription( "My Content Description")
+					.setContentImageUrl("https://lorempixel.com/400/400")
+					.setContentIndexingMode("public")
+					.setLocalIndexMode("public")
+					.setContentMetadata( new ContentMetadata()
+												 .addCustomMetadata("key1", "value1" )
+					)
+			;
 			
-			var tags:Array = [ "version1", "trial6" ];
+			var properties:LinkProperties = new LinkProperties()
+					.setChannel( "facebook" )
+					.setFeature( "sharing" )
+					.setCampaign( "content 123 launch" )
+					.setStage( "new user" )
+					.addControlParameter( "$desktop_url", "http://example.com/home" )
+					.addControlParameter( "custom", "data" )
+			;
 			
-			
-			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
-			Branch.instance.addEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
-			
-			Branch.instance.getShortUrl(
-					tags,
-					"text_message",
-					BranchConst.FEATURE_TAG_SHARE,
-					"level_3",
-					JSON.stringify( dataToInclude )
+			buo.generateShortUrl(
+					properties,
+					function ( url:String, error:BranchError ):void
+					{
+						log( "complete: " + url );
+						
+						Branch.instance.handleDeepLink( url, true );
+					}
 			);
 			
 		}
 		
 		
-		private function getShortUrl_failedHandler( event:BranchEvent ):void
-		{
-			log( event.type + "::" + event.data );
-			
-			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
-		}
 		
 		
-		private function getShortUrl_successHandler( event:BranchEvent ):void
-		{
-			log( event.type + "::" + event.data );
-			
-			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_FAILED, getShortUrl_failedHandler );
-			Branch.instance.removeEventListener( BranchEvent.GET_SHORT_URL_SUCCESS, getShortUrl_successHandler );
-			
-			
-			Branch.instance.handleDeepLink( event.data );
-			
-		}
+		
+		
+		
 		
 		
 		//

@@ -41,7 +41,7 @@ FREObject BranchVersion(FREContext ctx, void* funcData, uint32_t argc, FREObject
 	FREObject result = NULL;
     @autoreleasepool
     {
-        result = [DTFREUtils newFREObjectFromString: Branch_VERSION];
+        result = [DTFREUtils newFREObjectFromString: [branch_controller version]];
     }
     return result;
 }
@@ -258,6 +258,38 @@ FREObject Branch_validateIntegration(FREContext ctx, void* funcData, uint32_t ar
 
 
 
+//
+//  Branch Universal Objects
+//
+
+FREObject Branch_buo_generateShortUrl(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    FREObject result = NULL;
+    @autoreleasepool
+    {
+        NSString* requestId = [DTFREUtils getFREObjectAsString: argv[0]];
+        NSString* buoPropertiesString = [DTFREUtils getFREObjectAsString: argv[1]];
+        NSString* linkPropertiesString = [DTFREUtils getFREObjectAsString: argv[2]];
+        
+        NSDictionary *buoProperties = [NSJSONSerialization JSONObjectWithData: [buoPropertiesString dataUsingEncoding: NSUTF8StringEncoding]
+                                                                      options: 0
+                                                                        error: nil];
+        NSDictionary *linkProperties = [NSJSONSerialization JSONObjectWithData: [linkPropertiesString dataUsingEncoding: NSUTF8StringEncoding]
+                                                                       options: 0
+                                                                         error: nil];
+        
+        [branch_controller generateShortUrl: requestId
+                                        buo: buoProperties
+                             linkProperties: linkProperties];
+        
+        
+    }
+    return result;
+}
+
+
+
+
 
 
 ////////////////////////////////////////////////////////
@@ -294,7 +326,10 @@ void BranchContextInitializer(void* extData, const uint8_t* ctxType, FREContext 
         MAP_FUNCTION( Branch_getShortUrl,               "getShortUrl",              NULL ),
         
         MAP_FUNCTION( Branch_validateIntegration,     	"validateIntegration",    	NULL ),
+       
         
+        MAP_FUNCTION( Branch_buo_generateShortUrl,       "buo_generateShortUrl",    NULL ),
+       
     };
     
     *numFunctionsToTest = sizeof( distriqt_branchFunctionMap ) / sizeof( FRENamedFunction );
