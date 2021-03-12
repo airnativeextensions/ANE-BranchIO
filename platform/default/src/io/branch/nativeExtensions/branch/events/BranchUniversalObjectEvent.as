@@ -1,24 +1,21 @@
 /**
- *        __       __               __ 
+ *        __       __               __
  *   ____/ /_ ____/ /______ _ ___  / /_
  *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
+ * / /_/ / (__  ) / / /  / / /_/ / /
+ * \__,_/_/____/_/ /_/  /_/\__, /_/
+ *                           / /
+ *                           \/
  * http://distriqt.com
  *
- * @brief  		
- * @author 		marchbold
+ * @brief
+ * @author 		Michael Archbold (https://github.com/marchbold)
  * @created		19/9/20
  * @copyright	http://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.events
 {
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	
-	import io.branch.nativeExtensions.branch.BranchError;
 	
 	import io.branch.nativeExtensions.branch.BranchError;
 	
@@ -45,7 +42,6 @@ package io.branch.nativeExtensions.branch.events
 		public static const GENERATE_SHORT_URL_FAILED:String = "generateShortUrl:failed";
 		
 		
-		
 		////////////////////////////////////////////////////////
 		//  VARIABLES
 		//
@@ -61,8 +57,7 @@ package io.branch.nativeExtensions.branch.events
 		 */
 		public var error:BranchError;
 		
-
-
+		
 		////////////////////////////////////////////////////////
 		//  FUNCTIONALITY
 		//

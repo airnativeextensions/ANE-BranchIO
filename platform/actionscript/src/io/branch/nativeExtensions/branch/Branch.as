@@ -2,18 +2,13 @@ package io.branch.nativeExtensions.branch
 {
 	
 	import flash.desktop.NativeApplication;
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.InvokeEvent;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
 	
 	import io.branch.nativeExtensions.branch.buo.BranchUniversalObject;
-	
-	import io.branch.nativeExtensions.branch.buo.BranchUniversalObjectBuilder;
-	
 	import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
-	
 	import io.branch.nativeExtensions.branch.events.BranchEvent;
 	
 	

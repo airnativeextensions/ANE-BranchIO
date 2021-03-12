@@ -1,15 +1,15 @@
 /**
- *        __       __               __ 
+ *        __       __               __
  *   ____/ /_ ____/ /______ _ ___  / /_
  *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
+ * / /_/ / (__  ) / / /  / / /_/ / /
+ * \__,_/_/____/_/ /_/  /_/\__, /_/
+ *                           / /
+ *                           \/
  * http://distriqt.com
  *
- * @brief  		
- * @author 		marchbold
+ * @brief
+ * @author 		Michael Archbold (https://github.com/marchbold)
  * @created		19/9/20
  * @copyright	http://distriqt.com/copyright/license.txt
  */
@@ -45,7 +45,6 @@ package io.branch.nativeExtensions.branch
 		private var _identifier:String;
 		
 		private var _properties:Object;
-		
 		
 		
 		////////////////////////////////////////////////////////
@@ -133,14 +132,13 @@ package io.branch.nativeExtensions.branch
 			_properties[ "localIndexMode" ] = localIndexMode;
 			return this;
 		}
-
-
+		
+		
 		public function setContentMetadata( metadata:ContentMetadata ):BranchUniversalObject
 		{
 			_properties[ "metadata" ] = metadata.toObject();
 			return this;
 		}
-		
 		
 		
 		//
@@ -151,14 +149,14 @@ package io.branch.nativeExtensions.branch
 		/**
 		 * @inheritDoc
 		 */
-		public function generateShortUrl( properties:LinkProperties, callback:Function=null ):void
+		public function generateShortUrl( properties:LinkProperties, callback:Function = null ):void
 		{
 			var requestId:String = generateIdentifier();
 			try
 			{
 				if (callback != null)
 				{
-					_generateShortUrlCallbacks[requestId] = callback;
+					_generateShortUrlCallbacks[ requestId ] = callback;
 				}
 				if (properties == null)
 				{
@@ -168,8 +166,8 @@ package io.branch.nativeExtensions.branch
 				_extContext.addEventListener( StatusEvent.STATUS, extContext_statusHander );
 				_extContext.call( "buo_generateShortUrl",
 								  requestId,
-								  JSON.stringify(this.toObject()),
-								  JSON.stringify(properties.toObject())
+								  JSON.stringify( this.toObject() ),
+								  JSON.stringify( properties.toObject() )
 				);
 			}
 			catch (e:Error)
@@ -188,7 +186,6 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		
 		////////////////////////////////////////////////////////
 		//	EVENT HANDLING
 		//
@@ -203,9 +200,8 @@ package io.branch.nativeExtensions.branch
 		{
 			super.removeEventListener( type, listener, useCapture );
 		}
-
 		
-
+		
 		////////////////////////////////////////////////////////
 		//	INTERNALS
 		//
@@ -239,8 +235,6 @@ package io.branch.nativeExtensions.branch
 			}
 			return String.fromCharCode.apply( null, uid );
 		}
-
-		
 		
 		
 		////////////////////////////////////////////////////////
@@ -252,30 +246,30 @@ package io.branch.nativeExtensions.branch
 			var data:Object;
 			try
 			{
-				data = JSON.parse(event.level);
-				if (data.hasOwnProperty("identifier") && data.identifier == _identifier)
+				data = JSON.parse( event.level );
+				if (data.hasOwnProperty( "identifier" ) && data.identifier == _identifier)
 				{
 					switch (event.code)
 					{
 						case BranchUniversalObjectEvent.GENERATE_SHORT_URL_SUCCESS:
 						case BranchUniversalObjectEvent.GENERATE_SHORT_URL_FAILED:
 						{
-							var requestId:String = (data.hasOwnProperty("requestId") ? data.requestId : "");
+							var requestId:String = (data.hasOwnProperty( "requestId" ) ? data.requestId : "");
 							var url:String = data.url;
 							var error:BranchError = BranchError.fromObject( data.error );
 							
-							if (_generateShortUrlCallbacks.hasOwnProperty(requestId))
+							if (_generateShortUrlCallbacks.hasOwnProperty( requestId ))
 							{
-								var callback:Function = _generateShortUrlCallbacks[requestId];
+								var callback:Function = _generateShortUrlCallbacks[ requestId ];
 								callback( url, error );
-								delete _generateShortUrlCallbacks[requestId];
+								delete _generateShortUrlCallbacks[ requestId ];
 							}
 							
 							dispatchEvent( new BranchUniversalObjectEvent(
 									event.code,
 									url,
 									error
-							));
+							) );
 							
 							break;
 							

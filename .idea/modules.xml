@@ -4,8 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/platform/actionscript/actionscript.iml" filepath="$PROJECT_DIR$/platform/actionscript/actionscript.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform/default/default.iml" filepath="$PROJECT_DIR$/platform/default/default.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/simple/simple.iml" filepath="$PROJECT_DIR$/example/simple/simple.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/starling/starling.iml" filepath="$PROJECT_DIR$/example/starling/starling.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/simple/example.simple.iml" filepath="$PROJECT_DIR$/example/simple/example.simple.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/starling/example.starling.iml" filepath="$PROJECT_DIR$/example/starling/example.starling.iml" />
     </modules>
   </component>
 </project>

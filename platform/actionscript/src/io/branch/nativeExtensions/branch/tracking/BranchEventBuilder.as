@@ -1,23 +1,20 @@
 /**
- *        __       __               __ 
+ *        __       __               __
  *   ____/ /_ ____/ /______ _ ___  / /_
  *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
+ * / /_/ / (__  ) / / /  / / /_/ / /
+ * \__,_/_/____/_/ /_/  /_/\__, /_/
+ *                           / /
+ *                           \/
  * http://distriqt.com
  *
- * @brief  		
- * @author 		marchbold
+ * @brief
+ * @author 		Michael Archbold (https://github.com/marchbold)
  * @created		28/7/18
  * @copyright	http://distriqt.com/copyright/license.txt
  */
-package io.branch.nativeExtensions.branch.tracking 
+package io.branch.nativeExtensions.branch.tracking
 {
-	import io.branch.nativeExtensions.branch.Branch;
-	
-	
 	/**
 	 * <p>
 	 * Class for creating Branch events for tracking and analytical purpose.
@@ -36,67 +33,63 @@ package io.branch.nativeExtensions.branch.tracking
 	 *
 	 * @see io.branch.nativeExtensions.branch.Branch#logEvent()
 	 */
-    public class BranchEventBuilder 
-    {
- 		////////////////////////////////////////////////////////
-        //  CONSTANTS
-        //
-        
-        private static const TAG : String = "BranchEventBuilder";
-	
+	public class BranchEventBuilder
+	{
+		////////////////////////////////////////////////////////
+		//  CONSTANTS
+		//
+		
+		private static const TAG:String = "BranchEventBuilder";
+		
 		// Commerce events
-		public static const STANDARD_EVENT_ADD_TO_CART : String = "ADD_TO_CART";
-		public static const STANDARD_EVENT_ADD_TO_WISHLIST : String = "ADD_TO_WISHLIST";
-		public static const STANDARD_EVENT_VIEW_CART : String = "VIEW_CART";
-		public static const STANDARD_EVENT_INITIATE_PURCHASE : String = "INITIATE_PURCHASE";
-		public static const STANDARD_EVENT_ADD_PAYMENT_INFO : String = "ADD_PAYMENT_INFO";
-		public static const STANDARD_EVENT_PURCHASE : String = "PURCHASE";
-		public static const STANDARD_EVENT_SPEND_CREDITS : String = "SPEND_CREDITS";
+		public static const STANDARD_EVENT_ADD_TO_CART:String = "ADD_TO_CART";
+		public static const STANDARD_EVENT_ADD_TO_WISHLIST:String = "ADD_TO_WISHLIST";
+		public static const STANDARD_EVENT_VIEW_CART:String = "VIEW_CART";
+		public static const STANDARD_EVENT_INITIATE_PURCHASE:String = "INITIATE_PURCHASE";
+		public static const STANDARD_EVENT_ADD_PAYMENT_INFO:String = "ADD_PAYMENT_INFO";
+		public static const STANDARD_EVENT_PURCHASE:String = "PURCHASE";
+		public static const STANDARD_EVENT_SPEND_CREDITS:String = "SPEND_CREDITS";
 		
 		// Content events
-		public static const STANDARD_EVENT_SEARCH : String = "SEARCH";
-		public static const STANDARD_EVENT_VIEW_ITEM : String = "VIEW_ITEM";
-		public static const STANDARD_EVENT_VIEW_ITEMS : String = "VIEW_ITEMS";
-		public static const STANDARD_EVENT_RATE : String = "RATE";
-		public static const STANDARD_EVENT_SHARE : String = "SHARE";
+		public static const STANDARD_EVENT_SEARCH:String = "SEARCH";
+		public static const STANDARD_EVENT_VIEW_ITEM:String = "VIEW_ITEM";
+		public static const STANDARD_EVENT_VIEW_ITEMS:String = "VIEW_ITEMS";
+		public static const STANDARD_EVENT_RATE:String = "RATE";
+		public static const STANDARD_EVENT_SHARE:String = "SHARE";
 		
 		// User lifecycle events
-		public static const STANDARD_EVENT_COMPLETE_REGISTRATION : String = "COMPLETE_REGISTRATION";
-		public static const STANDARD_EVENT_COMPLETE_TUTORIAL : String = "COMPLETE_TUTORIAL";
-		public static const STANDARD_EVENT_ACHIEVE_LEVEL : String = "ACHIEVE_LEVEL";
-		public static const STANDARD_EVENT_UNLOCK_ACHIEVEMENT : String = "UNLOCK_ACHIEVEMENT";
+		public static const STANDARD_EVENT_COMPLETE_REGISTRATION:String = "COMPLETE_REGISTRATION";
+		public static const STANDARD_EVENT_COMPLETE_TUTORIAL:String = "COMPLETE_TUTORIAL";
+		public static const STANDARD_EVENT_ACHIEVE_LEVEL:String = "ACHIEVE_LEVEL";
+		public static const STANDARD_EVENT_UNLOCK_ACHIEVEMENT:String = "UNLOCK_ACHIEVEMENT";
 		
 		
+		////////////////////////////////////////////////////////
+		//  VARIABLES
+		//
+		
+		private var _event:Object;
+		private var _customData:Object;
 		
 		
+		////////////////////////////////////////////////////////
+		//  FUNCTIONALITY
+		//
 		
- 		////////////////////////////////////////////////////////
-        //  VARIABLES
-        //
-        
-		private var _event : Object;
-		private var _customData : Object;
-		
-		
-		
- 		////////////////////////////////////////////////////////
-        //  FUNCTIONALITY
-        //
-	
 		/**
 		 * Class constructor
 		 *
 		 * @param eventName
 		 */
 		public function BranchEventBuilder( eventName:String )
-        {
+		{
 			_event = {};
-        	_event["eventName"] = eventName;
-			_event["isStandardEvent"] = isStandardEvent(eventName);
-	
+			_event[ "eventName" ] = eventName;
+			_event[ "isStandardEvent" ] = isStandardEvent( eventName );
+			
 			_customData = {};
 		}
-
+		
 		
 		private function isStandardEvent( eventName:String ):Boolean
 		{
@@ -124,7 +117,7 @@ package io.branch.nativeExtensions.branch.tracking
 			}
 			return false;
 		}
-	
+		
 		
 		/**
 		 * Set the transaction id associated with this event if there in any
@@ -134,11 +127,11 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setTransactionID( transactionId:String ):BranchEventBuilder
 		{
-			_event["transaction_id"] = transactionId;
+			_event[ "transaction_id" ] = transactionId;
 			return this;
 		}
-	
-	
+		
+		
 		/**
 		 * Set the currency related with this transaction event
 		 *
@@ -147,11 +140,11 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setCurrency( iso4217Code:String ):BranchEventBuilder
 		{
-			_event["currency"] = iso4217Code;
+			_event[ "currency" ] = iso4217Code;
 			return this;
 		}
-	
-	
+		
+		
 		/**
 		 * Set the revenue value related with this transaction event
 		 *
@@ -160,11 +153,11 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setRevenue( revenue:Number ):BranchEventBuilder
 		{
-			_event["revenue"] = revenue;
+			_event[ "revenue" ] = revenue;
 			return this;
 		}
-	
-	
+		
+		
 		/**
 		 * Set the shipping value related with this transaction event
 		 *
@@ -173,11 +166,11 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setShipping( shipping:Number ):BranchEventBuilder
 		{
-			_event["shipping"] = shipping;
+			_event[ "shipping" ] = shipping;
 			return this;
 		}
-	
-	
+		
+		
 		/**
 		 * Set the tax value  related with this transaction event
 		 *
@@ -186,10 +179,10 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setTax( tax:Number ):BranchEventBuilder
 		{
-			_event["tax"] = tax;
+			_event[ "tax" ] = tax;
 			return this;
 		}
-	
+		
 		
 		/**
 		 * Set any coupons associated with this transaction event
@@ -199,11 +192,11 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setCoupon( coupon:String ):BranchEventBuilder
 		{
-			_event["coupon"] = coupon;
+			_event[ "coupon" ] = coupon;
 			return this;
 		}
 		
-	
+		
 		/**
 		 * Set any affiliation for this transaction event
 		 *
@@ -212,10 +205,10 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setAffiliation( affiliation:String ):BranchEventBuilder
 		{
-			_event["affiliation"] = affiliation;
+			_event[ "affiliation" ] = affiliation;
 			return this;
 		}
-	
+		
 		
 		/**
 		 * Set description for this transaction event
@@ -225,11 +218,11 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function setDescription( description:String ):BranchEventBuilder
 		{
-			_event["description"] = description;
+			_event[ "description" ] = description;
 			return this;
 		}
 		
-	
+		
 		/**
 		 * Set any search query associated with the event
 		 *
@@ -242,7 +235,7 @@ package io.branch.nativeExtensions.branch.tracking
 			else _event[ "search_query" ] = searchQuery;
 			return this;
 		}
-	
+		
 		
 		/**
 		 * Adds a custom data property associated with this Branch Event
@@ -254,25 +247,20 @@ package io.branch.nativeExtensions.branch.tracking
 		 */
 		public function addCustomDataProperty( propertyName:String, propertyValue:String ):BranchEventBuilder
 		{
-			_customData[propertyName] = propertyValue;
+			_customData[ propertyName ] = propertyValue;
 			return this;
 		}
-	
 		
 		
-		
-		
-	
 		/**
 		 * Creates an object representing an event for the extension.
 		 */
 		public function build():Object
 		{
-			_event["customData"] = _customData;
+			_event[ "customData" ] = _customData;
 			return _event;
 		}
 		
 		
-        
-    }
+	}
 }

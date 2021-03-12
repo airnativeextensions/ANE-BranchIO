@@ -2,7 +2,6 @@ package io.branch.nativeExtensions.branch
 {
 	
 	import flash.events.EventDispatcher;
-	import flash.external.ExtensionContext;
 	
 	import io.branch.nativeExtensions.branch.buo.BranchUniversalObject;
 	
@@ -38,7 +37,6 @@ package io.branch.nativeExtensions.branch
 	[Event(name="getshorturl:failed", type="io.branch.nativeExtensions.branch.events.BranchEvent")]
 	
 	
-	
 	/**
 	 * @eventType io.branch.nativeExtensions.branch.events.BranchCreditsEvent.GET_CREDITS_SUCCESS
 	 */
@@ -70,7 +68,6 @@ package io.branch.nativeExtensions.branch
 	[Event(name="getcreditshistory:failed", type="io.branch.nativeExtensions.branch.events.BranchCreditsEvent")]
 	
 	
-	
 	public class Branch extends EventDispatcher
 	{
 		////////////////////////////////////////////////////////
@@ -85,14 +82,12 @@ package io.branch.nativeExtensions.branch
 		private static const ERROR_SINGLETON:String = "The singleton has already been created. Use Branch.instance to access the functionality";
 		
 		
-		
 		////////////////////////////////////////////////////////
 		//	VARIABLES
 		//
 		
 		private static var _instance:Branch;
 		private static var _shouldCreateInstance:Boolean = false;
-		
 		
 		
 		////////////////////////////////////////////////////////
@@ -118,7 +113,6 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		
 		////////////////////////////////////////////////////////
 		//	FUNCTIONALITY
 		//
@@ -140,7 +134,7 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		public function initSession( options:BranchOptions=null ):void
+		public function initSession( options:BranchOptions = null ):void
 		{
 		}
 		
@@ -153,7 +147,6 @@ package io.branch.nativeExtensions.branch
 		public function logout():void
 		{
 		}
-		
 		
 		
 		public function getLatestReferringParams():String
@@ -188,10 +181,10 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		
-		public function handleDeepLink( link:String, forceNewSession:Boolean=true ):void
+		public function handleDeepLink( link:String, forceNewSession:Boolean = true ):void
 		{
 		}
+		
 		
 		//
 		//	TRACKING
@@ -201,7 +194,6 @@ package io.branch.nativeExtensions.branch
 		{
 			return false;
 		}
-		
 		
 		
 		//
@@ -232,14 +224,11 @@ package io.branch.nativeExtensions.branch
 		}
 		
 		
-		
-		
 		//
 		//
 		//	DEPRECATED
 		//
 		//
-		
 		
 		
 		[Deprecated(message="This referral functionality has been removed from the Branch SDK")]
@@ -264,7 +253,6 @@ package io.branch.nativeExtensions.branch
 		public function applyReferralCode( code:String ):void
 		{
 		}
-		
 		
 		
 	}

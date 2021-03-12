@@ -1,37 +1,37 @@
 /**
- *        __       __               __ 
+ *        __       __               __
  *   ____/ /_ ____/ /______ _ ___  / /_
  *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
+ * / /_/ / (__  ) / / /  / / /_/ / /
+ * \__,_/_/____/_/ /_/  /_/\__, /_/
+ *                           / /
+ *                           \/
  * http://distriqt.com
  *
- * @brief  		
- * @author 		marchbold
+ * @brief
+ * @author 		Michael Archbold (https://github.com/marchbold)
  * @created		28/7/18
  * @copyright	http://distriqt.com/copyright/license.txt
  */
-package io.branch.nativeExtensions.branch 
+package io.branch.nativeExtensions.branch
 {
 	
 	/**
 	 * This class defines setup options for the Branch instance and session
 	 */
-    public class BranchOptions 
-    {
- 		////////////////////////////////////////////////////////
-        //  CONSTANTS
-        //
-        
-        private static const TAG : String = "BranchOptions";
-        
-        
- 		////////////////////////////////////////////////////////
-        //  VARIABLES
-        //
-	
+	public class BranchOptions
+	{
+		////////////////////////////////////////////////////////
+		//  CONSTANTS
+		//
+		
+		private static const TAG:String = "BranchOptions";
+		
+		
+		////////////////////////////////////////////////////////
+		//  VARIABLES
+		//
+		
 		/**
 		 * <p>
 		 * If true then the Branch SDK will use the test key.
@@ -48,7 +48,7 @@ package io.branch.nativeExtensions.branch
 		 * @default false
 		 */
 		public var useTestKey:Boolean = false;
-	
+		
 		
 		/**
 		 * <p>
@@ -69,18 +69,17 @@ package io.branch.nativeExtensions.branch
 		
 		
 		public var enableDebugging:Boolean = false;
-
 		
 		
- 		////////////////////////////////////////////////////////
-        //  FUNCTIONALITY
-        //
-        
-        public function BranchOptions()
-        {
-        }
-	
-	
+		////////////////////////////////////////////////////////
+		//  FUNCTIONALITY
+		//
+		
+		public function BranchOptions()
+		{
+		}
+		
+		
 		/**
 		 * Sets whether your app will use the Branch test key.
 		 *
@@ -90,13 +89,13 @@ package io.branch.nativeExtensions.branch
 		 *
 		 * @see #useTestKey
 		 */
-		public function setUseTestKey( useTestKey:Boolean=true ):BranchOptions
+		public function setUseTestKey( useTestKey:Boolean = true ):BranchOptions
 		{
 			this.useTestKey = useTestKey;
 			return this;
 		}
-	
-	
+		
+		
 		/**
 		 * Sets whether your app will delay initialisation to check for search ads on iOS
 		 *
@@ -106,20 +105,19 @@ package io.branch.nativeExtensions.branch
 		 *
 		 * @see #delayInitToCheckForSearchAds
 		 */
-		public function setDelayInitToCheckForSearchAds( delay:Boolean=true ):BranchOptions
+		public function setDelayInitToCheckForSearchAds( delay:Boolean = true ):BranchOptions
 		{
 			delayInitToCheckForSearchAds = delay;
 			return this;
 		}
 		
 		
-		public function setDebugMode(enabled:Boolean=true ):BranchOptions
+		public function setDebugMode( enabled:Boolean = true ):BranchOptions
 		{
 			enableDebugging = enabled;
 			return this;
 		}
 		
 		
-        
-    }
+	}
 }
