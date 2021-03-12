@@ -214,12 +214,15 @@ _site
 	<target name="deploy">
 
 		<!-- Copy docs to site -->
-		<copy todir="${docs.external_site_source}" overwrite="true" >
+		<copy todir="${docs.external_site_source}" overwrite="true" failonerror="false">
 			<fileset dir="docs/site" >
 				<include name="**/*" />
 				<exclude name="sidebars.js" />
 			</fileset>
 		</copy>
+		
+		<lower name="project.namelower" value="${project.name}" />
+		<copy tofile="${docs.external_site_source}/docs/${project.namelower}/changelog.md" overwrite="true" file="CHANGELOG.md" />
 
 	</target>
 
