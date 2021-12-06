@@ -1,0 +1,56 @@
+{
+    "id": "@EXTENSIONID@",
+    "name": "@NAME@",
+    "url": "https://airnativeextensions.com/extension/@EXTENSIONID@",
+    "docUrl": "https://docs.airnativeextensions.com/docs/@NAMELOWER@",
+    "description": "@DESCRIPTION@",
+    "type": "ane",
+    "version": "@VERSION@",
+    "sourceUrl": "https://github.com/@GITHUB_REPO@/releases/download/v@VERSIONRELEASE@/@EXTENSIONID@_@VERSION@.airpackage",
+    "publishedAt": "@DATE@T00:00:00.000Z",
+    "dependencies": [
+        "com.distriqt.Core:6.x.x",
+        "androidx.core:1.x.x",
+        "androidx.appcompat:1.x.x",
+        "androidx.browser:1.x.x",
+        "com.android.installreferrer:1.x.x",
+        "com.distriqt.playservices.Base:17.x.x",
+        "com.distriqt.playservices.AdsIdentifier:17.x.x"
+    ],
+    "parameters": [
+      {
+        "name": "branchTestMode",
+        "required": "false",
+        "defaultValue": "false",
+        "description": "Used to set your application into test mode\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      },
+      {
+        "name": "branchAndroidKey",
+        "required": "true",
+        "description": "Your android application Branch key\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      },
+      {
+        "name": "branchAndroidTestKey",
+        "required": "true",
+        "description": "Your android application Branch key for test mode\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      },
+      {
+        "name": "branchIOSKey",
+        "required": "true",
+        "description": "Your iOS application Branch key\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      },
+      {
+        "name": "branchIOSTestKey",
+        "required": "true",
+        "description": "Your iOS application Branch key for test mode\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      }
+    ],
+    "tags": ["branch","app link", "deep link"],
+    "status": "release",
+    "purchaseUrl": "https://airnativeextensions.com/extension/@EXTENSIONID@",
+    "license": {
+        "url": "https://github.com/distriqt/ANE-BranchIO/blob/master/LICENSE.md",
+        "type": "MIT",
+        "public": true
+    }
+}
