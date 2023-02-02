@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+
 import org.json.JSONObject;
 
-import androidx.annotation.Nullable;
 import io.branch.nativeExtensions.branch.events.BranchEvent;
 import io.branch.nativeExtensions.branch.utils.Logger;
 import io.branch.referral.Branch;
@@ -26,7 +27,7 @@ public class BranchActivity extends Activity
 	{
 		super.onStart();
 
-		Bundle extras = this.getIntent().getExtras();
+		Bundle  extras     = this.getIntent().getExtras();
 		Boolean useTestKey = extras.getBoolean( extraPrefix + ".useTestKey" );
 
 		if (useTestKey)
@@ -69,28 +70,28 @@ public class BranchActivity extends Activity
 		//		.init();
 
 		Branch.getInstance().initSession(
-			new Branch.BranchReferralInitListener()
-			{
-				@Override
-				public void onInitFinished( JSONObject referringParams, BranchError error )
+				new Branch.BranchReferralInitListener()
 				{
-					Logger.d( TAG, "onInitFinished( %s, %s )",
-							referringParams == null ? "null" : referringParams.toString(),
-							error == null ? "null" : error.getMessage() );
+					@Override
+					public void onInitFinished( JSONObject referringParams, BranchError error )
+					{
+						Logger.d( TAG, "onInitFinished( %s, %s )",
+								  referringParams == null ? "null" : referringParams.toString(),
+								  error == null ? "null" : error.getMessage() );
 
-					if (error == null)
-					{
-						BranchExtension.context.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
+						if (error == null)
+						{
+							BranchExtension.context.dispatchEvent( BranchEvent.INIT_SUCCESS, referringParams.toString().replace( "\\", "" ) );
+						}
+						else
+						{
+							BranchExtension.context.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
+						}
+						finish();
 					}
-					else
-					{
-						BranchExtension.context.dispatchEvent( BranchEvent.INIT_FAILED, error.getMessage() );
-					}
-					finish();
-				}
-			},
-			getIntent().getData(),
-			this
+				},
+				getIntent().getData(),
+				this
 		);
 	}
 
@@ -109,9 +110,6 @@ public class BranchActivity extends Activity
 		Logger.d( TAG, "onNewIntent()" );
 		//this.setIntent( intent );
 	}
-
-
-
 
 
 }

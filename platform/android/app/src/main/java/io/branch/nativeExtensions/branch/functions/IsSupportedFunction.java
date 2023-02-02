@@ -8,11 +8,11 @@ import com.adobe.fre.FREObject;
 import com.adobe.fre.FREWrongThreadException;
 import com.distriqt.core.utils.FREUtils;
 
-public class IsSupportedFunction implements FREFunction 
+public class IsSupportedFunction implements FREFunction
 {
 
 	@Override
-	public FREObject call( FREContext context, FREObject[] args ) 
+	public FREObject call( FREContext context, FREObject[] args )
 	{
 		FREObject result = null;
 		try
@@ -24,7 +24,7 @@ public class IsSupportedFunction implements FREFunction
 			}
 			result = FREObject.newObject( isSupported );
 		}
-		catch (FREWrongThreadException e) 
+		catch (FREWrongThreadException e)
 		{
 			FREUtils.handleException( context, e );
 		}

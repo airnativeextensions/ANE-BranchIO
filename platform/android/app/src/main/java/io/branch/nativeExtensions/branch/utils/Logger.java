@@ -6,16 +6,17 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/
  *                           / /
  *                           \/
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @brief
- * @author marchbold
+ * @author Michael Archbold (https://github.com/marchbold)
  * @created 13/04/2017
- * @copyright http://distriqt.com/copyright/license.txt
+ * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.utils;
 
 import com.distriqt.core.utils.LogUtil;
+
 import io.branch.nativeExtensions.branch.BranchExtension;
 
 public class Logger

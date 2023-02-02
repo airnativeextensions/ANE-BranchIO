@@ -6,12 +6,12 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/ 
  *                           / / 
  *                           \/ 
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @brief
- * @author marchbold
+ * @author Michael Archbold (https://github.com/marchbold)
  * @created 19/09/2020
- * @copyright http://distriqt.com/copyright/license.txt
+ * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.functions.buo;
 
@@ -33,18 +33,18 @@ public class GenerateShortUrlFunction implements FREFunction
 		FREObject result = null;
 		try
 		{
-			String requestId = args[0].getAsString();
-			JSONObject buoProperties = new JSONObject( args[1].getAsString() );
+			String     requestId      = args[0].getAsString();
+			JSONObject buoProperties  = new JSONObject( args[1].getAsString() );
 			JSONObject linkProperties = new JSONObject( args[2].getAsString() );
 
-			BranchContext context = (BranchContext)freContext;
+			BranchContext context = (BranchContext) freContext;
 
 			context.controller().generateShortUrl( requestId, buoProperties, linkProperties );
 
 		}
 		catch (Exception e)
 		{
-			Errors.handleException(e);
+			Errors.handleException( e );
 		}
 		return result;
 	}

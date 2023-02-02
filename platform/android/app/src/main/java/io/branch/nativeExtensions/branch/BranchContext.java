@@ -6,12 +6,12 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/ 
  *                           / / 
  *                           \/ 
- * http://distriqt.com
+ * https://distriqt.com
  *
- * @brief  		Main Context for an ActionScript Native Extension
- * @author 		Michael Archbold
- * @created		Jan 19, 2012
- * @copyright	http://distriqt.com/copyright/license.txt
+ * @brief Main Context for an ActionScript Native Extension
+ * @author Michael Archbold
+ * @created Jan 19, 2012
+ * @copyright https://distriqt.com/copyright/license.txt
  *
  */
 package io.branch.nativeExtensions.branch;
@@ -53,8 +53,8 @@ import io.branch.referral.BuildConfig;
 
 public class BranchContext extends FREContext implements IExtensionContext, ActivityResultCallback, StateChangeCallback
 {
-	public static final String TAG = BranchContext.class.getSimpleName();
-	public static final String VERSION = BuildConfig.VERSION_NAME;
+	public static final String TAG            = BranchContext.class.getSimpleName();
+	public static final String VERSION        = BuildConfig.VERSION_NAME;
 	public static final String IMPLEMENTATION = "Android";
 
 
@@ -67,7 +67,6 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 	private AndroidActivityWrapper _aaw;
 
 	private BranchController _controller = null;
-
 
 
 	////////////////////////////////////////////////////////////
@@ -83,7 +82,7 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 
 
 	@Override
-	public void dispose() 
+	public void dispose()
 	{
 		if (_controller != null)
 		{
@@ -98,7 +97,7 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		}
 	}
 
-	
+
 	@Override
 	public Map<String, FREFunction> getFunctions()
 	{
@@ -138,7 +137,6 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		functionMap.put( "buo_generateShortUrl", new GenerateShortUrlFunction() );
 
 
-
 		//
 		// LEGACY
 		//
@@ -169,7 +167,6 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		}
 		return _controller;
 	}
-
 
 
 	//
@@ -251,5 +248,5 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		{
 		}
 	}
-	
+
 }

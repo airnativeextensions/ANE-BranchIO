@@ -19,7 +19,7 @@ public class UserCompletedActionFunction implements FREFunction
 			BranchContext ctx = (BranchContext) context;
 
 			String action = args[0].getAsString();
-			String json = args[1].getAsString();
+			String json   = args[1].getAsString();
 
 			ctx.controller().userCompletedAction( action, json );
 		}

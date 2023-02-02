@@ -22,20 +22,20 @@ import io.branch.referral.util.LinkProperties;
 
 public class GetShortUrlFunction implements FREFunction
 {
-	
+
 	@Override
-	public FREObject call(FREContext context, FREObject[] args)
+	public FREObject call( FREContext context, FREObject[] args )
 	{
 		FREObject result = null;
 		try
 		{
-			String[] tags = FREUtils.GetObjectAsArrayOfStrings( (FREArray) args[0] );
-			String channel = args[1].getAsString();
-			String feature = args[2].getAsString();
-			String stage = args[3].getAsString();
-			String json = args[4].getAsString();
-			String alias = args[5].getAsString();
-			int type = args[6].getAsInt();
+			String[] tags    = FREUtils.GetObjectAsArrayOfStrings( (FREArray) args[0] );
+			String   channel = args[1].getAsString();
+			String   feature = args[2].getAsString();
+			String   stage   = args[3].getAsString();
+			String   json    = args[4].getAsString();
+			String   alias   = args[5].getAsString();
+			int      type    = args[6].getAsInt();
 
 			JSONObject obj;
 			try

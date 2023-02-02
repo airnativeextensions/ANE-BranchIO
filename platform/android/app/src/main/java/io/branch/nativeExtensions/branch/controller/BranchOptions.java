@@ -6,18 +6,18 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/ 
  *                           / / 
  *                           \/ 
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @brief
- * @author marchbold
+ * @author Michael Archbold (https://github.com/marchbold)
  * @created 28/07/2018
- * @copyright http://distriqt.com/copyright/license.txt
+ * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.controller;
 
 public class BranchOptions
 {
-	public boolean useTestKey = false;
+	public boolean useTestKey                   = false;
 	public boolean delayInitToCheckForSearchAds = false;
-	public boolean enableDebugging = true;
+	public boolean enableDebugging              = true;
 }

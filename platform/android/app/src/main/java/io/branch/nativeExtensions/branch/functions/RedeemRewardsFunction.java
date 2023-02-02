@@ -18,8 +18,8 @@ public class RedeemRewardsFunction implements FREFunction
 		{
 			BranchContext ctx = (BranchContext) context;
 
-			int credits = args[0].getAsInt();
-			String bucket = args[1].getAsString();
+			int    credits = args[0].getAsInt();
+			String bucket  = args[1].getAsString();
 
 			ctx.controller().redeemRewards( credits, bucket );
 		}

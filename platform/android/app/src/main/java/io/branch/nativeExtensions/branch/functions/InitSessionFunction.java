@@ -17,12 +17,12 @@ public class InitSessionFunction implements FREFunction
 		FREObject result = null;
 		try
 		{
-			BranchContext ctx = (BranchContext)context;
+			BranchContext ctx = (BranchContext) context;
 
 			BranchOptions options = new BranchOptions();
-			options.useTestKey = args[0].getProperty( "useTestKey" ).getAsBool();
+			options.useTestKey                   = args[0].getProperty( "useTestKey" ).getAsBool();
 			options.delayInitToCheckForSearchAds = args[0].getProperty( "delayInitToCheckForSearchAds" ).getAsBool();
-			options.enableDebugging = args[0].getProperty( "enableDebugging" ).getAsBool();
+			options.enableDebugging              = args[0].getProperty( "enableDebugging" ).getAsBool();
 
 			ctx.controller().initSession( options );
 		}

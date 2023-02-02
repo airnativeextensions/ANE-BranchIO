@@ -6,12 +6,12 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/
  *                           / /
  *                           \/
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @brief
  * @author 		Michael Archbold (https://github.com/marchbold)
  * @created		19/9/20
- * @copyright	http://distriqt.com/copyright/license.txt
+ * @copyright	https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch
 {

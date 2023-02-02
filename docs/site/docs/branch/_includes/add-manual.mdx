@@ -1,0 +1,73 @@
+
+:::info
+The following guide is used to manually install the extension, download dependencies and update the application descriptor. We highly recommend installing extensions using `apm`. Using `apm` will automate the installation and automatically handle updates and dependencies along with greatly simplifying the application descriptor generation.
+:::
+
+
+First step is always to add the extension to your development environment. Download the extension from the repository and then follow the tutorial located [here](/docs/tutorials/getting-started) to add the extension to your development environment.
+
+
+
+
+### Dependencies
+
+Many of our extensions use some common libraries, for example, the Android Support libraries.
+
+We have to separate these libraries into separate extensions in order to avoid multiple versions of the libraries being included in your application and causing packaging conflicts. This means that you need to include some additional extensions in your application along with the main extension file.
+
+You will add these extensions as you do with any other extension, and you need to ensure it is packaged with your application.
+
+
+#### Core 
+
+The Core ANE is required by this ANE. You must include and package this extension in your application.
+
+The Core ANE doesn't provide any functionality in itself but provides support libraries and frameworks used by our extensions.
+It also includes some centralised code for some common actions that can cause issues if they are implemented in each individual extension.
+
+You can access this extension here: [https://github.com/distriqt/ANE-Core](https://github.com/distriqt/ANE-Core).
+
+
+
+#### Android Support
+
+The Android Support libraries encompass the Android Support, Android X and common Google libraries. 
+
+These libraries are specific to Android. There are no issues including these on all platforms, they are just **required** for Android.
+
+This extension requires the following extensions:
+
+- [androidx.appcompat.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.appcompat.ane)
+- [androidx.browser.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.browser.ane)
+- [androidx.core.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.core.ane)
+- [com.android.installreferrer.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.android.installreferrer.ane)
+
+You can access these extensions here: [https://github.com/distriqt/ANE-AndroidSupport](https://github.com/distriqt/ANE-AndroidSupport).
+
+
+>
+> **Note**: if you have been using the older `com.distriqt.androidsupport.*` (Android Support) extensions you should remove these extensions and replace it with the `androidx` extensions listed above. This is the new version of the android support libraries and moving forward all our extensions will require AndroidX.
+>
+
+
+#### Google Play Services
+
+This ANE requires can use of certain aspects of the Google Play Services if supplied, mainly around using the advertising identifier to attribute links correctly. 
+
+The client library is available as a series of ANEs that you add into your applications packaging options. 
+Each separate ANE provides a component from the Play Services client library and are used by different ANEs. 
+These client libraries aren't packaged with this ANE as they are used by multiple ANEs and separating them 
+will avoid conflicts, allowing you to use multiple ANEs in the one application.
+
+If you wish to use the expanded functionality add the following Google Play Services:
+
+- [`com.distriqt.playservices.Base`](https://github.com/distriqt/ANE-GooglePlayServices/raw/master/lib/com.distriqt.playservices.Base.ane)
+- [`com.distriqt.playservices.AdsIdentifier`](https://github.com/distriqt/ANE-GooglePlayServices/raw/master/lib/com.distriqt.playservices.AdsIdentifier.ane)
+
+You can access the Google Play Services client library extensions here: [https://github.com/distriqt/ANE-GooglePlayServices](https://github.com/distriqt/ANE-GooglePlayServices).
+
+>
+> **Note:** The Google Play Services and Android Support ANEs are only **required** on Android devices. 
+> There is no problem packaging these ANEs with all platforms as there are default implementations available which will allow your code to package without errors 
+> however if you are only building an iOS application feel free to remove the Google Play Services ANEs from your application.
+>

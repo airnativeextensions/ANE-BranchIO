@@ -6,12 +6,12 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/ 
  *                           / / 
  *                           \/ 
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @brief
- * @author marchbold
+ * @author Michael Archbold (https://github.com/marchbold)
  * @created 22/09/2020
- * @copyright http://distriqt.com/copyright/license.txt
+ * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.controller;
 
@@ -61,11 +61,11 @@ public class BranchUniversalObjectUtils
 
 					case "controlParameters":
 					{
-						JSONObject cpJSON = linkProperties.getJSONObject( key );
+						JSONObject       cpJSON = linkProperties.getJSONObject( key );
 						Iterator<String> cpKeys = cpJSON.keys();
 						while (cpKeys.hasNext())
 						{
-							String cpKey = cpKeys.next();
+							String cpKey   = cpKeys.next();
 							String cpValue = cpJSON.getString( cpKey );
 
 							lp.addControlParameter( cpKey, cpValue );
@@ -149,11 +149,11 @@ public class BranchUniversalObjectUtils
 					{
 						ContentMetadata metadata = new ContentMetadata();
 
-						JSONObject metadataJSON = buoProperties.getJSONObject( key );
+						JSONObject       metadataJSON = buoProperties.getJSONObject( key );
 						Iterator<String> metadataKeys = metadataJSON.keys();
 						while (metadataKeys.hasNext())
 						{
-							String metadataKey = metadataKeys.next();
+							String metadataKey   = metadataKeys.next();
 							String metadataValue = metadataJSON.getString( metadataKey );
 
 							metadata.addCustomMetadata( metadataKey, metadataValue );
@@ -172,8 +172,6 @@ public class BranchUniversalObjectUtils
 		}
 		return buo;
 	}
-
-
 
 
 }

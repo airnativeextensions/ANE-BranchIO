@@ -6,12 +6,12 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/ 
  *                           / / 
  *                           \/ 
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @brief
- * @author 		"Michael Archbold (ma&#64;distriqt.com)"
+ * @author Michael Archbold (https://github.com/marchbold)
  * @created 16/11/2017
- * @copyright http://distriqt.com/copyright/license.txt
+ * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.controller;
 
@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.Nullable;
+
 import com.distriqt.core.ActivityStateListener;
 import com.distriqt.core.utils.DebugUtil;
 import com.distriqt.core.utils.IExtensionContext;
@@ -28,7 +30,6 @@ import com.distriqt.core.utils.IExtensionContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import androidx.annotation.Nullable;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 import io.branch.nativeExtensions.branch.events.BranchEvent;
@@ -67,8 +68,8 @@ public class BranchController extends ActivityStateListener
 
 	public BranchController( IExtensionContext extensionContext )
 	{
-		_extContext = extensionContext;
-		_handler = new Handler( Looper.getMainLooper() );
+		_extContext  = extensionContext;
+		_handler     = new Handler( Looper.getMainLooper() );
 		_initialised = false;
 	}
 
@@ -77,8 +78,6 @@ public class BranchController extends ActivityStateListener
 	{
 		_extContext = null;
 	}
-
-
 
 
 	public void initSession( BranchOptions options )
@@ -104,11 +103,11 @@ public class BranchController extends ActivityStateListener
 
 			try
 			{
-				Uri dataUri = _extContext.getActivity().getIntent().getData();
-				Bundle extras = _extContext.getActivity().getIntent().getExtras();
+				Uri    dataUri = _extContext.getActivity().getIntent().getData();
+				Bundle extras  = _extContext.getActivity().getIntent().getExtras();
 
 				Logger.d( TAG, "INTENT DATA: %s", dataUri == null ? "null" : dataUri.toString() );
-				Logger.d( TAG, "INTENT EXTRAS: %s", DebugUtil.bundleToString( extras ));
+				Logger.d( TAG, "INTENT EXTRAS: %s", DebugUtil.bundleToString( extras ) );
 
 			}
 			catch (Exception e)
@@ -153,19 +152,19 @@ public class BranchController extends ActivityStateListener
 						//		_extContext.getActivity()
 						//);
 
-						Branch.sessionBuilder(_extContext.getActivity())
-								.ignoreIntent( true )
-								.withCallback( new Branch.BranchReferralInitListener()
-								{
-									@Override
-									public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
-									{
-										_initialised = true;
-										BranchController.this.onInitFinished( referringParams, error );
-									}
-								} )
-								.withData(_extContext.getActivity().getIntent().getData())
-								.init();
+						Branch.sessionBuilder( _extContext.getActivity() )
+							  .ignoreIntent( true )
+							  .withCallback( new Branch.BranchReferralInitListener()
+							  {
+								  @Override
+								  public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
+								  {
+									  _initialised = true;
+									  BranchController.this.onInitFinished( referringParams, error );
+								  }
+							  } )
+							  .withData( _extContext.getActivity().getIntent().getData() )
+							  .init();
 
 					}
 					catch (Exception e)
@@ -280,7 +279,7 @@ public class BranchController extends ActivityStateListener
 		{
 			JSONObject eventJSON = new JSONObject( eventJSONString );
 			return BranchEventUtils.eventFromJSONObject( eventJSON )
-					.logEvent( _extContext.getActivity() );
+								   .logEvent( _extContext.getActivity() );
 		}
 		catch (Exception e)
 		{
@@ -292,7 +291,7 @@ public class BranchController extends ActivityStateListener
 
 	public void userCompletedAction( String action, String json )
 	{
-		Logger.d( TAG, "userCompletedAction( %s, %s )", action, json  );
+		Logger.d( TAG, "userCompletedAction( %s, %s )", action, json );
 		try
 		{
 			if (Branch.getInstance() != null)
@@ -311,7 +310,7 @@ public class BranchController extends ActivityStateListener
 
 	public void getCredits( final String bucket )
 	{
-		Logger.d( TAG, "getCredits( %s )", bucket  );
+		Logger.d( TAG, "getCredits( %s )", bucket );
 		if (Branch.getInstance() != null)
 		{
 			Branch.getInstance().loadRewards( new Branch.BranchReferralStateChangedListener()
@@ -377,10 +376,11 @@ public class BranchController extends ActivityStateListener
 		{
 			if (Branch.getInstance() != null)
 			{
-				Branch.getInstance().getCreditHistory(bucket, new Branch.BranchListResponseListener() {
+				Branch.getInstance().getCreditHistory( bucket, new Branch.BranchListResponseListener()
+				{
 
 					@Override
-					public void onReceivingResponse( JSONArray list, BranchError error)
+					public void onReceivingResponse( JSONArray list, BranchError error )
 					{
 						if (error == null)
 						{
@@ -391,7 +391,7 @@ public class BranchController extends ActivityStateListener
 							_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED, error.getMessage() );
 						}
 					}
-				});
+				} );
 			}
 		}
 		catch (Exception e)
@@ -399,7 +399,6 @@ public class BranchController extends ActivityStateListener
 			Errors.handleException( e );
 		}
 	}
-
 
 
 	//
@@ -411,8 +410,8 @@ public class BranchController extends ActivityStateListener
 		try
 		{
 			Logger.d( TAG, "onInitFinished( %s, %s )",
-					referringParams == null ? "null" : referringParams.toString(),
-					error == null ? "null" : error.getMessage() );
+					  referringParams == null ? "null" : referringParams.toString(),
+					  error == null ? "null" : error.getMessage() );
 
 			if (error == null)
 			{
@@ -437,12 +436,11 @@ public class BranchController extends ActivityStateListener
 	}
 
 
-
 	//
 	//	Branch Universal Objects
 	//
 
-	public void generateShortUrl( final String requestId, JSONObject buoJSON, JSONObject linkJSON  )
+	public void generateShortUrl( final String requestId, JSONObject buoJSON, JSONObject linkJSON )
 	{
 		try
 		{
@@ -483,9 +481,6 @@ public class BranchController extends ActivityStateListener
 	}
 
 
-
-
-
 	//
 	//	ActivityStateListener
 	//
@@ -512,19 +507,19 @@ public class BranchController extends ActivityStateListener
 				//		_extContext.getActivity()
 				//);
 
-				Branch.sessionBuilder(_extContext.getActivity())
-						.ignoreIntent( false )
-						.withCallback( new Branch.BranchReferralInitListener()
-						{
-							@Override
-							public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
-							{
-								_initialised = true;
-								BranchController.this.onInitFinished( referringParams, error );
-							}
-						} )
-						.withData(_extContext.getActivity().getIntent().getData())
-						.init();
+				Branch.sessionBuilder( _extContext.getActivity() )
+					  .ignoreIntent( false )
+					  .withCallback( new Branch.BranchReferralInitListener()
+					  {
+						  @Override
+						  public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
+						  {
+							  _initialised = true;
+							  BranchController.this.onInitFinished( referringParams, error );
+						  }
+					  } )
+					  .withData( _extContext.getActivity().getIntent().getData() )
+					  .init();
 			}
 		}
 		catch (Exception e)
@@ -555,7 +550,6 @@ public class BranchController extends ActivityStateListener
 	}
 
 
-
 	//
 	//	DEBUG UTILS
 	//
@@ -573,7 +567,6 @@ public class BranchController extends ActivityStateListener
 			Errors.handleException( e );
 		}
 	}
-
 
 
 }

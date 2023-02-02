@@ -15,7 +15,7 @@ public class InvokeFunction implements FREFunction
 	{
 		try
 		{
-			BranchContext ctx = (BranchContext)context;
+			BranchContext ctx = (BranchContext) context;
 
 			ctx.controller().onNewIntent();
 		}

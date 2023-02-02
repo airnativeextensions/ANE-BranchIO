@@ -6,12 +6,12 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/
  *                           / /
  *                           \/
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @brief
- * @author marchbold
+ * @author Michael Archbold (https://github.com/marchbold)
  * @created 04/09/2018
- * @copyright http://distriqt.com/copyright/license.txt
+ * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.functions;
 
@@ -31,7 +31,7 @@ public class ValidateIntegrationFunction implements FREFunction
 		FREObject result = null;
 		try
 		{
-			BranchContext ctx = (BranchContext)context;
+			BranchContext ctx = (BranchContext) context;
 			ctx.controller().validateIntegration();
 		}
 		catch (Exception e)

@@ -6,13 +6,13 @@
  * \__,_/_/____/_/ /_/  /_/\__, /_/ 
  *                           / / 
  *                           \/ 
- * http://distriqt.com
+ * https://distriqt.com
  *
  * @file   		Branch.m
  * @brief  		ActionScript Native Extension
  * @author 		Michael Archbold
  * @created		Jan 19, 2012
- * @copyright	http://distriqt.com/copyright/license.txt
+ * @copyright	https://distriqt.com/copyright/license.txt
  *
  */
 
