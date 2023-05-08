@@ -21,8 +21,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.Nullable;
-
 import com.distriqt.core.ActivityStateListener;
 import com.distriqt.core.utils.DebugUtil;
 import com.distriqt.core.utils.IExtensionContext;
@@ -68,8 +66,8 @@ public class BranchController extends ActivityStateListener
 
 	public BranchController( IExtensionContext extensionContext )
 	{
-		_extContext  = extensionContext;
-		_handler     = new Handler( Looper.getMainLooper() );
+		_extContext = extensionContext;
+		_handler = new Handler( Looper.getMainLooper() );
 		_initialised = false;
 	}
 
@@ -103,8 +101,8 @@ public class BranchController extends ActivityStateListener
 
 			try
 			{
-				Uri    dataUri = _extContext.getActivity().getIntent().getData();
-				Bundle extras  = _extContext.getActivity().getIntent().getExtras();
+				Uri dataUri = _extContext.getActivity().getIntent().getData();
+				Bundle extras = _extContext.getActivity().getIntent().getExtras();
 
 				Logger.d( TAG, "INTENT DATA: %s", dataUri == null ? "null" : dataUri.toString() );
 				Logger.d( TAG, "INTENT EXTRAS: %s", DebugUtil.bundleToString( extras ) );
@@ -157,7 +155,7 @@ public class BranchController extends ActivityStateListener
 							  .withCallback( new Branch.BranchReferralInitListener()
 							  {
 								  @Override
-								  public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
+								  public void onInitFinished( JSONObject referringParams, BranchError error )
 								  {
 									  _initialised = true;
 									  BranchController.this.onInitFinished( referringParams, error );
@@ -512,7 +510,7 @@ public class BranchController extends ActivityStateListener
 					  .withCallback( new Branch.BranchReferralInitListener()
 					  {
 						  @Override
-						  public void onInitFinished( @Nullable JSONObject referringParams, @Nullable BranchError error )
+						  public void onInitFinished( JSONObject referringParams, BranchError error )
 						  {
 							  _initialised = true;
 							  BranchController.this.onInitFinished( referringParams, error );

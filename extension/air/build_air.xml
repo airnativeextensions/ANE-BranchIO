@@ -373,6 +373,10 @@
 			</sequential>
 		</for>
 
+		<exec executable="xcrun" spawn="false" failonerror="true" outputproperty="bitcode_strip.cmd" >
+			<arg line="-sdk iphoneos --find bitcode_strip" />
+		</exec>
+
 		<!-- Copy Dynamic frameworks to output -->
 		<for param="frameworkname">
 			<path>
@@ -422,6 +426,41 @@
 			</resources>
 		</copy>
 
+		<condition property="dynamicframeworks.process">
+			<and>
+				<available file="${output.dir}/${variant}/${ios.frameworks_dir}" type="dir"/>
+				<istrue value="${isMacOS}" />
+			</and>
+		</condition>
+
+		<!-- Strip bitcode from dynamic frameworks -->
+		<for param="frameworkpath" if:true="${dynamicframeworks.process}" >
+			<path>
+				<dirset dir="${output.dir}/${variant}/${ios.frameworks_dir}" >
+					<include name="*.framework" />
+				</dirset>
+			</path>
+			<sequential>
+				<var name="frameworklib" unset="true" />
+				<if>
+					<available file="@{frameworkpath}/Info.plist" />
+					<then>
+						<exec executable="defaults" failonerror="true" outputproperty="frameworklib">
+							<arg line="read @{frameworkpath}/Info.plist CFBundleExecutable" />
+						</exec>
+					</then>
+					<else>
+						<basename property="frameworklib" file="@{frameworkpath}" suffix=".framework" />
+					</else>
+				</if>
+
+				<exec executable="${bitcode_strip.cmd}" failonerror="true">
+					<arg line="@{frameworkpath}/${frameworklib} -r -o @{frameworkpath}/${frameworklib}" />
+				</exec>
+
+			</sequential>
+		</for>
+		
 
 		<!-- Strip other platforms from frameworks -->
 		<for param="frameworkpath" if:true="${isMacOS}">
@@ -449,6 +488,12 @@
 				<exec executable="lipo" failonerror="false">
 					<arg line="-remove x86_64 -output @{frameworkpath}/${frameworklib} @{frameworkpath}/${frameworklib}" />
 				</exec>
+
+				<!-- Strip bitcode -->
+				<exec executable="${bitcode_strip.cmd}" failonerror="true">
+					<arg line="@{frameworkpath}/${frameworklib} -r -o @{frameworkpath}/${frameworklib}" />
+				</exec>
+
 			</sequential>
 		</for>
 		<condition property="iOSSimulatorandmacOS">
@@ -518,6 +563,8 @@
 				</exec> -->
 			</sequential>
 		</for>
+
+		
 
 		<delete failonerror="false">
 			<fileset dir="${ios.dir}/${ios.build_dir}/${variant}/${ios.iphoneos_dir}">

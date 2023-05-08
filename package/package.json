@@ -14,8 +14,8 @@
     "androidx.appcompat:1.x.x",
     "androidx.browser:1.x.x",
     "com.android.installreferrer:1.x.x",
-    "com.distriqt.playservices.Base:17.x.x",
-    "com.distriqt.playservices.AdsIdentifier:17.x.x"
+    "com.distriqt.playservices.Base:18.x.x",
+    "com.distriqt.playservices.AdsIdentifier:18.x.x"
   ],
   "parameters": [
     {

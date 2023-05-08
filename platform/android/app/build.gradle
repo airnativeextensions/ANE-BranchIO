@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
@@ -20,7 +20,6 @@ android {
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'io.branch.sdk.android:library:5.0.3'
-//    implementation 'io.branch.sdk.android:library:3.2.0'
+    implementation 'io.branch.sdk.android:library:5.4.0'
 
 }
