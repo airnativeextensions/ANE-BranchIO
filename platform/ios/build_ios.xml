@@ -14,11 +14,7 @@
 	//
 	-->
 
-	<lower name="project.packagename" value="${project.name}" />
-
 	<dirname property="ios.basedir" file="${ant.file.ios}" />
-
-	<cleanchars name="ios.name" value="${project.grp}${project.name}" />
 
 	<!-- Check macOS and iOS enabled -->
 	<condition property="ios.shouldbuild" else="false">

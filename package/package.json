@@ -13,7 +13,7 @@
     "androidx.core:1.x.x",
     "androidx.appcompat:1.x.x",
     "androidx.browser:1.x.x",
-    "com.android.installreferrer:1.x.x",
+    "com.android.installreferrer:2.x.x",
     "com.distriqt.playservices.Base:18.x.x",
     "com.distriqt.playservices.AdsIdentifier:18.x.x"
   ],
