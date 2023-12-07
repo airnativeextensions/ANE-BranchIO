@@ -738,10 +738,23 @@
 			<include name="**/*.jar" />
 			<exclude name="**/${android.name}" />
 		</fileset>
-		<pathconvert refid="platform.android.jar.fs" property="platform.android.jars" pathsep="&lt;/packagedDependency&gt;${line.separator}&lt;packagedDependency&gt;">
+		<pathconvert refid="platform.android.jar.fs" property="platform.android.jars" pathsep="&lt;/packagedDependency&gt;${line.separator}        &lt;packagedDependency&gt;">
 			<map from="${basedir}/platform/android/build/" to="" />
 		</pathconvert>
 		<wrapxmltag name="platform.android.jars.str" input="${platform.android.jars}" tag="packagedDependency" />
+
+		<loadfile srcFile="${common.basedir}/${android.dir}/app/build.gradle" property="android.gradle.dependencies">
+			<filterchain>
+				<linecontains>
+					<contains value="implementation"/>
+				</linecontains>
+				<tokenfilter>
+					<replaceregex pattern="\simplementation\s([\S]*)" replace="         &lt;dependency&gt;implementation \1&lt;/dependency&gt;" />
+				</tokenfilter>
+			</filterchain>
+		</loadfile>
+		<echo message="${android.gradle.dependencies}" />
+
 		<property name="version" value="${version_major}.${version_minor}.${version_build}" />
 		<copy file="${common.basedir}/build_config/platform_android${variant}.xml" tofile="${android.dir}/platform_android${variant}.build.xml" overwrite="true">
 			<filterchain>
@@ -749,7 +762,8 @@
 					<replacestring from="@AIRVERSION@" to="${air.namespaceversion}" />
 					<replacestring from="@ANDROIDPACKAGE@" to="${package.name}" />
 					<replacestring from="@ANDROIDRES@" to="${android.resources}" />
-					<replacestring from="@JARS@" to="${platform.android.jars.str}" />
+					<replacestring from="@JARS@" to="        ${platform.android.jars.str}" />
+					<replacestring from="@GRADLEDEPENDENCIES@" to="${android.gradle.dependencies}" />
 					<replacestring from="@VERSION@" to="${version}" />
 					<replacestring from="@VERSIONEXT@" to="${version.grp}" />
 					<replacestring from="@VERSIONGROUP@" to="${version.grp}" />
@@ -781,6 +795,7 @@
 			<fileset dir="${android.dir}/${output.tmpdir}/libs/">
 				<include name="*.jar" />
 			</fileset>
+			<globmapper from="*" to="${explode_aar_name}-*"/>
 		</copy>
 
 		<copy overwrite="true" includeEmptyDirs="false" failonerror="false" quiet="true" todir="${output.dir}/${variant}/${android.assets_dir}" >
