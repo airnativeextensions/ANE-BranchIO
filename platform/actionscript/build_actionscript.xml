@@ -17,7 +17,7 @@
 	<!-- <lower name="project.packagename" value="${project.name}" /> -->
 	<grppackagename name="project.packagename" prefix="" grp="${project.grp}" projectname="${project.name}" />
 
-	<property name="actionscript.name" value="distriqt.extension.${project.packagename}.swc" />
+	<property name="actionscript.name" value="${output.name}.swc" />
 
 	<taskdef resource="flexTasks.tasks" classpath="${air.sdk}/ant/lib/flexTasks.jar" />
 
@@ -103,11 +103,10 @@
 			<env key="FALCON_HOME" value="${air.sdk}" />
 			<arg line="-compiler.locale en_US" />
 			<arg line="-source-path ${actionscript.basedir}/src" />
-			<arg line="-window-title 'distriqt // ${project.name}'" />
-			<arg line="-main-title 'distriqt // ${project.name} Native Extension Documentation'" if:true="${isWindows}" />
-			<arg line="-main-title '&lt;a href=&quot;https://distriqt.com&quot; target=&quot;_top&quot; &gt;distriqt&lt;/a&gt; // ${project.name} Native Extension Documentation'" if:true="${isMacOS}" />
-			<arg line="-footer 'Copyright distriqt 2016'" if:true="${isWindows}" />
-			<arg line="-footer 'Copyright &lt;a href=&quot;https://distriqt.com&quot; target=&quot;_top&quot; &gt;distriqt&lt;/a&gt; 2016'" if:true="${isMacOS}" />
+			<arg line="-window-title '${project.name}'" />
+			<arg line="-main-title '${project.name} Native Extension Documentation'" />
+			<arg line="-footer 'Copyright Michael Archbold 2025'" if:true="${isWindows}" />
+			<arg line="-footer 'Copyright &lt;a href=&quot;https://michaelarchbold.com&quot; target=&quot;_top&quot; &gt;Michael Archbold&lt;/a&gt; 2025'" if:true="${isMacOS}" />
 			<arg line="-doc-sources ${actionscript.basedir}/src" />
 			<arg line="-output ${common.basedir}/${output.docs}" />
 			<arg line="-lenient" />
@@ -126,10 +125,9 @@
 			<arg line="-compiler.locale en_US" />
 			<arg line="-source-path ${actionscript.basedir}/src" />
 			<arg line="-window-title 'distriqt // ${project.name}'" />
-			<arg line="-main-title 'distriqt // ${project.name} Native Extension Documentation'" if:true="${isWindows}" />
-			<arg line="-main-title '&lt;a href=&quot;https://distriqt.com&quot; target=&quot;_top&quot; &gt;distriqt&lt;/a&gt; // ${project.name} Native Extension Documentation'" if:true="${isMacOS}" />
-			<arg line="-footer 'Copyright distriqt 2016'" if:true="${isWindows}" />
-			<arg line="-footer 'Copyright &lt;a href=&quot;https://distriqt.com&quot; target=&quot;_top&quot; &gt;distriqt&lt;/a&gt; 2016'" if:true="${isMacOS}" />
+			<arg line="-main-title '${project.name} Native Extension Documentation'" />
+			<arg line="-footer 'Copyright Michael Archbold 2025'" if:true="${isWindows}" />
+			<arg line="-footer 'Copyright &lt;a href=&quot;https://michaelarchbold.com&quot; target=&quot;_top&quot; &gt;Michael Archbold&lt;/a&gt; 2025'" if:true="${isMacOS}" />
 			<arg line="-doc-sources ${actionscript.basedir}/src" />
 			<arg line="-output ${common.basedir}/${output.docs}/.embedded" />
 			<arg line="-lenient" />

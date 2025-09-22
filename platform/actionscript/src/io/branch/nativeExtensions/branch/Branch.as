@@ -404,8 +404,9 @@ package io.branch.nativeExtensions.branch
 			{
 			}
 		}
-		
-		
+
+
+		[Deprecated(message="No longer supported by the Branch SDK. This will log a custom event with the action as the event name")]
 		/**
 		 * Register Custom Events
 		 *
@@ -424,7 +425,8 @@ package io.branch.nativeExtensions.branch
 			}
 		}
 		
-		
+
+		[Deprecated(message="No longer supported by the Branch SDK")]
 		/**
 		 * Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so it'll make an asynchronous call to retrieve the balance.
 		 * Be sure to listen <code>GET_CREDITS</code> event.
@@ -441,8 +443,9 @@ package io.branch.nativeExtensions.branch
 			{
 			}
 		}
-		
-		
+
+
+		[Deprecated(message="No longer supported by the Branch SDK")]
 		/**
 		 * We will store how many of the rewards have been deployed so that you don't have to track it on your end. In order to save that you gave the credits to the user, you can call redeem.
 		 * Redemptions will reduce the balance of outstanding credits permanently.
@@ -460,8 +463,9 @@ package io.branch.nativeExtensions.branch
 			{
 			}
 		}
-		
-		
+
+
+		[Deprecated(message="No longer supported by the Branch SDK")]
 		/**
 		 * This call will retrieve the entire history of credits and redemptions from the individual user.
 		 * Be sure to listen <code>GET_CREDITS_HISTORY_SUCCESS</code> and <code>GET_CREDITS_HISTORY_FAILED</code> events.
@@ -487,9 +491,9 @@ package io.branch.nativeExtensions.branch
 		//
 		
 		/**
+		 * Create a new Branch Universal Object
 		 *
-		 * @param builder
-		 * @return
+		 * @return A new instance of a Branch Universal Object
 		 */
 		public function createUniversalObject():BranchUniversalObject
 		{

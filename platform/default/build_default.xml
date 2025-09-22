@@ -17,7 +17,7 @@
 	<!-- <lower name="project.packagename" value="${project.name}" /> -->
 	<grppackagename name="project.packagename" prefix="" grp="${project.grp}" projectname="${project.name}" />
 
-	<property name="default.name" value="distriqt.extension.${project.packagename}.default.swc" />
+	<property name="default.name" value="${output.name}.default.swc" />
 
 	<taskdef resource="flexTasks.tasks" classpath="${air.sdk}/ant/lib/flexTasks.jar" />
 

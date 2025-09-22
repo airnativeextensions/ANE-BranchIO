@@ -159,23 +159,27 @@ package io.branch.nativeExtensions.branch
 		{
 			return "";
 		}
-		
-		
+
+
+		[Deprecated(message="No longer supported by the Branch SDK. This will log a custom event with the action as the event name")]
 		public function userCompletedAction( action:String, stateStringifiedJSON:String = "{}" ):void
 		{
 		}
-		
-		
+
+
+		[Deprecated(message="No longer supported by the Branch SDK")]
 		public function getCredits( bucket:String = "" ):void
 		{
 		}
-		
-		
+
+
+		[Deprecated(message="No longer supported by the Branch SDK")]
 		public function redeemRewards( credits:int, bucket:String = "" ):void
 		{
 		}
-		
-		
+
+
+		[Deprecated(message="No longer supported by the Branch SDK")]
 		public function getCreditsHistory( bucket:String = "" ):void
 		{
 		}
