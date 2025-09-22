@@ -1,12 +1,16 @@
+/**
+ * @author Michael Archbold (https://github.com/marchbold)
+ * @created 19/09/2020
+ */
 package io.branch.nativeExtensions.branch.functions;
-
-import android.os.Build;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.adobe.fre.FREWrongThreadException;
 import com.distriqt.core.utils.FREUtils;
+
+import io.branch.nativeExtensions.branch.BranchContext;
 
 public class IsSupportedFunction implements FREFunction
 {
@@ -17,11 +21,8 @@ public class IsSupportedFunction implements FREFunction
 		FREObject result = null;
 		try
 		{
-			boolean isSupported = false;
-			if (Build.VERSION.SDK_INT >= 15)
-			{
-				isSupported = true;
-			}
+			BranchContext ctx = (BranchContext) context;
+			boolean isSupported = ctx.controller().isSupported();
 			result = FREObject.newObject( isSupported );
 		}
 		catch (FREWrongThreadException e)

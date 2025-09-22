@@ -1,17 +1,6 @@
 /**
- *        __       __               __ 
- *   ____/ /_ ____/ /______ _ ___  / /_
- *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
- * https://distriqt.com
- *
- * @brief
  * @author Michael Archbold (https://github.com/marchbold)
  * @created 16/11/2017
- * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.controller;
 
@@ -25,8 +14,9 @@ import com.distriqt.core.ActivityStateListener;
 import com.distriqt.core.utils.DebugUtil;
 import com.distriqt.core.utils.IExtensionContext;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Iterator;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
@@ -63,7 +53,6 @@ public class BranchController extends ActivityStateListener
 	////////////////////////////////////////////////////////////
 	//	FUNCTIONALITY
 	//
-
 	public BranchController( IExtensionContext extensionContext )
 	{
 		_extContext = extensionContext;
@@ -72,9 +61,17 @@ public class BranchController extends ActivityStateListener
 	}
 
 
+	public boolean isSupported()
+	{
+		return true;
+	}
+
+
 	public void dispose()
 	{
 		_extContext = null;
+		_handler.removeCallbacksAndMessages( null );
+		_handler = null;
 	}
 
 
@@ -86,18 +83,10 @@ public class BranchController extends ActivityStateListener
 			if (options.enableDebugging)
 				Branch.enableLogging();
 
-			Branch branch;
 			if (options.useTestKey)
-			{
-				// Force test instance usage
-				branch = Branch.getTestInstance( _extContext.getActivity().getApplication() );
-			}
-			else
-			{
-				// Auto method from manifest settings
-				branch = Branch.getAutoInstance( _extContext.getActivity().getApplication() );
-			}
+				Branch.enableTestMode();
 
+			Branch branch = Branch.getAutoInstance( _extContext.getActivity().getApplicationContext() );
 
 			try
 			{
@@ -113,7 +102,6 @@ public class BranchController extends ActivityStateListener
 				e.printStackTrace();
 			}
 
-
 			//try
 			//{
 			//	// This triggers reinitialisation - without this Branch waits for activity lifecycle events
@@ -126,7 +114,6 @@ public class BranchController extends ActivityStateListener
 			//{
 			//	e.printStackTrace();
 			//}
-
 
 			_handler.postDelayed( new Runnable()
 			{
@@ -167,7 +154,7 @@ public class BranchController extends ActivityStateListener
 					}
 					catch (Exception e)
 					{
-						e.printStackTrace();
+						Errors.handleException( e );
 					}
 				}
 			}, 500 );
@@ -176,7 +163,7 @@ public class BranchController extends ActivityStateListener
 		catch (Exception e)
 		{
 			Errors.handleException( e );
-			_extContext.dispatchEvent( "INIT_FAILED", e.getMessage() );
+			_extContext.dispatchEvent( BranchEvent.INIT_FAILED, e.getMessage() );
 		}
 	}
 
@@ -294,9 +281,20 @@ public class BranchController extends ActivityStateListener
 		{
 			if (Branch.getInstance() != null)
 			{
-				JSONObject obj = new JSONObject( json );
+				io.branch.referral.util.BranchEvent branchEvent = new io.branch.referral.util.BranchEvent( action );
+				JSONObject customDataObject = new JSONObject( json );
+				for (Iterator<String> customDataIter = customDataObject.keys(); customDataIter.hasNext(); )
+				{
+					String propertyName = customDataIter.next();
+					branchEvent.addCustomDataProperty(
+							propertyName,
+							customDataObject.getString( propertyName )
+					);
+				}
+				branchEvent.logEvent( _extContext.getActivity() );
 
-				Branch.getInstance().userCompletedAction( action, obj );
+//				JSONObject obj = new JSONObject( json );
+//				Branch.getInstance().userCompletedAction( action, obj );
 			}
 		}
 		catch (Exception e)
@@ -309,30 +307,32 @@ public class BranchController extends ActivityStateListener
 	public void getCredits( final String bucket )
 	{
 		Logger.d( TAG, "getCredits( %s )", bucket );
-		if (Branch.getInstance() != null)
-		{
-			Branch.getInstance().loadRewards( new Branch.BranchReferralStateChangedListener()
-			{
-				@Override
-				public void onStateChanged( boolean changed, BranchError error )
-				{
-					if (error == null)
-					{
-						_extContext.dispatchEvent(
-								BranchCreditsEvent.GET_CREDITS_SUCCESS,
-								String.valueOf( Branch.getInstance().getCreditsForBucket( bucket ) )
-						);
-					}
-					else
-					{
-						_extContext.dispatchEvent(
-								BranchCreditsEvent.GET_CREDITS_FAILED,
-								error.getMessage()
-						);
-					}
-				}
-			} );
-		}
+//		if (Branch.getInstance() != null)
+//		{
+//			Branch.getInstance().loadRewards( new Branch.BranchReferralStateChangedListener()
+//			{
+//				@Override
+//				public void onStateChanged( boolean changed, BranchError error )
+//				{
+//					if (error == null)
+//					{
+//						_extContext.dispatchEvent(
+//								BranchCreditsEvent.GET_CREDITS_SUCCESS,
+//								String.valueOf( Branch.getInstance().getCreditsForBucket( bucket ) )
+//						);
+//					}
+//					else
+//					{
+//						_extContext.dispatchEvent(
+//								BranchCreditsEvent.GET_CREDITS_FAILED,
+//								error.getMessage()
+//						);
+//					}
+//				}
+//			} );
+//
+//		}
+		_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_FAILED, "Not supported" );
 	}
 
 
@@ -341,24 +341,26 @@ public class BranchController extends ActivityStateListener
 		Logger.d( TAG, "redeemRewards( %d, %s )", credits, bucket );
 		try
 		{
-			if (Branch.getInstance() != null)
-			{
-				Branch.getInstance().redeemRewards( bucket, credits, new Branch.BranchReferralStateChangedListener()
-				{
-					@Override
-					public void onStateChanged( boolean changed, BranchError error )
-					{
-						if (error == null)
-						{
-							_extContext.dispatchEvent( BranchCreditsEvent.REDEEM_REWARDS_SUCCESS, "" );
-						}
-						else
-						{
-							_extContext.dispatchEvent( BranchCreditsEvent.REDEEM_REWARDS_FAILED, error.getMessage() );
-						}
-					}
-				} );
-			}
+//			if (Branch.getInstance() != null)
+//			{
+//				Branch.getInstance().redeemRewards( bucket, credits, new Branch.BranchReferralStateChangedListener()
+//				{
+//					@Override
+//					public void onStateChanged( boolean changed, BranchError error )
+//					{
+//						if (error == null)
+//						{
+//							_extContext.dispatchEvent( BranchCreditsEvent.REDEEM_REWARDS_SUCCESS, "" );
+//						}
+//						else
+//						{
+//							_extContext.dispatchEvent( BranchCreditsEvent.REDEEM_REWARDS_FAILED, error.getMessage() );
+//						}
+//					}
+//				} );
+//			}
+
+			_extContext.dispatchEvent( BranchCreditsEvent.REDEEM_REWARDS_FAILED, "Not supported" );
 		}
 		catch (Exception e)
 		{
@@ -372,25 +374,27 @@ public class BranchController extends ActivityStateListener
 		Logger.d( TAG, "getCreditHistory( %s )", bucket );
 		try
 		{
-			if (Branch.getInstance() != null)
-			{
-				Branch.getInstance().getCreditHistory( bucket, new Branch.BranchListResponseListener()
-				{
+//			if (Branch.getInstance() != null)
+//			{
+//				Branch.getInstance().getCreditHistory( bucket, new Branch.BranchListResponseListener()
+//				{
+//
+//					@Override
+//					public void onReceivingResponse( JSONArray list, BranchError error )
+//					{
+//						if (error == null)
+//						{
+//							_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_SUCCESS, list.toString() );
+//						}
+//						else
+//						{
+//							_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED, error.getMessage() );
+//						}
+//					}
+//				} );
+//			}
 
-					@Override
-					public void onReceivingResponse( JSONArray list, BranchError error )
-					{
-						if (error == null)
-						{
-							_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_SUCCESS, list.toString() );
-						}
-						else
-						{
-							_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED, error.getMessage() );
-						}
-					}
-				} );
-			}
+			_extContext.dispatchEvent( BranchCreditsEvent.GET_CREDITS_HISTORY_FAILED, "Not supported" );
 		}
 		catch (Exception e)
 		{

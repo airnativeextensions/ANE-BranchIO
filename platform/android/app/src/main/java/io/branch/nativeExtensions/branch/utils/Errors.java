@@ -1,38 +1,55 @@
 /**
- *        __       __               __ 
- *   ____/ /_ ____/ /______ _ ___  / /_
- *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
- * https://distriqt.com
- *
- * @brief
  * @author Michael Archbold (https://github.com/marchbold)
  * @created 13/04/2017
- * @copyright https://distriqt.com/copyright/license.txt
  */
 package io.branch.nativeExtensions.branch.utils;
 
-import com.adobe.fre.FREContext;
-import com.distriqt.core.utils.FREUtils;
+import static com.distriqt.core.utils.FREUtils.DEBUG_ENABLED;
 
-import io.branch.nativeExtensions.branch.BranchExtension;
+import com.distriqt.core.utils.IExtensionContext;
+
+import io.branch.nativeExtensions.branch.Branch;
 
 public class Errors
 {
 
 
-	public static void handleException( FREContext context, Throwable e )
+	public static void handleException( IExtensionContext context, Throwable e )
 	{
-		FREUtils.handleException( context, e );
+		try
+		{
+			if (DEBUG_ENABLED)
+			{
+				e.printStackTrace();
+			}
+
+			if (context != null)
+			{
+				String message = "unknown";
+
+				try
+				{
+					if (e != null)
+					{
+						message = e.getMessage();
+					}
+				}
+				catch (Throwable var4)
+				{
+				}
+
+				context.dispatchEvent( "extension:error", message );
+			}
+		}
+		catch (Throwable var5)
+		{
+		}
 	}
 
 
 	public static void handleException( Throwable e )
 	{
-		handleException( BranchExtension.context, e );
+		handleException( Branch.context, e );
 	}
 
 
