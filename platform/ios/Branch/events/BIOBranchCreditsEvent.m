@@ -3,7 +3,7 @@
 //  Branch
 //
 //  Created by Michael Archbold on 3/8/18.
-//  Copyright © 2018 distriqt. All rights reserved.
+//  Copyright © 2025 Michael Archbold. All rights reserved.
 //
 
 #import "BIOBranchCreditsEvent.h"

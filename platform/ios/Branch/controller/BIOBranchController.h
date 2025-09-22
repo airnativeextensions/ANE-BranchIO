@@ -3,7 +3,7 @@
 //  Branch
 //
 //  Created by Michael Archbold on 22/09/2015.
-//  Copyright © 2015 distriqt. All rights reserved.
+//  Copyright © 2025 Michael Archbold. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,7 +12,7 @@
 #import "BIOBranchOptions.h"
 #import "BIOBranchContext.h"
 
-#import "BNCConfig.h"
+#import <BranchSDK/Branch.h>
 
 @interface BIOBranchController : NSObject<DTNotificationsDelegate>
 

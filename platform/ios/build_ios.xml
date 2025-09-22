@@ -197,7 +197,7 @@
 		<mkdir dir=".tmp" />
 		<for param="xibfile">
 			<path>
-				<fileset dir="${ios.basedir}">
+				<fileset dir="${ios.basedir}/${ios.name}">
 					<include name="**/*.xib" />
 				</fileset>
 			</path>

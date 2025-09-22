@@ -3,7 +3,7 @@
 //  Branch
 //
 //  Created by Michael Archbold on 22/09/2015.
-//  Copyright © 2015 distriqt. All rights reserved.
+//  Copyright © 2025 Michael Archbold. All rights reserved.
 //
 
 #import "BIOBranchController.h"
@@ -13,7 +13,8 @@
 #import "BIOBranchUniversalObjectEvent.h"
 #import "BIOBranchUniversalObjectUtils.h"
 
-#import <Branch/Branch.h>
+#import <BranchSDK/Branch.h>
+#import <BranchSDK/BranchEvent.h>
 
 
 @implementation BIOBranchController
@@ -36,7 +37,7 @@
 
 -(NSString*) version
 {
-    return BNC_SDK_VERSION;
+    return @"3.13.1";
 }
 
 
@@ -47,10 +48,18 @@
     {
         Branch.useTestBranchKey = YES;
     }
+    if (options.enableDebugging)
+    {
+        [Branch enableLogging];
+    }
+    
     if (options.delayInitToCheckForSearchAds)
     {
-        [[Branch getInstance] delayInitToCheckForSearchAds];
+//        [[Branch getInstance] delayInitToCheckForSearchAds];
     }
+    
+    
+    
 }
 
 
@@ -192,7 +201,9 @@
     
     if (!jsonError)
     {
-        [[Branch getInstance] userCompletedAction:action withState:params];
+        BranchEvent* event = [BranchEvent customEventWithName: action];
+        event.customData = params;
+        [event logEvent];
     }
 }
 
@@ -210,7 +221,6 @@
         if (!jsonError)
         {
             NSString* eventName = [eventDict objectForKey: @"eventName"];
-            
             BranchEvent* event;
             if ([eventDict objectForKey: @"isStandardEvent"])
             {
@@ -286,57 +296,21 @@
 - (void) getCredits:(NSString *) bucket
 {
     [context log: Branch_TAG message: @"BIOBranchController::getCredits: %@", bucket];
-    [[Branch getInstance] loadRewardsWithCallback:^(BOOL changed, NSError *error)
-    {
-        if (!error)
-        {
-            [self.context dispatch: BIO_BRANCHCREDITSEVENT_GET_CREDITS_SUCCESS
-                              data: [NSString stringWithFormat: @"%ld", (long) [[Branch getInstance] getCreditsForBucket:bucket]]];
-        }
-        else
-        {
-            [self.context dispatch: BIO_BRANCHCREDITSEVENT_GET_CREDITS_FAILED
-                              data: error.description];
-        }
-    }];
+    [self.context dispatch: BIO_BRANCHCREDITSEVENT_GET_CREDITS_FAILED data: @"Not supported"];
 }
 
 
 - (void) redeemRewards:(NSInteger) credits andBucket:(NSString *) bucket
 {
     [context log: Branch_TAG message: @"BIOBranchController::redeemRewards: %d andBucket: %@", credits, bucket];
-    [[Branch getInstance] redeemRewards:credits forBucket:bucket callback:^(BOOL changed, NSError *error)
-    {
-        if (!error)
-        {
-            [self.context dispatch: BIO_BRANCHCREDITSEVENT_REDEEM_REWARDS_SUCCESS
-                              data: @""];
-        }
-        else
-        {
-            [self.context dispatch: BIO_BRANCHCREDITSEVENT_REDEEM_REWARDS_FAILED
-                              data: error.description];
-        }
-    }];
+    [self.context dispatch: BIO_BRANCHCREDITSEVENT_REDEEM_REWARDS_FAILED data: @"Not supported"];
 }
 
 
 - (void) getCreditsHistory:(NSString *) bucket
 {
     [context log: Branch_TAG message: @"BIOBranchController::getCreditsHistory: %@", bucket];
-    [[Branch getInstance] getCreditHistoryForBucket:bucket andCallback:^(NSArray *list, NSError *error)
-    {
-        if (!error)
-        {
-            [self.context dispatch: BIO_BRANCHCREDITSEVENT_GET_CREDITS_HISTORY_SUCCESS
-                              data: [[list valueForKey:@"description"] componentsJoinedByString:@""]];
-        }
-        else
-        {
-            [self.context dispatch: BIO_BRANCHCREDITSEVENT_GET_CREDITS_HISTORY_FAILED
-                              data: error.description];
-        }
-    }];
+    [self.context dispatch: BIO_BRANCHCREDITSEVENT_GET_CREDITS_HISTORY_FAILED data: @"Not supported"];
 }
 
 
@@ -484,6 +458,12 @@
     [[Branch getInstance] continueUserActivity:userActivity];
 }
 
+
+-(void) didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [context log: Branch_TAG message: @"BIOBranchController::didReceiveRemoteNotification:" ];
+    [[Branch getInstance] handlePushNotification:userInfo];
+}
 
 
 
