@@ -1,53 +1,40 @@
 package com.distriqt.test.branch
 {
 	import com.distriqt.extension.core.Core;
-	
-	import flash.desktop.NativeApplication;
-	import flash.display.Bitmap;
-	import flash.events.Event;
+
 	import flash.events.InvokeEvent;
-	import flash.filesystem.File;
-	import flash.geom.Rectangle;
-	import flash.net.URLRequest;
-	import flash.utils.setTimeout;
-	
+
 	import io.branch.nativeExtensions.branch.Branch;
-	import io.branch.nativeExtensions.branch.BranchConst;
 	import io.branch.nativeExtensions.branch.BranchError;
 	import io.branch.nativeExtensions.branch.BranchOptions;
 	import io.branch.nativeExtensions.branch.buo.BranchUniversalObject;
 	import io.branch.nativeExtensions.branch.buo.ContentMetadata;
 	import io.branch.nativeExtensions.branch.buo.LinkProperties;
-	import io.branch.nativeExtensions.branch.events.BranchCreditsEvent;
 	import io.branch.nativeExtensions.branch.events.BranchEvent;
 	import io.branch.nativeExtensions.branch.tracking.BranchEventBuilder;
-	
-	import starling.core.Starling;
-	
-	import starling.display.Image;
+
 	import starling.display.Sprite;
-	
-	
+
 	/**
 	 * This class demonstrates Branch functionality in small test cases
 	 */
 	public class BranchTests extends Sprite
 	{
 		public static const TAG:String = "";
-		
+
 		private var _l:ILogger;
-		
-		
+
+
 		private function log( log:String ):void
 		{
 			_l.log( TAG, log );
 		}
-		
-		
+
+
 		////////////////////////////////////////////////////////
 		//	FUNCTIONALITY
 		//
-		
+
 		public function BranchTests( logger:ILogger )
 		{
 			_l = logger;
@@ -60,21 +47,21 @@ package com.distriqt.test.branch
 					log( "Branch Version:   " + Branch.instance.version );
 					log( "Branch SDK Version:   " + Branch.instance.nativeVersion );
 //					NativeApplication.nativeApplication.addEventListener( InvokeEvent.INVOKE, invokeHandler );
-					
+
 				}
-				
+
 			}
 			catch (e:Error)
 			{
 				log( e.message );
 			}
 		}
-		
-		
+
+
 		////////////////////////////////////////////////////////
 		//  
 		//
-		
+
 		public function initSession():void
 		{
 			log( "initSession()" );
@@ -82,39 +69,39 @@ package com.distriqt.test.branch
 			{
 				Branch.instance.addEventListener( BranchEvent.INIT_FAILED, init_failedHandler );
 				Branch.instance.addEventListener( BranchEvent.INIT_SUCCESS, init_successHandler );
-				
+
 				Branch.instance.initSession(
 						new BranchOptions()
 								.setDebugMode()
-//								.setUseTestKey()
-//								.setDelayInitToCheckForSearchAds()
+						//								.setUseTestKey()
+						//								.setDelayInitToCheckForSearchAds()
 				);
 			}
 		}
-		
-		
+
+
 		private function getPropertyFromParams( params:Object, propertyName:String, defaultValue:* ):*
 		{
-			if (params.hasOwnProperty(propertyName))
+			if (params.hasOwnProperty( propertyName ))
 				return params[propertyName];
 			return defaultValue;
 		}
-		
-		
+
+
 		private function init_successHandler( event:BranchEvent ):void
 		{
 			log( event.type + "::" + event.data );
-			
+
 			// params are the deep linked params associated with the link that the user clicked before showing up
 			// params will be empty if no data found
-			
+
 			try
 			{
-				var sessionParams:Object = JSON.parse(event.data);
-				
+				var sessionParams:Object = JSON.parse( event.data );
+
 				var clicked_branch_link:Boolean = getPropertyFromParams( sessionParams, "+clicked_branch_link", false );
 				var match_guaranteed:Boolean = getPropertyFromParams( sessionParams, "+match_guaranteed", false );
-				
+
 				if (clicked_branch_link && match_guaranteed)
 				{
 					log( "CLICKED BRANCH LINK" );
@@ -123,50 +110,48 @@ package com.distriqt.test.branch
 			catch (e:Error)
 			{
 			}
-			
+
 
 //			var sessionParamsString:String = Branch.instance.getLatestReferringParams();
 //			log( "sessionParams: " + sessionParamsString );
 
 //			var installParams:String = Branch.instance.getFirstReferringParams();
 //			log( "installParams: " + installParams );
-			
-			
+
+
 //			Branch.instance.setIdentity( "Bob" );
-		
-		
-		
-		
+
+
 		}
-		
-		
+
+
 		private function init_failedHandler( event:BranchEvent ):void
 		{
 			log( event.type + "::" + event.data );
 		}
-		
-		
+
+
 		//
 		//	INVOKE
 		//
-		
+
 		private function invokeHandler( event:InvokeEvent ):void
 		{
-			log( "invoke: " + event.arguments.join(",") );
+			log( "invoke: " + event.arguments.join( "," ) );
 			var sessionParams:String = Branch.instance.getLatestReferringParams();
 			log( "sessionParams: " + sessionParams );
 		}
-		
+
 		public function getLatestReferringParams():void
 		{
 			log( "getLatestReferringParams:" + Branch.instance.getLatestReferringParams() );
 		}
-		
-		
+
+
 		//
 		//	TRACKING
 		//
-		
+
 		public function trackStandard():void
 		{
 			log( "trackStandard()" );
@@ -180,8 +165,8 @@ package com.distriqt.test.branch
 							.build()
 			);
 		}
-		
-		
+
+
 		public function trackCustom():void
 		{
 			log( "trackCustom()" );
@@ -191,8 +176,8 @@ package com.distriqt.test.branch
 							.build()
 			);
 		}
-		
-		
+
+
 //		//
 //		//	SHORT URL
 //		//
@@ -249,28 +234,28 @@ package com.distriqt.test.branch
 //			Branch.instance.handleDeepLink( event.data );
 //
 //		}
-		
-		
+
+
 		//
 		//	BRANCH UNIVERSAL OBJECTS
 		//
-		
+
 		public function createObjectAndGenerateShortLink():void
 		{
 			log( "createObjectAndGenerateShortLink()" );
-			
+
 			var buo:BranchUniversalObject = Branch.instance.createUniversalObject()
-					.setCanonicalIdentifier( "content/12345" )
-					.setTitle( "My Content Title" )
-					.setContentDescription( "My Content Description")
-					.setContentImageUrl("https://lorempixel.com/400/400")
-					.setContentIndexingMode("public")
-					.setLocalIndexMode("public")
-					.setContentMetadata( new ContentMetadata()
-												 .addCustomMetadata("key1", "value1" )
-					)
+												  .setCanonicalIdentifier( "content/12345" )
+												  .setTitle( "My Content Title" )
+												  .setContentDescription( "My Content Description" )
+												  .setContentImageUrl( "https://lorempixel.com/400/400" )
+												  .setContentIndexingMode( "public" )
+												  .setLocalIndexMode( "public" )
+												  .setContentMetadata( new ContentMetadata()
+																			   .addCustomMetadata( "key1", "value1" )
+												  )
 			;
-			
+
 			var properties:LinkProperties = new LinkProperties()
 					.setChannel( "facebook" )
 					.setFeature( "sharing" )
@@ -279,65 +264,56 @@ package com.distriqt.test.branch
 					.addControlParameter( "$desktop_url", "http://example.com/home" )
 					.addControlParameter( "custom", "data" )
 			;
-			
+
 			buo.generateShortUrl(
 					properties,
 					function ( url:String, error:BranchError ):void
 					{
 						log( "complete: " + url );
-						
+
 						Branch.instance.handleDeepLink( url, true );
 					}
 			);
-			
+
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
 		//
 		//	SET IDENTITY
 		//
-		
+
 		public function setIdentity():void
 		{
 			log( "setIdentity()" );
-			
+
 			var userId:String = "user" + int( Math.random() * 100000 );
-			
+
 			Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_FAILED, setIdentityHandler );
 			Branch.instance.addEventListener( BranchEvent.SET_IDENTITY_SUCCESS, setIdentityHandler );
-			
+
 			Branch.instance.setIdentity( userId );
 		}
-		
-		
+
+
 		private function setIdentityHandler( event:BranchEvent ):void
 		{
 			log( event.type + "::" + event.data );
-			
+
 			Branch.instance.removeEventListener( BranchEvent.SET_IDENTITY_FAILED, setIdentityHandler );
 			Branch.instance.removeEventListener( BranchEvent.SET_IDENTITY_SUCCESS, setIdentityHandler );
 		}
-		
-		
-		
+
+
 		//
 		//	DEBUG
 		//
-		
+
 		public function validateIntegration():void
 		{
 			Branch.instance.validateIntegration();
 		}
-		
-		
-		
+
+
 	}
-	
+
 }
