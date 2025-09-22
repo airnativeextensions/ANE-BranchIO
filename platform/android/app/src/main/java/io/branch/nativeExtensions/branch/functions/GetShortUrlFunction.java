@@ -1,3 +1,7 @@
+/**
+ * @author Michael Archbold (https://github.com/marchbold)
+ * @created 19/09/2020
+ */
 package io.branch.nativeExtensions.branch.functions;
 
 import com.adobe.fre.FREArray;
@@ -12,7 +16,7 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 import io.branch.indexing.BranchUniversalObject;
-import io.branch.nativeExtensions.branch.BranchExtension;
+import io.branch.nativeExtensions.branch.Branch;
 import io.branch.nativeExtensions.branch.events.BranchEvent;
 import io.branch.nativeExtensions.branch.utils.Errors;
 import io.branch.referral.Branch.BranchLinkCreateListener;
@@ -29,13 +33,13 @@ public class GetShortUrlFunction implements FREFunction
 		FREObject result = null;
 		try
 		{
-			String[] tags    = FREUtils.GetObjectAsArrayOfStrings( (FREArray) args[0] );
-			String   channel = args[1].getAsString();
-			String   feature = args[2].getAsString();
-			String   stage   = args[3].getAsString();
-			String   json    = args[4].getAsString();
-			String   alias   = args[5].getAsString();
-			int      type    = args[6].getAsInt();
+			String[] tags = FREUtils.GetObjectAsArrayOfStrings( (FREArray) args[0] );
+			String channel = args[1].getAsString();
+			String feature = args[2].getAsString();
+			String stage = args[3].getAsString();
+			String json = args[4].getAsString();
+			String alias = args[5].getAsString();
+			int type = args[6].getAsInt();
 
 			JSONObject obj;
 			try
@@ -44,7 +48,7 @@ public class GetShortUrlFunction implements FREFunction
 			}
 			catch (JSONException e)
 			{
-				BranchExtension.context.dispatchStatusEventAsync( "GET_SHORT_URL_FAILED", "Could not parse malformed JSON" );
+				Branch.context.dispatchEvent( "GET_SHORT_URL_FAILED", "Could not parse malformed JSON" );
 				Errors.handleException( e );
 				return null;
 			}
@@ -67,9 +71,12 @@ public class GetShortUrlFunction implements FREFunction
 
 			if (obj != null)
 			{
-				if (obj.has( "$og_title" )) branchUniversalObject.setTitle( obj.getString( "$og_title" ) );
-				if (obj.has( "$og_image_url" )) branchUniversalObject.setContentImageUrl( obj.getString( "$og_image_url" ) );
-				if (obj.has( "$og_description" )) branchUniversalObject.setContentDescription( obj.getString( "$og_description" ) );
+				if (obj.has( "$og_title" ))
+					branchUniversalObject.setTitle( obj.getString( "$og_title" ) );
+				if (obj.has( "$og_image_url" ))
+					branchUniversalObject.setContentImageUrl( obj.getString( "$og_image_url" ) );
+				if (obj.has( "$og_description" ))
+					branchUniversalObject.setContentDescription( obj.getString( "$og_description" ) );
 
 				ContentMetadata contentMetadata = new ContentMetadata();
 				for (Iterator<String> iter = obj.keys(); iter.hasNext(); )
@@ -102,14 +109,14 @@ public class GetShortUrlFunction implements FREFunction
 						{
 							if (error == null)
 							{
-								BranchExtension.context.dispatchStatusEventAsync(
+								Branch.context.dispatchEvent(
 										BranchEvent.GET_SHORT_URL_SUCCESS,
 										url
 								);
 							}
 							else
 							{
-								BranchExtension.context.dispatchStatusEventAsync(
+								Branch.context.dispatchEvent(
 										BranchEvent.GET_SHORT_URL_FAILED,
 										error.getMessage()
 								);

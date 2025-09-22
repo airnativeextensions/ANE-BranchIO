@@ -126,9 +126,9 @@
 		<for list="${externals}" param="lib">
 			<sequential>
 				<propertyregex override="true" property="libversion" input="@{lib}" regexp="\@VERSIONEXT\@" replace="${version.android}" defaultvalue="@{lib}" />
-
 				<echo>android external: ${libversion}</echo>
 
+				<!-- Search all grade cache for specified filename as aar/jar -->
 				<fileset dir="${android.sdk}/extras" id="fileset1">
 					<include name="**/${libversion}.aar" />
 					<include name="**/${libversion}.jar" />
@@ -137,14 +137,46 @@
 					<include name="**/${libversion}.aar" />
 					<include name="**/${libversion}.jar" />
 				</fileset>
-				<path id="aarfile">
-					<first>
-						<union>
-							<resources refid="fileset1" />
-							<resources refid="fileset2" />
-						</union>
-					</first>
-				</path>
+
+				<!-- Finds aar / jar based on gradle line format group:lib:version -->
+				<propertyregex override="true" property="libversionpath" input="${libversion}" regexp=":" replace="/" defaultvalue="${libversion}" />
+				<echo>android external path: ${libversionpath}</echo>
+				<fileset dir="${android.gradle_files_cache}/${libversionpath}" id="fileset3">
+					<include name="**/*.aar" />
+				</fileset>
+				<fileset dir="${android.gradle_files_cache}/${libversionpath}" id="fileset4">
+					<include name="**/*.jar" />
+					<exclude name="**/*sources.jar" />
+				</fileset>
+
+				<if>
+					<available type="dir" file="${android.gradle_files_cache}/${libversionpath}" />
+					<then>
+						<!-- Take first file -->
+						<path id="aarfile">
+							<first>
+								<union>
+									<resources refid="fileset1" />
+									<resources refid="fileset2" />
+									<resources refid="fileset3" />
+									<resources refid="fileset4" />
+								</union>
+							</first>
+						</path>
+					</then>
+					<else>
+						<!-- Take first file -->
+						<path id="aarfile">
+							<first>
+								<union>
+									<resources refid="fileset1" />
+									<resources refid="fileset2" />
+								</union>
+							</first>
+						</path>
+					</else>
+				</if>
+				
 
 				<fail message="Could not find dependency: ${libversion}">
 					<condition>
@@ -165,6 +197,7 @@
 
 						<echo>jetify android external: ${toString:aarfile} -> ${aarfilename}</echo>
 
+						<copy file="${toString:aarfile}" tofile="${externalsdir}/${aarfilename}" failonerror="false" />
 						<exec executable="${android.jetifier}">
 							<arg value="-i" />
 							<arg value="${toString:aarfile}" />

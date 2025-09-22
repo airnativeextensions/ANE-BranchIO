@@ -1,3 +1,7 @@
+/**
+ * @author Michael Archbold (https://github.com/marchbold)
+ * @created 19/09/2020
+ */
 package io.branch.nativeExtensions.branch.functions;
 
 import com.adobe.fre.FREContext;

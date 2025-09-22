@@ -1,18 +1,6 @@
 /**
- *        __       __               __ 
- *   ____/ /_ ____/ /______ _ ___  / /_
- *  / __  / / ___/ __/ ___/ / __ `/ __/
- * / /_/ / (__  ) / / /  / / /_/ / / 
- * \__,_/_/____/_/ /_/  /_/\__, /_/ 
- *                           / / 
- *                           \/ 
- * https://distriqt.com
- *
- * @brief Main Context for an ActionScript Native Extension
- * @author Michael Archbold
+ * @author Michael Archbold (https://github.com/marchbold)
  * @created Jan 19, 2012
- * @copyright https://distriqt.com/copyright/license.txt
- *
  */
 package io.branch.nativeExtensions.branch;
 
@@ -48,16 +36,9 @@ import io.branch.nativeExtensions.branch.functions.UserCompletedActionFunction;
 import io.branch.nativeExtensions.branch.functions.ValidateIntegrationFunction;
 import io.branch.nativeExtensions.branch.functions.VersionFunction;
 import io.branch.nativeExtensions.branch.functions.buo.GenerateShortUrlFunction;
-import io.branch.nativeExtensions.branch.utils.Logger;
-import io.branch.referral.BuildConfig;
 
 public class BranchContext extends FREContext implements IExtensionContext, ActivityResultCallback, StateChangeCallback
 {
-	public static final String TAG            = BranchContext.class.getSimpleName();
-	public static final String VERSION        = BuildConfig.VERSION_NAME;
-	public static final String IMPLEMENTATION = "Android";
-
-
 	////////////////////////////////////////////////////////////
 	//	VARIABLES
 	//
@@ -133,7 +114,6 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 		// BRANCH UNIVERSAL OBJECTS
 		//
 
-
 		functionMap.put( "buo_generateShortUrl", new GenerateShortUrlFunction() );
 
 
@@ -190,7 +170,6 @@ public class BranchContext extends FREContext implements IExtensionContext, Acti
 	@Override
 	public void onActivityStateChanged( AndroidActivityWrapper.ActivityState state )
 	{
-		Logger.d( TAG, "onActivityStateChanged()" );
 		if (_controller != null)
 		{
 			switch (state)
