@@ -8,12 +8,11 @@ The following should be added to your `extensions` node in your application desc
     <extensionID>io.branch.nativeExtensions.Branch</extensionID>
 
     <extensionID>com.distriqt.Core</extensionID>
+    <extensionID>com.jetbrains.kotlin</extensionID>
     <extensionID>androidx.core</extensionID>
     <extensionID>androidx.appcompat</extensionID>
     <extensionID>androidx.browser</extensionID>
     <extensionID>com.android.installreferrer</extensionID>
-    <extensionID>com.distriqt.playservices.Base</extensionID>
-    <extensionID>com.distriqt.playservices.AdsIdentifier</extensionID>
 </extensions>
 ```
 
@@ -54,7 +53,7 @@ The `io.branch.sdk.TestMode` flag can be used to set your application into test 
 If you are adding a deep link / custom url scheme to be able to launch your application from a url such as `myapp://` then you need to add the scheme to the main activity for your application:
 
 ```xml
-<activity android:launchMode="singleTask">
+<activity>
     <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -82,7 +81,7 @@ If you are adding a deep link / custom url scheme to be able to launch your appl
             <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
 
             <application>
-                <activity android:launchMode="singleTask">
+                <activity>
                     <intent-filter>
                         <action android:name="android.intent.action.MAIN"/>
                         <category android:name="android.intent.category.LAUNCHER"/>

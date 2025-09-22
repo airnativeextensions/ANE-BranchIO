@@ -34,13 +34,14 @@ Once complete `apm` will have created something like the following file structur
 - Add the `ane` directory to your IDE. *See the tutorials located [here](/docs/tutorials/getting-started) on adding an extension to your IDE.*
 
 :::info
-We suggest you use the locations directly in your builds rather than copying the files elsewhere. The reason for this is if you ever go to update the extensions using `apm` that these updates will be pulled into your build automatically.
+We suggest you use the locations directly in your builds rather than copying the files elsewhere. 
+The reason for this is if you ever go to update the extensions using `apm` that these updates will be pulled into your build automatically.
 :::
 
 
-- You will need to set the usage description strings for use in the authorisation dialogs. Call the following to step through the configuration values for this extension:
+- You will need to set some configuration values for your Branch account. Call the following to step through the configuration values for this extension:
 
 ```
-apm project config set com.distriqt.BluetoothLE
+apm project config set io.branch.nativeExtensions.Branch
 ```
 

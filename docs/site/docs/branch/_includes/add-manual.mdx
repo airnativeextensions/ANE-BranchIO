@@ -25,6 +25,8 @@ The Core ANE is required by this ANE. You must include and package this extensio
 The Core ANE doesn't provide any functionality in itself but provides support libraries and frameworks used by our extensions.
 It also includes some centralised code for some common actions that can cause issues if they are implemented in each individual extension.
 
+- [com.distriqt.Core](https://github.com/distriqt/ANE-Core/raw/master/lib/com.distriqt.Core.ane)
+
 You can access this extension here: [https://github.com/distriqt/ANE-Core](https://github.com/distriqt/ANE-Core).
 
 
@@ -37,37 +39,10 @@ These libraries are specific to Android. There are no issues including these on 
 
 This extension requires the following extensions:
 
-- [androidx.appcompat.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.appcompat.ane)
-- [androidx.browser.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.browser.ane)
-- [androidx.core.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.core.ane)
-- [com.android.installreferrer.ane](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.android.installreferrer.ane)
+- [androidx.appcompat](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.appcompat.ane)
+- [androidx.browser](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.browser.ane)
+- [androidx.core](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/androidx.core.ane)
+- [com.android.installreferrer](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.android.installreferrer.ane)
+- [com.jetbrains.kotlin](https://github.com/distriqt/ANE-AndroidSupport/raw/master/lib/com.jetbrains.kotlin.ane)
 
 You can access these extensions here: [https://github.com/distriqt/ANE-AndroidSupport](https://github.com/distriqt/ANE-AndroidSupport).
-
-
->
-> **Note**: if you have been using the older `com.distriqt.androidsupport.*` (Android Support) extensions you should remove these extensions and replace it with the `androidx` extensions listed above. This is the new version of the android support libraries and moving forward all our extensions will require AndroidX.
->
-
-
-#### Google Play Services
-
-This ANE requires can use of certain aspects of the Google Play Services if supplied, mainly around using the advertising identifier to attribute links correctly. 
-
-The client library is available as a series of ANEs that you add into your applications packaging options. 
-Each separate ANE provides a component from the Play Services client library and are used by different ANEs. 
-These client libraries aren't packaged with this ANE as they are used by multiple ANEs and separating them 
-will avoid conflicts, allowing you to use multiple ANEs in the one application.
-
-If you wish to use the expanded functionality add the following Google Play Services:
-
-- [`com.distriqt.playservices.Base`](https://github.com/distriqt/ANE-GooglePlayServices/raw/master/lib/com.distriqt.playservices.Base.ane)
-- [`com.distriqt.playservices.AdsIdentifier`](https://github.com/distriqt/ANE-GooglePlayServices/raw/master/lib/com.distriqt.playservices.AdsIdentifier.ane)
-
-You can access the Google Play Services client library extensions here: [https://github.com/distriqt/ANE-GooglePlayServices](https://github.com/distriqt/ANE-GooglePlayServices).
-
->
-> **Note:** The Google Play Services and Android Support ANEs are only **required** on Android devices. 
-> There is no problem packaging these ANEs with all platforms as there are default implementations available which will allow your code to package without errors 
-> however if you are only building an iOS application feel free to remove the Google Play Services ANEs from your application.
->
