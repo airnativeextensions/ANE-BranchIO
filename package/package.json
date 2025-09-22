@@ -10,12 +10,11 @@
   "publishedAt": "@DATETIME@",
   "dependencies": [
     "com.distriqt.Core:7.x.x",
-    "androidx.core:1.x.x",
-    "androidx.appcompat:1.x.x",
-    "androidx.browser:1.x.x",
-    "com.android.installreferrer:2.x.x",
-    "com.distriqt.playservices.Base:18.x.x",
-    "com.distriqt.playservices.AdsIdentifier:18.x.x"
+    "androidx.core:2.0.x",
+    "androidx.appcompat:2.0.x",
+    "androidx.browser:2.0.x",
+    "com.android.installreferrer:3.0.x",
+    "com.jetbrains.kotlin:2.0.x"
   ],
   "parameters": [
     {
@@ -27,24 +26,46 @@
     {
       "name": "branchAndroidKey",
       "required": "true",
-      "description": "Your android application Branch key\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      "description": "Your android application Branch key\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension",
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "branchAndroidTestKey",
       "required": "true",
-      "description": "Your android application Branch key for test mode\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      "description": "Your android application Branch key for test mode\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension",
+      "platforms": [
+        "android"
+      ]
     },
     {
       "name": "branchIOSKey",
       "required": "true",
-      "description": "Your iOS application Branch key\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      "description": "Your iOS application Branch key\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension",
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "branchIOSTestKey",
       "required": "true",
-      "description": "Your iOS application Branch key for test mode\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension"
+      "description": "Your iOS application Branch key for test mode\n Reference: https://docs.airnativeextensions.com/docs/branch/add-the-extension",
+      "platforms": [
+        "ios"
+      ]
     }
   ],
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "platformParameters": {
+    "android": {
+      "gradleVersion": "8.9",
+      "androidGradlePluginVersion": "8.7.3"
+    }
+  },
   "tags": [
     "branch",
     "app link",
@@ -53,7 +74,7 @@
   "status": "release",
   "purchaseUrl": "https://airnativeextensions.com/extension/@EXTENSIONID@",
   "license": {
-    "url": "https://github.com/distriqt/ANE-BranchIO/blob/master/LICENSE.md",
+    "url": "https://github.com/@GITHUB_REPO@/blob/master/LICENSE.md",
     "type": "MIT",
     "public": true
   }

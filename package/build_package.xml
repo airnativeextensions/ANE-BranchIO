@@ -235,7 +235,7 @@
 		<antcall target="build_android" />
 		<antcall target="copy_template" />
 		<antcall target="copy" />
-		<exec executable="apm" dir="${airpackage.basedir}">
+		<exec executable="${air.apm}" dir="${airpackage.basedir}">
 			<arg line="build build" />
 		</exec>
 	</target>
@@ -263,7 +263,7 @@
 			<arg line="--clobber" />
 		</exec>
 		<!-- Publish to apm repository -->
-		<exec executable="apm">
+		<exec executable="${air.apm}">
 			<arg line="publish ${packagefile}" />
 		</exec>
 	</target>
