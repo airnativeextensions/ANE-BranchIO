@@ -12,7 +12,6 @@
  * @brief  		ActionScript Native Extension
  * @author 		Michael Archbold
  * @created		Jan 19, 2012
- * @copyright	https://distriqt.com/copyright/license.txt
  *
  */
 
@@ -83,6 +82,7 @@ FREObject Branch_initSession(FREContext ctx, void* funcData, uint32_t argc, FREO
     {
         BIOBranchOptions* options = [[BIOBranchOptions alloc] init];
         options.useTestKey = [DTFREUtils getFREObjectPropertyAsBoolean: @"useTestKey" object: argv[0]];
+        options.enableDebugging = [DTFREUtils getFREObjectPropertyAsBoolean: @"enableDebugging" object: argv[0]];
         options.delayInitToCheckForSearchAds = [DTFREUtils getFREObjectPropertyAsBoolean: @"delayInitToCheckForSearchAds" object: argv[0]];
 
         [branch_controller initSession: options];

@@ -3,7 +3,7 @@
 //  Branch
 //
 //  Created by Michael Archbold on 21/9/20.
-//  Copyright © 2020 distriqt. All rights reserved.
+//  Copyright © 2025 Michael Archbold. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
