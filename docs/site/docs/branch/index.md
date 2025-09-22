@@ -41,11 +41,10 @@ Branch IO Adobe AIR Native Extension for iOS and Android gives you access to the
 
 - Session management 
 - Link parameters 
-- Credits
 - Event Tracking (standard and custom)
 
 
-The [Wiki](https://github.com/distriqt/ANE-BranchIO/wiki) forms the best source of detailed documentation for the extension along with the [asdocs](https://distriqt.github.io/ANE-BranchIO/asdocs). 
+The [documentation site](https://docs.airnativeextensions.com/docs/branch/) forms the best source of detailed documentation for the extension along with the [asdocs](https://docs.airnativeextensions.com/asdocs/branch/). 
 
 
 ![](images/promo.png)
