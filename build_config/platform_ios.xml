@@ -1,15 +1,19 @@
 <platform xmlns="http://ns.adobe.com/air/extension/@AIRVERSION@">
-	<copyright>2023 // distriqt</copyright>
-	<sdkVersion>11.0</sdkVersion>
+	<sdkVersion>12.0</sdkVersion>
 	<linkerOptions>
 		<option>-w</option>
 		<option>-framework SafariServices</option>
 		<option>-framework MobileCoreServices</option>
-		<option>-framework CoreSpotlight</option>
-		<option>-framework CoreTelephony</option>
+		<option>-framework SystemConfiguration</option>
 		<option>-framework Webkit</option>
+		<option>-framework CoreSpotlight</option>
+		<option>-weak_framework AdServices</option>
+		<option>-weak_framework AdSupport</option>
+		<option>-weak_framework StoreKit</option>
+		<option>-weak_framework LinkPresentation</option>
 	</linkerOptions>
 	<packagedDependencies>
+		<packagedDependency>BranchSDK.framework</packagedDependency>
 @PODS@
 	</packagedDependencies>
 </platform>
