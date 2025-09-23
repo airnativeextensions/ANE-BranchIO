@@ -30,14 +30,14 @@
 	<!-- <lower name="project.packagename" value="${project.name}" /> -->
 	<grppackagename name="project.packagename" prefix="" grp="${project.grp}" projectname="${project.name}" />
 
-	<property name="actionscript.name" value="distriqt.extension.${project.packagename}.swc" />
-	<property name="default.name" value="distriqt.extension.${project.packagename}.default.swc" />
+	<property name="actionscript.name" value="${output.name}.swc" />
+	<property name="default.name" value="${output.name}.default.swc" />
 
 	<titlecase name="android.extclassname" value="${project.name}Extension" />
 
-	<property name="android.name" value="distriqt.extension.${project.packagename}.android.jar" />
+	<lower name="android.name" value="${output.name}.android.jar" />
 	<property name="android.extclass" value="${package.name}.${android.extclassname}" />
-	<packagetores name="android.resources" value="distriqt-extension-${project.packagename}-res" />
+	<packagetores name="android.resources" value="${project.packagename}-res" />
 
 	<cleanchars name="ios.name" value="${project.grp}${project.name}" />
 
@@ -148,11 +148,11 @@
 
 
 	<target name="clean">
-		<delete dir="${common.basedir}/${output.dir}/${variant}/${ios.frameworks_dir}" />
-		<delete dir="${common.basedir}/${output.dir}/${variant}/${ios.simulator.frameworks_dir}" />
-		<delete dir="${common.basedir}/${output.dir}/${variant}/${android.assets_dir}" />
-		<delete dir="${output.dir}" />
-		<delete dir="platform" />
+		<delete dir="${common.basedir}/${output.dir}/${variant}/${ios.frameworks_dir}" failonerror="false" />
+		<delete dir="${common.basedir}/${output.dir}/${variant}/${ios.simulator.frameworks_dir}" failonerror="false" />
+		<delete dir="${common.basedir}/${output.dir}/${variant}/${android.assets_dir}" failonerror="false" />
+		<delete dir="${output.dir}" failonerror="false" />
+		<delete dir="platform" failonerror="false" />
 		<delete>
 			<fileset dir=".">
 				<include name="*.build.xml" />
@@ -245,6 +245,22 @@
 	<target name="prepare_ios" description="Copy iOS files for packaging" if="${ios.enabled}">
 
 
+		<copy todir="${common.basedir}/${ios.dir}/${ios.build_dir}/${variant}/${ios.iphoneos_dir}" flatten="true" overwrite="true">
+			<fileset dir="${common.basedir}/${ios.dir}">
+				<include name="*/PrivacyInfo.xcprivacy" />
+			</fileset>
+		</copy>
+		<copy todir="${common.basedir}/${ios.dir}/${ios.build_dir}/${variant}/${ios.iphonesimulator_dir}" flatten="true" overwrite="true">
+			<fileset dir="${common.basedir}/${ios.dir}">
+				<include name="*/PrivacyInfo.xcprivacy" />
+			</fileset>
+		</copy>
+		<copy todir="${common.basedir}/${ios.dir}/${ios.build_dir}/${variant}/${ios.tvos_dir}" flatten="true" overwrite="true">
+			<fileset dir="${common.basedir}/${ios.dir}">
+				<include name="*/PrivacyInfo.xcprivacy" />
+			</fileset>
+		</copy>
+
 		<patternset id="libs.frameworks.bundles">
 			<include name="*.framework/**" />
 			<exclude name="*.framework/Versions/**" />
@@ -265,14 +281,17 @@
 		</fileset>
 		<fileset id="iphoneosdir" dir="${common.basedir}/${ios.dir}/${ios.build_dir}/${variant}/${ios.iphoneos_dir}" erroronmissingdir="false" excludes="${ios.excludes}">
 			<exclude name="*.framework/**" />
+			<exclude name="Assets.car" />
 			<include name="**/*" />
 		</fileset>
 		<fileset id="iphonesimulatordir" dir="${common.basedir}/${ios.dir}/${ios.build_dir}/${variant}/${ios.iphonesimulator_dir}" erroronmissingdir="false" excludes="${ios.simulator.excludes}">
 			<exclude name="*.framework/**" />
+			<exclude name="Assets.car" />
 			<include name="**/*" />
 		</fileset>
 		<fileset id="tvosdir" dir="${common.basedir}/${ios.dir}/${ios.build_dir}/${variant}/${ios.tvos_dir}" erroronmissingdir="false">
 			<exclude name="*.framework/**" />
+			<exclude name="Assets.car" />
 			<include name="**/*" />
 		</fileset>
 		<fileset id="codedir" dir="${common.basedir}/${ios.dir}/${ios.name}" erroronmissingdir="false">
@@ -373,7 +392,7 @@
 			</sequential>
 		</for>
 
-		<exec executable="xcrun" spawn="false" failonerror="true" outputproperty="bitcode_strip.cmd" >
+		<exec executable="xcrun" spawn="false" failonerror="true" outputproperty="bitcode_strip.cmd" if:true="${isMacOS}">
 			<arg line="-sdk iphoneos --find bitcode_strip" />
 		</exec>
 
@@ -454,9 +473,16 @@
 					</else>
 				</if>
 
-				<exec executable="${bitcode_strip.cmd}" failonerror="true">
+				<exec executable="${bitcode_strip.cmd}" failonerror="true" output="/dev/null" error="/dev/null">
 					<arg line="@{frameworkpath}/${frameworklib} -r -o @{frameworkpath}/${frameworklib}" />
 				</exec>
+
+				<!-- Copy bundles to root extension -->
+				<copy overwrite="true" todir="${ios.dir}/${ios.build_dir}/${variant}/${ios.iphoneos_dir}">
+					<fileset dir="@{frameworkpath}" erroronmissingdir="false">
+						<include name="*.bundle/**" />
+					</fileset>
+				</copy>
 
 			</sequential>
 		</for>
@@ -482,17 +508,25 @@
 						<basename property="frameworklib" file="@{frameworkpath}" suffix=".framework" />
 					</else>
 				</if>
-				<exec executable="lipo" failonerror="false">
+				<exec executable="lipo" failonerror="false" output="/dev/null" error="/dev/null">
 					<arg line="-remove i386 -output @{frameworkpath}/${frameworklib} @{frameworkpath}/${frameworklib}" />
 				</exec>
-				<exec executable="lipo" failonerror="false">
+				<exec executable="lipo" failonerror="false" output="/dev/null" error="/dev/null">
 					<arg line="-remove x86_64 -output @{frameworkpath}/${frameworklib} @{frameworkpath}/${frameworklib}" />
 				</exec>
 
 				<!-- Strip bitcode -->
-				<exec executable="${bitcode_strip.cmd}" failonerror="true">
+				<!-- XCODE 16.3 - THIS IS NOW FAILING - something to do with bitcode_strip not working with static ar -->
+				<!-- <exec executable="${bitcode_strip.cmd}" failonerror="true" output="/dev/null" error="/dev/null">
 					<arg line="@{frameworkpath}/${frameworklib} -r -o @{frameworkpath}/${frameworklib}" />
-				</exec>
+				</exec> -->
+
+				<!-- Copy bundles to root extension -->
+				<copy overwrite="true" todir="${ios.dir}/${ios.build_dir}/${variant}/${ios.iphoneos_dir}">
+					<fileset dir="@{frameworkpath}" erroronmissingdir="false">
+						<include name="*.bundle/**" />
+					</fileset>
+				</copy>
 
 			</sequential>
 		</for>
@@ -521,12 +555,20 @@
 						<basename property="frameworklib" file="@{frameworkpath}" suffix=".framework" />
 					</else>
 				</if>
-				<exec executable="lipo" failonerror="false">
+				<exec executable="lipo" failonerror="false" output="/dev/null" error="/dev/null">
 					<arg line="-remove armv7 -output @{frameworkpath}/${frameworklib} @{frameworkpath}/${frameworklib}" />
 				</exec>
-				<exec executable="lipo" failonerror="false">
+				<exec executable="lipo" failonerror="false" output="/dev/null" error="/dev/null">
 					<arg line="-remove arm64 -output @{frameworkpath}/${frameworklib} @{frameworkpath}/${frameworklib}" />
 				</exec>
+
+				<!-- Copy bundles to root extension -->
+				<copy overwrite="true" todir="${ios.dir}/${ios.build_dir}/${variant}/${ios.iphonesimulator_dir}">
+					<fileset dir="@{frameworkpath}" erroronmissingdir="false">
+						<include name="*.bundle/**" />
+					</fileset>
+				</copy>
+
 			</sequential>
 		</for>
 		<condition property="tvOSandmacOS">
@@ -555,16 +597,23 @@
 					</else>
 				</if>
 				<!-- TODO: tvOS ? -->
-				<!-- <exec executable="lipo" failonerror="false">
+				<!-- <exec executable="lipo" failonerror="false" output="/dev/null" error="/dev/null">
 					<arg line="-remove armv7 -output @{frameworkpath}/${frameworklib} @{frameworkpath}/${frameworklib}" />
 				</exec>
-				<exec executable="lipo" failonerror="false">
+				<exec executable="lipo" failonerror="false" output="/dev/null" error="/dev/null">
 					<arg line="-remove arm64 -output @{frameworkpath}/${frameworklib} @{frameworkpath}/${frameworklib}" />
 				</exec> -->
+
+				<!-- Copy bundles to root extension -->
+				<copy overwrite="true" todir="${ios.dir}/${ios.build_dir}/${variant}/${ios.tvos_dir}">
+					<fileset dir="@{frameworkpath}" erroronmissingdir="false">
+						<include name="*.bundle/**" />
+					</fileset>
+				</copy>
+
 			</sequential>
 		</for>
 
-		
 
 		<delete failonerror="false">
 			<fileset dir="${ios.dir}/${ios.build_dir}/${variant}/${ios.iphoneos_dir}">
@@ -670,7 +719,7 @@
 
 		<delete dir="${android.dir}/${output.tmpdir}" />
 
-		<fileset dir="${common.basedir}/${android.dir}/externals/" erroronmissingdir="false" id="filesetexternals">
+		<fileset dir="${common.basedir}/${android.dir}/externals/${variant}" erroronmissingdir="false" id="filesetvariantexternals">
 			<include name="*.aar" />
 		</fileset>
 		<fileset dir="${common.basedir}/${android.dir}/libs/${variant}" erroronmissingdir="false" id="filesetvariant">
@@ -682,7 +731,7 @@
 		<foreach target="explode_aar" param="explode_aar_file">
 			<path>
 				<union>
-					<resources refid="filesetexternals" />
+					<resources refid="filesetvariantexternals" />
 					<resources refid="filesetvariant" />
 					<resources refid="filesetdependencies" />
 				</union>
@@ -701,7 +750,7 @@
 
 
 		<copy todir="${android.dir}/${android.outputdir}">
-			<fileset dir="${common.basedir}/${android.dir}/externals/" erroronmissingdir="false">
+			<fileset dir="${common.basedir}/${android.dir}/externals/${variant}" erroronmissingdir="false">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
@@ -749,10 +798,17 @@
 					<contains value="implementation"/>
 				</linecontains>
 				<tokenfilter>
-					<replaceregex pattern="\simplementation\s([\S]*)" replace="         &lt;dependency&gt;implementation \1&lt;/dependency&gt;" />
+					<!-- Exclude lines that start with // -->
+        			<replaceregex pattern="^\s*\/\/.*" replace="" />
+					<replaceregex pattern="\simplementation([\S\s]*)" replace="         &lt;dependency&gt;implementation\1&lt;/dependency&gt;" />
 				</tokenfilter>
 			</filterchain>
 		</loadfile>
+		<condition property="android.gradle.dependencies" value="">
+			<not>  
+				<isset property="android.gradle.dependencies"/>
+			</not>
+		</condition>
 		<echo message="${android.gradle.dependencies}" />
 
 		<property name="version" value="${version_major}.${version_minor}.${version_build}" />
@@ -765,7 +821,7 @@
 					<replacestring from="@JARS@" to="        ${platform.android.jars.str}" />
 					<replacestring from="@GRADLEDEPENDENCIES@" to="${android.gradle.dependencies}" />
 					<replacestring from="@VERSION@" to="${version}" />
-					<replacestring from="@VERSIONEXT@" to="${version.grp}" />
+					<replacestring from="@VERSIONEXT@" to="${version.android}" />
 					<replacestring from="@VERSIONGROUP@" to="${version.grp}" />
 				</tokenfilter>
 			</filterchain>
@@ -892,10 +948,20 @@
 			</path>
 			<sequential>
 				<echo>@{file}</echo>
-				<!-- TODO:: Might need to change this command on windows? -->
-				<exec executable="cp" failonerror="true">
-					<arg line="-Rf @{file} ${macos.dir}/${macos.build_dir}/." />
-				</exec>
+				<if>
+					<equals arg1="${isWindows}" arg2="true" />
+					<then>
+							<!-- If getting link errors try running: export MSYS=winsymlinks:nativestrict -->
+						<exec executable="cp" failonerror="true">
+							<arg line="-Rf @{file} ${macos.dir}/${macos.build_dir}" />
+						</exec>
+					</then>
+					<else>
+						<exec executable="cp" failonerror="true">
+							<arg line="-Rf @{file} ${macos.dir}/${macos.build_dir}/." />
+						</exec>
+					</else>
+				</if>
 			</sequential>
 		</for>
 
