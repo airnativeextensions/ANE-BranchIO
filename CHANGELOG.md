@@ -1,3 +1,13 @@
+###### 2025.09.23 [v5.20.100]
+
+```
+feat(android): update android sdk v5.20.1
+feat(android): move to gradle dependencies
+feat(ios): update to xcframework integration v3.13.1
+feat(example): update example app
+feat(actionscript): simplify comments + mark deprecations
+```
+
 
 
 ###### 2023.05.08 [v5.4.0]
