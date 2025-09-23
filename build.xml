@@ -11,7 +11,7 @@
 		<sequential>
 			<subant target="@{target}">
 				<fileset dir="@{directory}">
-					<include name="**/build_*.xml" />
+					<include name="*/build_*.xml" />
 				</fileset>
 			</subant>
 		</sequential>
@@ -39,6 +39,14 @@
 		</propertyfile>
 		<var name="version_build" value="" unset="true"/>
 		<var file="${common.basedir}/build_config/version.config" description="build version properties" />
+	</target>
+
+	<target name="version_major_increment">
+		<propertyfile file="./build_config/version.config">
+			<entry key="version_major" type="int" operation="+" value="1" />
+			<entry key="version_minor" type="int" value="0" />
+			<entry key="version_build" type="int" value="0" />
+		</propertyfile>
 	</target>
 
 	<target name="version_write">
@@ -106,12 +114,14 @@
 		<var name="docs.asdocs_dir" value="docs/site/static/asdocs/${project.namelower}" />
 
 		<!-- Copy ASDocs -->
-		<copy todir="${docs.asdocs_dir}" overwrite="true">
-			<fileset dir="docs/asdocs" />
+		<available file="${docs.asdocs_dir}" type="dir" property="docs.asdocs_dir.exists"/>
+		<copy todir="${docs.asdocs_dir}" overwrite="true" failonerror="false" if:set="docs.asdocs_dir.exists">
+        	<fileset dir="docs/asdocs" />
 		</copy>
 
 		<!-- Copy CHANGELOG -->
-		<copy tofile="${docs.dir}/changelog.md" overwrite="true" file="CHANGELOG.md" />
+		<available file="${docs.dir}" type="dir" property="docs.dir.exists"/>
+        <copy tofile="${docs.dir}/changelog.md" overwrite="true" file="CHANGELOG.md" if:set="docs.dir.exists"/>
 
 	</target>
 
@@ -201,23 +211,35 @@ _site
 	//
 	-->
 
+	<macrodef name="iteratedeep">
+		<attribute name="target" />
+		<attribute name="directory" />
+		<sequential>
+			<subant target="@{target}">
+				<fileset dir="@{directory}">
+					<include name="**/build_*.xml" />
+				</fileset>
+			</subant>
+		</sequential>
+	</macrodef>
+
 	<target name="airpackage">
-		<iterate target="deploy" directory="package" />
+		<iteratedeep target="deploy" directory="package" />
 		<if>
 			<available file="package/variants" type="dir"/>
 			<then>
-				<iterate target="deploy" directory="package/variants" />
+				<iteratedeep target="deploy" directory="package/variants" />
 			</then>
 		</if>
 	</target>
 
 
 	<target name="clean_airpackage">
-		<iterate target="clean" directory="package" />
+		<iteratedeep target="clean" directory="package" />
 		<if>
 			<available file="package/variants" type="dir"/>
 			<then>
-				<iterate target="clean" directory="package/variants" />
+				<iteratedeep target="clean" directory="package/variants" />
 			</then>
 		</if>
 	</target>

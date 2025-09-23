@@ -50,12 +50,19 @@
 	<condition property="android.gradle" value="gradlew.bat" else="./gradlew">
 		<istrue value="${isWindows}"/>
 	</condition>
+	<condition property="android.jetifier" value="${android.jetifier.windows}" else="${android.jetifier.macos}">
+		<istrue value="${isWindows}"/>
+	</condition>
 
 	<condition property="air.adt" value="${air.sdk}/bin/adt.bat" else="${air.sdk}/bin/adt">
 		<istrue value="${isWindows}"/>
 	</condition>
 
 	<condition property="air.asdoc" value="${air.sdk}/bin/asdoc.bat" else="${air.sdk}/bin/asdoc">
+		<istrue value="${isWindows}"/>
+	</condition>
+
+	<condition property="air.apm" value="apm.bat" else="apm">
 		<istrue value="${isWindows}"/>
 	</condition>
 	
@@ -179,7 +186,8 @@
 	</scriptdef>
 
 
-	<outputname name="output.name" prefix="${output.basename}" grp="${project.grp}" projectname="${project.name}" />
+	<outputname name="output.default_id" prefix="${output.basename}" grp="${project.grp}" projectname="${project.name}" />
+	<property name="output.name" value="${output.default_id}" /> <!-- Only assigns if not set in config -->
 	<grppackagename name="package.name" prefix="${package.basename}" grp="${project.grp}" projectname="${project.name}" />
 	<packagepath name="package.path" value="${package.name}" />
 
